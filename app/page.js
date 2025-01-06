@@ -7,7 +7,8 @@ import LandingPageNavbar from "@/components/ui/landingPageNavbar";
 import ExploreProducts from "@/components/ui/exploreProducts";
 import BrowseByCategory from "@/components/ui/browseByCategory";
 import TrendingProduct from "@/components/ui/trendingProduct";
-import AdProduct from "@/components/ui/adProduct";
+import Footer from "@/components/ui/footer";
+import FlashSale from "@/components/ui/flashSale";
 
 export default function LandingPage() {
 	const {
@@ -15,8 +16,7 @@ export default function LandingPage() {
 		allProducts,
 		currentQuickViewProduct,
 		setCurrentQuickViewProduct,
-		mostSoldProduts,
-		setMostSoldProducts,
+		mostSoldProducts,
 	} = useMainContext();
 	return (
 		<div className="relative h-screen w-screen overflow-hidden">
@@ -52,25 +52,43 @@ export default function LandingPage() {
 									<BrowseByCategory categories={categories} />
 								</div>
 							</div>
-							<div className="relative h-auto w-full pt-16 flex justify-center bg-gray-100">
-								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full overflow-hidden">
-									<AdProduct adProduct={allProducts[0]} />
-								</div>
-							</div>
-							<div className="relative h-auto w-full bg-white flex justify-center">
+							<div className="relative h-auto w-full flex justify-center">
 								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
 									<div className="relative w-full h-auto grid gap-8">
-										<div className="relative font-bold text-3xl xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4">
-											Most Sold
+										<div className="relative xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4 flex w-full justify-between">
+											<div className="relative font-bold text-3xl">
+												Most Sold
+											</div>
+											<div className="relative flex items-center gap-2 cursor-pointer">
+												<div className="relative uppercase text-gray-800 text-sm font-bold">
+													View all
+												</div>
+												<div className="relative h-[2px] w-3 bg-gray-800"></div>
+											</div>
 										</div>
 										<ExploreProducts
-											allProducts={allProducts}
+											allProducts={mostSoldProducts}
 											setCurrentQuickViewProduct={setCurrentQuickViewProduct}
 										/>
 									</div>
 								</div>
 							</div>
+							<div className="relative h-auto w-full flex justify-center">
+								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
+									<div className="relative w-full h-auto grid gap-8">
+										<div className="relative font-bold text-3xl xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4">
+											Goofy Collections
+										</div>
+										<ExploreProducts
+											allProducts={mostSoldProducts}
+											setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+										/>
+									</div>
+								</div>
+							</div>
+							<FlashSale />
 						</div>
+						<Footer />
 					</div>
 				</div>
 			</div>

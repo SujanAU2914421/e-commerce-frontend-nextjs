@@ -9,6 +9,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import {
+	ChevronLeft,
 	ChevronRight,
 	Heart,
 	Minus,
@@ -20,7 +21,7 @@ import {
 	Zap,
 } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import AccordionContentDesign from "./accordionItem";
 import PhotosUi from "./photos";
@@ -28,6 +29,7 @@ import ExploreProducts from "@/components/ui/exploreProducts";
 import ShareUi from "@/components/ui/share";
 import QuickViewPopUp from "@/components/ui/quickViewPopUp";
 import PhotoView from "@/components/ui/photoView";
+import ToggleNotifier from "@/components/ui/wishListToggleNotifier";
 
 export default function ItemPage({
 	currentItemData,
@@ -53,16 +55,35 @@ export default function ItemPage({
 
 	const [addedToCart, setAddedToCart] = useState(false);
 
-	const [showCartPopUp, setShowCartPopUp] = useState(false);
+	const [showNotifierPopUp, setShowNotifirerPopUp] = useState(false);
 
 	const [liked, setLiked] = useState(false);
 
-	useEffect(() => {
-		setShowCartPopUp(true);
+	const [likeOrCart, setLikeOrCart] = useState(null);
+
+	const toggleCartAdded = () => {
+		setAddedToCart(!addedToCart);
+		setLikeOrCart("cart");
+		setShowNotifirerPopUp(true);
 		setTimeout(() => {
-			setShowCartPopUp(false);
-		}, 1000);
-	}, [addedToCart]);
+			setShowNotifirerPopUp(false);
+		}, 1800);
+	};
+
+	const router = useRouter();
+
+	const handleGoBack = () => {
+		router.back();
+	};
+
+	const toggleLiked = () => {
+		setLiked(!liked);
+		setLikeOrCart("like");
+		setShowNotifirerPopUp(true);
+		setTimeout(() => {
+			setShowNotifirerPopUp(false);
+		}, 1800);
+	};
 
 	return (
 		<div className="relative h-auto w-full">
@@ -84,51 +105,23 @@ export default function ItemPage({
 					setCurrentImageIndexInView={setCurrentImageIndexInView}
 				/>
 			)}
-			<div
-				className={`${
-					showCartPopUp
-						? "opacity-100 translate-y-0"
-						: "opacity-0 translate-y-20"
-				} fixed h-10 bottom-8 right-[calc(50%-5rem)] z-50 w-56 shadow-xl flex items-center ease-out duration-300 justify-center gap-4 ${
-					addedToCart
-						? "bg-green-500 shadow-green-500"
-						: "bg-red-500 shadow-red-500"
-				} text-white`}
-			>
-				<div className="relative text-sm font-bold">
-					{addedToCart ? "Added To Cart" : "Removed From Cart"}
-				</div>
-				<div className="relative">
-					{addedToCart ? (
-						<ShoppingBag stroke="currentColor" size={18} />
-					) : (
-						<Trash stroke="currentColor" size={18} />
-					)}
-				</div>
-			</div>
+			<ToggleNotifier
+				showPopUp={showNotifierPopUp}
+				addedOrRemoved={likeOrCart === "like" ? liked : addedToCart}
+				likeOrCart={likeOrCart}
+			/>
 
 			<div className="relative h-auto w-full grid gap-16">
 				<div className="relative h-auto w-full grid gap-4">
-					<div className="relative pt-10 flex items-center justify-between px-8">
+					<div className="relative pt-7 flex items-center justify-between px-8">
 						<div className="relative h-auto w-auto">
-							<div className="relative h-auto w-auto flex text-sm items-center gap-3 capitalize text-gray-500 font-medium">
-								<Link href={"/" + pathMain} className="relative">
-									{pathMain}
-								</Link>
-								<div className="relative text-gray-500">
-									<ChevronRight size={15} stroke="currentColor" />
-								</div>
-								<Link
-									href={"/" + pathMain + "/" + pathCategory}
-									className="relative"
+							<div className="relative h-auto w-auto flex items-center gap-3 capitalize text-gray-600 hover:text-gray-800 font-medium">
+								<div
+									onClick={handleGoBack}
+									className="relative cursor-pointer font-bold flex items-center gap-4"
 								>
-									{pathCategory}
-								</Link>
-								<div className="relative text-gray-500">
-									<ChevronRight size={15} stroke="currentColor" />
-								</div>
-								<div className="relative text-gray-800 font-bold">
-									{currentItemData["name"]}
+									<ChevronLeft size={14} />
+									<div className="relative">Go Back</div>
 								</div>
 							</div>
 						</div>
@@ -266,7 +259,7 @@ export default function ItemPage({
 												<div className="relative h-auto w-auto flex items-center flex-wrap gap-2">
 													<Button
 														onClick={() => {
-															setAddedToCart(!addedToCart);
+															toggleCartAdded();
 														}}
 														variant={addedToCart ? "outline" : "default"}
 														className="select-none"
@@ -293,7 +286,7 @@ export default function ItemPage({
 														</Button>
 														<Button
 															onClick={() => {
-																setLiked(!liked);
+																toggleLiked();
 															}}
 															variant="outline"
 															className={`${
@@ -348,7 +341,7 @@ export default function ItemPage({
 						</div>
 					</div>
 				</div>
-				<div className="relative h-screen w-screen px-8">
+				<div className="relative h-auto w-full px-8">
 					<div className="relative w-full h-auto grid gap-4">
 						<div className="relative text-sm font-bold text-gray-700 uppercase">
 							Releted Products

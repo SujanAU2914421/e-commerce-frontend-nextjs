@@ -31,7 +31,7 @@ export default function CartPage() {
 		wishList.some((wish) => wish.productId === product.id)
 	);
 	return (
-		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto bg-gray-100">
+		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto">
 			{/* Navbar */}
 			{
 				// If quickViewPopUp is true, render the QuickViewPopUp component
@@ -68,10 +68,10 @@ export default function CartPage() {
 								Your cart is empty.
 							</div>
 						) : (
-							<div className="relative grid gap-8">
+							<div className="relative grid gap-2">
 								{/* Table Header */}
-								<div className="relative h-auto w-auto border bg-white flex items-center px-4">
-									<div className="relative h-auto py-4 w-full grid grid-cols-6 items-center uppercase text-sm">
+								<div className="relative h-auto w-auto bg-white flex items-center px-4">
+									<div className="relative h-auto py-4 w-full grid grid-cols-6 items-center uppercase font-bold text-sm">
 										<div className="relative col-span-3 flex items-center">
 											Product
 										</div>
@@ -89,7 +89,7 @@ export default function CartPage() {
 										<Trash size={16} />
 									</div>
 								</div>
-								<div className="relative grid gap-4">
+								<div className="relative grid gap-2">
 									{/* Map through cart items */}
 									{cartItems.map((item, index) => {
 										const product = allProducts.find(
@@ -100,7 +100,7 @@ export default function CartPage() {
 										return (
 											<div
 												key={index}
-												className="relative h-auto w-auto border bg-white flex items-center px-4"
+												className="relative h-auto w-auto border bg-white rounded flex items-center px-4"
 											>
 												<div className="relative h-auto py-4 w-full grid grid-cols-6 items-center uppercase text-xs">
 													<div className="relative col-span-3 flex items-center">
@@ -176,7 +176,7 @@ export default function CartPage() {
 					{/* Right Section: Summary */}
 					{cartItems && cartItems.length > 0 ? (
 						<div className="relative w-full lg:w-2/5 xl:w-2/5 h-auto">
-							<div className="sticky top-16 w-full bg-white p-6 border">
+							<div className="sticky top-16 w-full bg-white p-6 border rounded">
 								<h3 className="text-xl font-bold mb-4 uppercase font-sans">
 									Cart Totals
 								</h3>

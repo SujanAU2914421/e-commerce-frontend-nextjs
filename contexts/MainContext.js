@@ -179,6 +179,109 @@ export function MainContextProvider({ children }) {
 			],
 			addedDate: new Date("2024-12-01T14:30:00Z").getTime(),
 		},
+		{
+			id: "0x5E6F7G",
+			name: "Cozy Knit Sweater",
+			price: 30,
+			discountPercent: 15,
+			currency: "$",
+			rating: 4.6,
+			available: true,
+			stock: 60,
+			sales: 300,
+			description:
+				"This soft and warm knit sweater is perfect for chilly days. Made from high-quality fabric to ensure durability and comfort.",
+			images: [
+				"/assets/photos/products/sweater/cream/image1.webp",
+				"https://via.placeholder.com/300x200?text=Cozy+Knit+Sweater+Hover",
+			],
+			category: "Sweaters",
+			reviews: [
+				{
+					username: "winterwarrior",
+					rating: 5,
+					comment:
+						"Absolutely love this sweater! It's so warm and cozy, perfect for winter.",
+					date: new Date("2024-11-20T16:00:00Z").getTime(),
+				},
+				{
+					username: "fashionchic",
+					rating: 4,
+					comment: "Nice fit, but the sleeves could be a little longer.",
+					date: new Date("2024-11-10T10:15:00Z").getTime(),
+				},
+			],
+			sizes: ["S", "M", "L", "XL"],
+			colors: [
+				{
+					name: "Cream",
+					images: [
+						"/assets/photos/products/sweater/cream/image1.webp",
+						"/assets/photos/products/sweater/cream/image2.webp",
+					],
+				},
+				{
+					name: "Grey",
+					images: [
+						"/assets/photos/products/sweater/grey/image1.webp",
+						"/assets/photos/products/sweater/grey/image2.webp",
+					],
+				},
+			],
+			addedDate: new Date("2024-10-15T12:00:00Z").getTime(),
+		},
+		{
+			id: "0x6F7G8H",
+			name: "Slim Fit Denim Jacket",
+			price: 55,
+			discountPercent: 10,
+			currency: "$",
+			rating: 4.5,
+			available: true,
+			stock: 45,
+			sales: 250,
+			description:
+				"A stylish slim-fit denim jacket that pairs perfectly with any casual outfit. Made from premium denim for a trendy look.",
+			images: [
+				"/assets/photos/products/jacket/blue/image1.webp",
+				"https://via.placeholder.com/300x200?text=Slim+Fit+Denim+Jacket+Hover",
+			],
+			category: "Jackets",
+			reviews: [
+				{
+					username: "denimlover",
+					rating: 5,
+					comment:
+						"This jacket is amazing! Fits perfectly and looks very stylish.",
+					date: new Date("2024-12-05T14:45:00Z").getTime(),
+				},
+				{
+					username: "urbanfashion",
+					rating: 4,
+					comment:
+						"Great quality, but runs slightly tight around the shoulders.",
+					date: new Date("2024-11-22T09:30:00Z").getTime(),
+				},
+			],
+			sizes: ["M", "L", "XL"],
+			colors: [
+				{
+					name: "Blue",
+					images: [
+						"/assets/photos/products/jacket/blue/image1.webp",
+						"/assets/photos/products/jacket/blue/image2.webp",
+					],
+				},
+				{
+					name: "Black",
+					images: [
+						"/assets/photos/products/jacket/black/image1.webp",
+						"/assets/photos/products/jacket/black/image2.webp",
+					],
+				},
+			],
+			addedDate: new Date("2024-09-25T18:30:00Z").getTime(),
+		},
 	];
 
 	const [cartItems, setCartItems] = useState([
@@ -192,16 +295,7 @@ export function MainContextProvider({ children }) {
 		},
 	]);
 
-	const [mostSoldProducts, setMostSoldProducts] = useState([
-		{
-			productId: "0x1A2B3C", // Matches the ID from allProducts
-			quantity: 2, // Quantity user wants to buy
-		},
-		{
-			productId: "0x2B3C4D", // Matches the ID from allProducts
-			quantity: 3, // Quantity user wants to buy
-		},
-	]);
+	const mostSoldProducts = allProducts;
 
 	const [wishList, setWishList] = useState([
 		{
@@ -214,6 +308,9 @@ export function MainContextProvider({ children }) {
 	const [currentQuickViewProduct, setCurrentQuickViewProduct] = useState(null);
 
 	const [photoView, setPhotoView] = useState(null);
+
+	const [wishListView, setWishListView] = useState(false);
+	const [carListtView, setCartListView] = useState(false);
 
 	return (
 		<MainContext.Provider
@@ -231,7 +328,10 @@ export function MainContextProvider({ children }) {
 				wishList,
 				setWishList,
 				mostSoldProducts,
-				setMostSoldProducts,
+				wishListView,
+				setWishListView,
+				carListtView,
+				setCartListView,
 			}}
 		>
 			{children}

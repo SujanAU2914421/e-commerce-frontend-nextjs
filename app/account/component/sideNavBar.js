@@ -5,7 +5,7 @@ import {
 	ShoppingCart,
 } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 export default function SideNavBar() {
@@ -15,6 +15,11 @@ export default function SideNavBar() {
 		return (pathSegment === "" && path === "profile") || pathSegment === path
 			? "bg-gray-700 text-white"
 			: "hover:bg-gray-200";
+	};
+	const router = useRouter();
+
+	const handleGoBack = () => {
+		router.back();
 	};
 
 	return (
@@ -31,30 +36,23 @@ export default function SideNavBar() {
 						</div>
 					</Link>
 				</div>
-				<div className="relative">
+				<div className="relative pt-2">
 					<div className="relative h-auto w-auto flex">
-						<Link
-							href="/shop"
-							className="relative h-auto w-auto flex text-sm items-center gap-3 capitalize text-gray-500 font-medium px-4 pt-4"
+						<div
+							onClick={() => {
+								handleGoBack();
+							}}
+							className="relative cursor-pointer h-auto w-auto flex text-sm items-center gap-3 capitalize text-gray-500 hover:text-gray-800 font-medium px-2 pt-4"
 						>
-							<div className="relative text-gray-800">
+							<div className="relative">
 								<ChevronLeft size={18} />
 							</div>
-							<div className="relative font-bold text-gray-800">Go Back</div>
-						</Link>
+							<div className="relative font-bold">Go Back</div>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div className="relative grid gap-4 text-sm text-gray-700">
-				<Link
-					href={"/shop"}
-					className={`relative h-10 w-full rounded bg-gray-200 flex items-center px-5 gap-4 cursor-pointer`}
-				>
-					<div className="relative h-auto w-auto">
-						<ShoppingCart size={20} />
-					</div>
-					<div className="relative h-auto w-auto">Go Back Shopping</div>
-				</Link>
 				<div className="relative grid gap-2 text-sm">
 					<Link
 						href={"/account/activity"}

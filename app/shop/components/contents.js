@@ -38,7 +38,7 @@ export default function Contents({
 	}, [pathname, setShopCurrentCategory, pathCategory]); // Depend on pathname and pathCategory
 
 	return (
-		<div className="relative h-auto w-full pt-4 grid gap-10">
+		<div className="relative h-auto w-full pt-4 grid gap-8">
 			<div className="relative h-auto w-full pt-4 grid gap-4">
 				{
 					// If quickViewPopUp is true, render the QuickViewPopUp component
@@ -101,38 +101,10 @@ export default function Contents({
 							))}
 						</div>
 					</div>
-
-					{/* Search Bar */}
-					<div className="relative">
-						<div className="relative h-auto w-auto">
-							<div className="relative h-auto w-auto flex gap-4">
-								<div className="relative flex max-w-80 h-10 items-center border overflow-hidden rounded-md">
-									<div className="relative h-full w-full">
-										<input
-											type="text"
-											className="relative h-full w-full outline-none border-none text-sm px-4"
-											placeholder="Search"
-										/>
-									</div>
-									<div className="relative px-4">
-										<svg
-											width="17"
-											height="17"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="2"
-											strokeLinecap="round"
-											strokeLinejoin="round"
-										>
-											<circle cx="11" cy="11" r="8"></circle>
-											<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-										</svg>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+				</div>
+				<div className="relative h-auto w-full justify-between pt-8">
+					<div className="relative text-gray-700">Showing Results</div>
+					<div className="relative flex gap-4"></div>
 				</div>
 			</div>
 			{filteredData.length === 0 ? (

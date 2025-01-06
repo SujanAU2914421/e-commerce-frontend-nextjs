@@ -1,8 +1,10 @@
+"use client";
 import Link from "next/link";
 import React, { useState } from "react";
 import RatingsStar from "./ratingsStar";
-import { Heart } from "lucide-react";
+import { Heart, Trash } from "lucide-react";
 import { ImageWithSkeleton } from "./imageWithSkeleton";
+import ToggleNotifier from "./wishListToggleNotifier";
 
 export default function ExploreProducts({
 	allProducts,
@@ -11,18 +13,33 @@ export default function ExploreProducts({
 	setCurrentQuickViewProduct,
 }) {
 	const [likedItems, setLikedItems] = useState([]);
+	const [showLikedPopUp, setShowLikedPopUp] = useState(false);
+	const [likedOrDisliked, setLikedOrDisliked] = useState(false);
 
 	const toggleLike = (product) => {
 		setLikedItems((prevLiked) => {
-			if (prevLiked.some((item) => item.id === product.id)) {
-				return prevLiked.filter((item) => item.id !== product.id);
-			}
-			return [...prevLiked, product];
+			const isAlreadyLiked = prevLiked.some((item) => item.id === product.id);
+			setLikedOrDisliked(!isAlreadyLiked); // Update liked/disliked status
+			return isAlreadyLiked
+				? prevLiked.filter((item) => item.id !== product.id)
+				: [...prevLiked, product];
 		});
+		setShowLikedPopUp(true);
+		setTimeout(() => {
+			setShowLikedPopUp(false);
+		}, 1000);
 	};
 
 	return (
 		<div className="relative w-full h-auto">
+			{/* Pop-up for like/dislike */}
+			<ToggleNotifier
+				showPopUp={showLikedPopUp}
+				addedOrRemoved={likedOrDisliked}
+				likeOrCart="like"
+			/>
+
+			{/* Product grid */}
 			<div className="relative w-full grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-5 gap-y-10 px-4 md:px-8 xl:px-0">
 				{allProducts?.map((product, index) => {
 					if (neglectItem && neglectItem?.id === product.id) return null;
@@ -31,13 +48,13 @@ export default function ExploreProducts({
 
 					return (
 						<div key={index} className="relative flex">
-							<div className="group relative">
+							<div className="group relative w-full">
 								<div className="relative h-auto w-full flex items-center hover:scale-[1.02] scale-100 duration-200">
 									<Link
 										href={`/shop/${product.category}/${product.id}`}
 										className="relative w-full h-auto"
 									>
-										<div className="relative h-full w-full">
+										<div className="relative h-full w-full bg-gray-100">
 											<ImageWithSkeleton src={product.colors[0]?.images[0]} />
 										</div>
 										<div

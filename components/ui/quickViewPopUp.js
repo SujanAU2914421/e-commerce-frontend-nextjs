@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import ShareUi from "./share";
 import RatingsStar from "./ratingsStar";
 import AccordionContentDesignForQuickView from "./accordionContentDesignForQuickView";
+import Link from "next/link";
 
 export default function QuickViewPopUp({
 	filteredData,
@@ -343,6 +344,18 @@ export default function QuickViewPopUp({
 																Add to cart
 															</div>
 														</Button>
+														<Link
+															href={`/shop/product/${currentQuickViewProduct.id}`}
+															onClick={() => {
+																setCurrentQuickViewProduct(null);
+															}}
+														>
+															<Button variant="outline" className="select-none">
+																<div className="relative text-xs font-bold">
+																	Check Out
+																</div>
+															</Button>
+														</Link>
 														<div className="relative h-auto w-auto flex items-center gap-2">
 															<Button variant="default" className="select-none">
 																<div className="relative text-yellow-500">

@@ -37,10 +37,10 @@ export default function CheckOut() {
 			style={{ fontFamily: "afacad-flux" }}
 		>
 			<div className="relative h-full w-full overflow-x-hidden overflow-y-auto">
-				<div className="relative h-auto w-full grid">
-					<div className="relative min-h-screen h-auto w-full">
+				<div className="relative h-auto w-full">
+					<div className="relative h-auto w-full">
 						<div className="relative h-auto w-full">
-							<div className="sticky top-0 bg-white z-50 h-auto px-8">
+							<div className="sticky top-0 bg-white z-50 h-auto">
 								<ShopNavbar
 									shopCurrentCategory={shopCurrentCategory}
 									setShopCurrentCategory={setShopCurrentCategory}
