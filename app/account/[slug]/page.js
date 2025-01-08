@@ -24,8 +24,6 @@ export default function AccountPage() {
 								<div className="relative h-auto w-full pb-16 pt-10">
 									{pathname.split("/")[2] === "profile" ? (
 										<Profile />
-									) : pathname.split("/")[2] === "cart" ? (
-										<CartPageUi />
 									) : pathname.split("/")[2] === "activity" ? (
 										<Activity />
 									) : pathname.split("/")[2] === "purchase-details" ? (

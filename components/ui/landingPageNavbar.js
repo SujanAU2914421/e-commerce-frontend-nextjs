@@ -5,7 +5,7 @@ export default function LandingPageNavbar() {
 	const pathname = usePathname();
 
 	return (
-		<div className="relative h-full w-full flex justify-between items-center xl:px-0 lg:px-0 px-4 border-b border-gray-100">
+		<div className="relative h-full w-full flex justify-between items-center xl:px-0 lg:px-0 px-4 border-b py-4 border-gray-100">
 			<div className="relative flex">
 				<div className="relative font-bold text-xl font-sans">FP</div>
 			</div>

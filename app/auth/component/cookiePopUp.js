@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react/dist/cjs/lucide-react";
 
 export const CookieConsent = () => {
 	const [showBanner, setShowBanner] = useState(false);
@@ -44,29 +46,23 @@ export const CookieConsent = () => {
 
 	return (
 		showBanner && (
-			<div style={styles.banner}>
-				<p>
-					We use cookies to improve your experience on our site. By accepting,
-					you agree to our use of cookies.
-				</p>
-				<button onClick={handleAcceptCookies}>Accept</button>
-				<button onClick={handleDeclineCookies}>Decline</button>
+			<div className="fixed z-50 w-[350px] right-16 bottom-16 flex justify-center bg-indigo-600 text-gray-200 px-16 py-8 rounded-md">
+				<div className="relative grid gap-4">
+					<div className="relative text-center">
+						We use cookies to improve your experience on our site. By accepting, you agree to our use of cookies.
+					</div>
+					<div className="relative flex items-center justify-center gap-4">
+						<Button variant="default" size="lg" onClick={handleAcceptCookies}>
+							Accept
+							<Check size={16} />
+						</Button>
+						<Button variant="default" size="lg" onClick={handleDeclineCookies}>
+							Decline
+							<X size={16} />
+						</Button>
+					</div>
+				</div>
 			</div>
 		)
 	);
-};
-
-// Styles for the cookie consent banner
-const styles = {
-	banner: {
-		position: "fixed",
-		bottom: "0",
-		left: "0",
-		right: "0",
-		backgroundColor: "#333",
-		color: "white",
-		padding: "10px",
-		textAlign: "center",
-		zIndex: "1000",
-	},
 };

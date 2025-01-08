@@ -26,26 +26,17 @@ export default function CheckOut() {
 	const currentItemData = useMemo(() => {
 		console.log("Finding product with ID: ", productId);
 
-		return (
-			allProducts?.find((product) => product.id === productId) || allProducts[0]
-		);
+		return allProducts?.find((product) => product.id === productId) || allProducts[0];
 	}, [allProducts, productId]);
 
 	return (
-		<div
-			className="relative h-screen w-screen overflow-hidden"
-			style={{ fontFamily: "afacad-flux" }}
-		>
+		<div className="relative h-screen w-screen overflow-hidden" style={{ fontFamily: "afacad-flux" }}>
 			<div className="relative h-full w-full overflow-x-hidden overflow-y-auto">
 				<div className="relative h-auto w-full">
 					<div className="relative h-auto w-full">
 						<div className="relative h-auto w-full">
 							<div className="sticky top-0 bg-white z-50 h-auto">
-								<ShopNavbar
-									shopCurrentCategory={shopCurrentCategory}
-									setShopCurrentCategory={setShopCurrentCategory}
-									currentItemData={currentItemData}
-								/>
+								<ShopNavbar />
 							</div>
 							<div className="relative h-auto w-full">
 								<Content

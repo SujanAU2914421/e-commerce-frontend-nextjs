@@ -342,9 +342,9 @@ export default function ItemPage({
 					</div>
 				</div>
 				<div className="relative h-auto w-full px-8">
-					<div className="relative w-full h-auto grid gap-4">
-						<div className="relative text-sm font-bold text-gray-700 uppercase">
-							Releted Products
+					<div className="relative w-full h-auto grid gap-8 pt-8">
+						<div className="relative font-bold text-gray-800 uppercase">
+							Related Products
 						</div>
 						<ExploreProducts
 							allProducts={allProducts}

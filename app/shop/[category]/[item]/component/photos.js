@@ -12,6 +12,11 @@ export default function PhotosUi({
 		setCurrentImageIndex(index);
 	};
 
+	const shopPhotoPopUp = () => {
+		setCurrentImageIndexInView(currentImageIndex);
+		setPhotoView(photos?.images);
+	};
+
 	return (
 		<div className="relative h-full w-full">
 			<div className="xl:sticky lg:sticky md:sticky relative xl:top-16 lg:top-16 md:top-16 top-0 w-full h-auto flex xl:flex-nowrap lg:flex-nowrap md:flex-nowrap flex-wrap-reverse gap-4">
@@ -41,12 +46,16 @@ export default function PhotosUi({
 					<div className="absolute top-0 left-0 h-full w-full flex items-center justify-center text-gray-600 text-xs">
 						Loading...
 					</div>
-					<div className="relative xl:h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)] md:h-[calc(100vh-8rem)] h-[90vw] w-full overflow-hidden flex justify-center">
+					<div
+						onClick={() => {
+							shopPhotoPopUp();
+						}}
+						className="relative xl:h-[calc(100vh-8rem)] lg:h-[calc(100vh-8rem)] md:h-[calc(100vh-8rem)] h-[90vw] w-full overflow-hidden flex justify-center"
+					>
 						<div
 							className="absolute top-4 right-4 h-10 w-10 bg-white z-10 flex items-center cursor-pointer justify-center rounded-md group-hover:opacity-100 opacity-0 duration-200 text-gray-700"
 							onClick={() => {
-								setCurrentImageIndexInView(currentImageIndex);
-								setPhotoView(photos?.images);
+								shopPhotoPopUp();
 							}}
 						>
 							<ZoomIn size={20} />

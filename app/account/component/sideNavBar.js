@@ -66,7 +66,7 @@ export default function SideNavBar() {
 						<div className="relative h-auto w-auto">Activity</div>
 					</Link>
 					<Link
-						href={"/account/cart"}
+						href={"/cart"}
 						className={`${isactive(
 							"cart"
 						)} relative h-10 w-full rounded flex items-center px-5 gap-4 cursor-pointer`}
@@ -74,7 +74,7 @@ export default function SideNavBar() {
 						<div className="relative h-auto w-auto">
 							<ShoppingCart size={20} />
 						</div>
-						<div className="relative h-auto w-auto">Cart</div>
+						<div className="relative h-auto w-auto">View Cart</div>
 					</Link>
 					<Link
 						href={"/account/purchase-details"}

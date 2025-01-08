@@ -357,18 +357,26 @@ export default function QuickViewPopUp({
 															</Button>
 														</Link>
 														<div className="relative h-auto w-auto flex items-center gap-2">
-															<Button variant="default" className="select-none">
-																<div className="relative text-yellow-500">
-																	<Zap
-																		fill="currentColor"
-																		stroke="currentColor"
-																		size={20}
-																	/>
-																</div>
-																<div className="relative text-xs font-bold">
-																	Buy Now
-																</div>
-															</Button>
+															<Link
+																href="/checkout"
+																className="relative rounded-md"
+															>
+																<Button
+																	variant="default"
+																	className="select-none"
+																>
+																	<div className="relative text-yellow-500">
+																		<Zap
+																			fill="currentColor"
+																			stroke="currentColor"
+																			size={20}
+																		/>
+																	</div>
+																	<div className="relative text-xs font-bold">
+																		Buy Now
+																	</div>
+																</Button>
+															</Link>
 															<Button variant="outline">
 																<Heart size={20} />
 															</Button>

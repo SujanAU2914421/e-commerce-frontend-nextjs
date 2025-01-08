@@ -2,27 +2,24 @@
 
 import axios from "@/config/axios";
 import Cookies from "js-cookie";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const AuthContext = createContext();
 
 export default function AuthContextProvider({ children }) {
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [user, setUser] = useState(null);
 
 	// To prevent the checkAuthenticated function from running multiple times
 	const operationExecuted = useRef(false);
-	const [path, setPath] = useState("");
-
-	const getPathname = () => {
-		return window.location.pathname;
-	};
+	const path = usePathname();
 
 	const checkAuth = async () => {
 		try {
 			const response = await axios.post("check-auth");
 
+			setUser(response.user);
 			if (response.user) {
-				setIsAuthenticated(true);
 				if (path === "/auth/login" || path === "/auth/signup") {
 					window.location.href = "/";
 				}
@@ -48,7 +45,6 @@ export default function AuthContextProvider({ children }) {
 	};
 
 	useEffect(() => {
-		setPath(getPathname());
 		if (!operationExecuted.current) {
 			checkAuth();
 		}
@@ -57,18 +53,12 @@ export default function AuthContextProvider({ children }) {
 		};
 	}, []);
 
-	return (
-		<AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={{ login, logout, user }}>{children}</AuthContext.Provider>;
 }
 
 export const useAuthContext = () => {
 	if (!AuthContext) {
-		throw new Error(
-			"useAuthContext must be used within an AuthContextProvider"
-		);
+		throw new Error("useAuthContext must be used within an AuthContextProvider");
 	}
 	return useContext(AuthContext);
 };

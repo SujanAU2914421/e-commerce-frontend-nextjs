@@ -16,19 +16,12 @@ export default function Home() {
 		setCurrentQuickViewProduct,
 	} = useMainContext();
 	return (
-		<div
-			className="relative h-screen w-screen overflow-hidden"
-			style={{ fontFamily: "afacad-flux" }}
-		>
+		<div className="relative h-screen w-screen overflow-hidden" style={{ fontFamily: "afacad-flux" }}>
 			<div className="relative h-full w-full overflow-x-hidden overflow-y-auto">
 				<div className="relative h-auto w-full">
 					<div className="relative min-h-screen h-auto w-full">
 						<div className="h-auto w-full sticky top-0 bg-white z-50">
-							<ShopNavbar
-								categories={categories}
-								shopCurrentCategory={shopCurrentCategory}
-								setShopCurrentCategory={setShopCurrentCategory}
-							/>
+							<ShopNavbar />
 						</div>
 						<div className="relative h-auto w-full px-8">
 							<Contents

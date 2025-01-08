@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useMainContext } from "@/contexts/MainContext";
 import QuickViewPopUp from "@/components/ui/quickViewPopUp";
 import LandingPageNavbar from "@/components/ui/landingPageNavbar";
@@ -9,15 +9,18 @@ import BrowseByCategory from "@/components/ui/browseByCategory";
 import TrendingProduct from "@/components/ui/trendingProduct";
 import Footer from "@/components/ui/footer";
 import FlashSale from "@/components/ui/flashSale";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function LandingPage() {
-	const {
-		categories,
-		allProducts,
-		currentQuickViewProduct,
-		setCurrentQuickViewProduct,
-		mostSoldProducts,
-	} = useMainContext();
+	const { categories, allProducts, currentQuickViewProduct, setCurrentQuickViewProduct, mostSoldProducts } =
+		useMainContext();
+
+	const { user } = useAuthContext();
+
+	useEffect(() => {
+		console.log(user);
+	}, [user]);
+
 	return (
 		<div className="relative h-screen w-screen overflow-hidden">
 			{
@@ -30,10 +33,7 @@ export default function LandingPage() {
 					/>
 				)
 			}
-			<div
-				className="relative h-full w-full overflow-y-auto overflow-x-hidden"
-				style={{ fontFamily: "afacad-flux" }}
-			>
+			<div className="relative h-full w-full overflow-y-auto overflow-x-hidden" style={{ fontFamily: "afacad-flux" }}>
 				<div className="relative h-full overflow-x-hidden w-screen overflow-y-auto">
 					<div className="sticky top-0 z-50 bg-white flex justify-center h-16 w-full">
 						<div className="relative h-full xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
@@ -56,13 +56,9 @@ export default function LandingPage() {
 								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
 									<div className="relative w-full h-auto grid gap-8">
 										<div className="relative xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4 flex w-full justify-between">
-											<div className="relative font-bold text-3xl">
-												Most Sold
-											</div>
+											<div className="relative font-bold text-3xl">Most Sold</div>
 											<div className="relative flex items-center gap-2 cursor-pointer">
-												<div className="relative uppercase text-gray-800 text-sm font-bold">
-													View all
-												</div>
+												<div className="relative uppercase text-gray-800 text-sm font-bold">View all</div>
 												<div className="relative h-[2px] w-3 bg-gray-800"></div>
 											</div>
 										</div>

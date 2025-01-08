@@ -1,6 +1,8 @@
 "use client";
+import axios from "@/config/axios";
 import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuthContext } from "./AuthContext";
 
 const MainContext = createContext();
 
@@ -54,8 +56,7 @@ export function MainContextProvider({ children }) {
 				{
 					username: "cozylover",
 					rating: 5,
-					comment:
-						"Absolutely love this hoodie! It's warm and the material is high-quality.",
+					comment: "Absolutely love this hoodie! It's warm and the material is high-quality.",
 					date: new Date("2024-12-15T16:45:00Z").getTime(),
 				},
 				{
@@ -121,29 +122,25 @@ export function MainContextProvider({ children }) {
 					username: "fashionista101",
 					rating: 5,
 					picture: "/assets/photos/avatar/user1.png",
-					comment:
-						"This jacket is a must-have! It’s so versatile and comfortable. Absolutely love it!",
+					comment: "This jacket is a must-have! It’s so versatile and comfortable. Absolutely love it!",
 				},
 				{
 					username: "style_guru",
 					rating: 4,
 					picture: "/assets/photos/avatar/user2.png",
-					comment:
-						"Great quality denim and fits true to size. I wish there were more color options.",
+					comment: "Great quality denim and fits true to size. I wish there were more color options.",
 				},
 				{
 					username: "trendsetter",
 					rating: 5,
 					picture: "/assets/photos/avatar/user3.png",
-					comment:
-						"Amazing jacket! Perfect for casual outings. I’ve been getting so many compliments.",
+					comment: "Amazing jacket! Perfect for casual outings. I’ve been getting so many compliments.",
 				},
 				{
 					username: "casual_dresser",
 					rating: 4.5,
 					picture: "/assets/photos/avatar/user4.png",
-					comment:
-						"Stylish and comfortable! Great for layering over hoodies or tees.",
+					comment: "Stylish and comfortable! Great for layering over hoodies or tees.",
 				},
 			],
 			sizes: ["M", "L", "XL"],
@@ -200,8 +197,7 @@ export function MainContextProvider({ children }) {
 				{
 					username: "winterwarrior",
 					rating: 5,
-					comment:
-						"Absolutely love this sweater! It's so warm and cozy, perfect for winter.",
+					comment: "Absolutely love this sweater! It's so warm and cozy, perfect for winter.",
 					date: new Date("2024-11-20T16:00:00Z").getTime(),
 				},
 				{
@@ -251,15 +247,13 @@ export function MainContextProvider({ children }) {
 				{
 					username: "denimlover",
 					rating: 5,
-					comment:
-						"This jacket is amazing! Fits perfectly and looks very stylish.",
+					comment: "This jacket is amazing! Fits perfectly and looks very stylish.",
 					date: new Date("2024-12-05T14:45:00Z").getTime(),
 				},
 				{
 					username: "urbanfashion",
 					rating: 4,
-					comment:
-						"Great quality, but runs slightly tight around the shoulders.",
+					comment: "Great quality, but runs slightly tight around the shoulders.",
 					date: new Date("2024-11-22T09:30:00Z").getTime(),
 				},
 			],
@@ -305,12 +299,26 @@ export function MainContextProvider({ children }) {
 			productId: "0x2B3C4D", // Matches the ID from allProducts
 		},
 	]);
+
+	const getProducts = async () => {
+		try {
+			const response = await axios.get("get-orders");
+
+			console.log(response);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	const [currentQuickViewProduct, setCurrentQuickViewProduct] = useState(null);
 
 	const [photoView, setPhotoView] = useState(null);
 
 	const [wishListView, setWishListView] = useState(false);
 	const [carListtView, setCartListView] = useState(false);
+
+	useEffect(() => {
+		getProducts();
+	}, []);
 
 	return (
 		<MainContext.Provider
