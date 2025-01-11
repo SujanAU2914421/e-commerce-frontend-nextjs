@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useMainContext } from "@/contexts/MainContext";
 import Content from "./component/content";
 import { usePathname } from "next/navigation";
@@ -23,10 +23,11 @@ export default function CheckOut() {
 	const productId = pathSegments[3]; // Extract the product ID
 
 	// Find the product with the matching ID in the allProducts array
-	const currentItemData = useMemo(() => {
-		console.log("Finding product with ID: ", productId);
+	const [currentItemData, setCurrentItemData] = useState(null);
 
-		return allProducts?.find((product) => product.id === productId) || allProducts[0];
+	useEffect(() => {
+		setCurrentItemData(allProducts?.find((product) => product.id.toString() === productId));
+		console.log(allProducts, productId);
 	}, [allProducts, productId]);
 
 	return (
@@ -39,16 +40,18 @@ export default function CheckOut() {
 								<ShopNavbar />
 							</div>
 							<div className="relative h-auto w-full">
-								<Content
-									shopCurrentCategory={shopCurrentCategory}
-									setShopCurrentCategory={setShopCurrentCategory}
-									currentItemData={currentItemData}
-									allProducts={allProducts}
-									currentQuickViewProduct={currentQuickViewProduct}
-									setCurrentQuickViewProduct={setCurrentQuickViewProduct}
-									photoView={photoView}
-									setPhotoView={setPhotoView}
-								/>
+								{currentItemData && (
+									<Content
+										shopCurrentCategory={shopCurrentCategory}
+										setShopCurrentCategory={setShopCurrentCategory}
+										currentItemData={currentItemData}
+										allProducts={allProducts}
+										currentQuickViewProduct={currentQuickViewProduct}
+										setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+										photoView={photoView}
+										setPhotoView={setPhotoView}
+									/>
+								)}
 							</div>
 						</div>
 					</div>

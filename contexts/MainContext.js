@@ -8,307 +8,30 @@ const MainContext = createContext();
 
 export function MainContextProvider({ children }) {
 	const [shopCurrentCategory, setShopCurrentCategory] = useState(null);
-	const categories = [
-		{ name: "T-Shirts", icon: "https://example.com/icons/tshirts.png" },
-		{ name: "Hoodies", icon: "https://example.com/icons/hoodies.png" },
-		{ name: "Sweat-shirts", icon: "https://example.com/icons/sweatshirts.png" },
-		{ name: "Jeans", icon: "https://example.com/icons/jeans.png" },
-		{ name: "Jackets", icon: "https://example.com/icons/jackets.png" },
-		{ name: "Track-suits", icon: "https://example.com/icons/tracksuits.png" },
-		{ name: "Active-wear", icon: "https://example.com/icons/activewear.png" },
-		{ name: "Shorts", icon: "https://example.com/icons/shorts.png" },
-		{ name: "Cargo Pants", icon: "https://example.com/icons/cargo_pants.png" },
-		{ name: "Sweaters", icon: "https://example.com/icons/sweaters.png" },
-		{
-			name: "Wind-breakers",
-			icon: "https://example.com/icons/windbreakers.png",
-		},
-		{ name: "Vests", icon: "https://example.com/icons/vests.png" },
-		{ name: "Swimwear", icon: "https://example.com/icons/swimwear.png" },
-		{ name: "Overalls", icon: "https://example.com/icons/overalls.png" },
-		{ name: "Raincoats", icon: "https://example.com/icons/raincoats.png" },
-		{ name: "Beanies", icon: "https://example.com/icons/beanies.png" },
-		{ name: "Scarves", icon: "https://example.com/icons/scarves.png" },
-		{ name: "Socks", icon: "https://example.com/icons/socks.png" },
-		{ name: "Belts", icon: "https://example.com/icons/belts.png" },
-		{ name: "Caps", icon: "https://example.com/icons/caps.png" },
-	];
+	const [categories, setCategories] = useState(null);
 
-	const allProducts = [
-		{
-			id: "0x1A2B3C",
-			name: "Everyday Essential Tee",
-			price: 15,
-			discountPercent: 10,
-			currency: "$",
-			rating: 3.5,
-			available: true,
-			stock: 4,
-			sales: 500,
-			description:
-				"A timeless classic, this white T-shirt is made from 100% cotton for ultimate comfort. Perfect for casual wear or layering.",
-			images: [
-				"/assets/photos/products/t-shirt/black/image1.webp",
-				"https://via.placeholder.com/300x200?text=White+T-Shirt+Hover",
-			],
-			category: "T-Shirts",
-			reviews: [
-				{
-					username: "cozylover",
-					rating: 5,
-					comment: "Absolutely love this hoodie! It's warm and the material is high-quality.",
-					date: new Date("2024-12-15T16:45:00Z").getTime(),
-				},
-				{
-					username: "stylequeen",
-					rating: 4,
-					comment: "Looks great but runs a bit small. Order one size up!",
-					date: new Date("2024-11-30T12:20:00Z").getTime(),
-				},
-			],
-			sizes: ["S", "M", "L", "XL"],
-			colors: [
-				{
-					name: "White",
-					images: [
-						"/assets/photos/products/t-shirt/white/image1.webp",
-						"/assets/photos/products/t-shirt/white/image2.webp",
-						"/assets/photos/products/t-shirt/white/image3.webp",
-						"/assets/photos/products/t-shirt/white/image4.webp",
-					],
-				},
-				{
-					name: "Black",
-					images: [
-						"/assets/photos/products/t-shirt/black/image1.webp",
-						"/assets/photos/products/t-shirt/black/image2.webp",
-						"/assets/photos/products/t-shirt/black/image3.webp",
-						"/assets/photos/products/t-shirt/black/image4.webp",
-						"/assets/photos/products/t-shirt/black/image5.webp",
-					],
-				},
-				{
-					name: "green",
-					images: [
-						"/assets/photos/products/t-shirt/green/image1.webp",
-						"/assets/photos/products/t-shirt/green/image2.webp",
-						"/assets/photos/products/t-shirt/green/image3.webp",
-						"/assets/photos/products/t-shirt/green/image4.webp",
-						"/assets/photos/products/t-shirt/green/image5.webp",
-					],
-				},
-			],
-			addedDate: new Date("2024-11-01T10:00:00Z").getTime(),
-		},
-		{
-			id: "0x2B3C4D",
-			name: "Urban Comfort Sweatpants",
-			price: 40,
-			discountPercent: 15,
-			currency: "$",
-			rating: 4.8,
-			available: true,
-			stock: 150,
-			sales: 400,
-			description:
-				"Stay warm and stylish with this cozy grey hoodie, featuring a soft fleece lining and adjustable drawstring.",
-			images: [
-				"/assets/photos/products/sweatpants/white/image1.webp",
-				"https://via.placeholder.com/300x200?text=Grey+Hoodie+Hover",
-			],
-			category: "Hoodies",
-			reviews: [
-				{
-					username: "fashionista101",
-					rating: 5,
-					picture: "/assets/photos/avatar/user1.png",
-					comment: "This jacket is a must-have! It’s so versatile and comfortable. Absolutely love it!",
-				},
-				{
-					username: "style_guru",
-					rating: 4,
-					picture: "/assets/photos/avatar/user2.png",
-					comment: "Great quality denim and fits true to size. I wish there were more color options.",
-				},
-				{
-					username: "trendsetter",
-					rating: 5,
-					picture: "/assets/photos/avatar/user3.png",
-					comment: "Amazing jacket! Perfect for casual outings. I’ve been getting so many compliments.",
-				},
-				{
-					username: "casual_dresser",
-					rating: 4.5,
-					picture: "/assets/photos/avatar/user4.png",
-					comment: "Stylish and comfortable! Great for layering over hoodies or tees.",
-				},
-			],
-			sizes: ["M", "L", "XL"],
-			colors: [
-				{
-					name: "white",
-					images: [
-						"/assets/photos/products/sweatpants/white/image1.webp",
-						"/assets/photos/products/sweatpants/white/image2.webp",
-						"/assets/photos/products/sweatpants/white/image3.webp",
-						"/assets/photos/products/sweatpants/white/image4.webp",
-						"/assets/photos/products/sweatpants/white/image5.webp",
-					],
-				},
-				{
-					name: "pink",
-					images: [
-						"/assets/photos/products/sweatpants/pink/image1.webp",
-						"/assets/photos/products/sweatpants/pink/image2.webp",
-						"/assets/photos/products/sweatpants/pink/image3.webp",
-					],
-				},
-				{
-					name: "black",
-					images: [
-						"/assets/photos/products/sweatpants/black/image1.webp",
-						"/assets/photos/products/sweatpants/black/image2.webp",
-						"/assets/photos/products/sweatpants/black/image3.webp",
-						"/assets/photos/products/sweatpants/black/image4.webp",
-						"/assets/photos/products/sweatpants/black/image5.webp",
-					],
-				},
-			],
-			addedDate: new Date("2024-12-01T14:30:00Z").getTime(),
-		},
-		{
-			id: "0x5E6F7G",
-			name: "Cozy Knit Sweater",
-			price: 30,
-			discountPercent: 15,
-			currency: "$",
-			rating: 4.6,
-			available: true,
-			stock: 60,
-			sales: 300,
-			description:
-				"This soft and warm knit sweater is perfect for chilly days. Made from high-quality fabric to ensure durability and comfort.",
-			images: [
-				"/assets/photos/products/sweater/cream/image1.webp",
-				"https://via.placeholder.com/300x200?text=Cozy+Knit+Sweater+Hover",
-			],
-			category: "Sweaters",
-			reviews: [
-				{
-					username: "winterwarrior",
-					rating: 5,
-					comment: "Absolutely love this sweater! It's so warm and cozy, perfect for winter.",
-					date: new Date("2024-11-20T16:00:00Z").getTime(),
-				},
-				{
-					username: "fashionchic",
-					rating: 4,
-					comment: "Nice fit, but the sleeves could be a little longer.",
-					date: new Date("2024-11-10T10:15:00Z").getTime(),
-				},
-			],
-			sizes: ["S", "M", "L", "XL"],
-			colors: [
-				{
-					name: "Cream",
-					images: [
-						"/assets/photos/products/sweater/cream/image1.webp",
-						"/assets/photos/products/sweater/cream/image2.webp",
-					],
-				},
-				{
-					name: "Grey",
-					images: [
-						"/assets/photos/products/sweater/grey/image1.webp",
-						"/assets/photos/products/sweater/grey/image2.webp",
-					],
-				},
-			],
-			addedDate: new Date("2024-10-15T12:00:00Z").getTime(),
-		},
-		{
-			id: "0x6F7G8H",
-			name: "Slim Fit Denim Jacket",
-			price: 55,
-			discountPercent: 10,
-			currency: "$",
-			rating: 4.5,
-			available: true,
-			stock: 45,
-			sales: 250,
-			description:
-				"A stylish slim-fit denim jacket that pairs perfectly with any casual outfit. Made from premium denim for a trendy look.",
-			images: [
-				"/assets/photos/products/jacket/blue/image1.webp",
-				"https://via.placeholder.com/300x200?text=Slim+Fit+Denim+Jacket+Hover",
-			],
-			category: "Jackets",
-			reviews: [
-				{
-					username: "denimlover",
-					rating: 5,
-					comment: "This jacket is amazing! Fits perfectly and looks very stylish.",
-					date: new Date("2024-12-05T14:45:00Z").getTime(),
-				},
-				{
-					username: "urbanfashion",
-					rating: 4,
-					comment: "Great quality, but runs slightly tight around the shoulders.",
-					date: new Date("2024-11-22T09:30:00Z").getTime(),
-				},
-			],
-			sizes: ["M", "L", "XL"],
-			colors: [
-				{
-					name: "Blue",
-					images: [
-						"/assets/photos/products/jacket/blue/image1.webp",
-						"/assets/photos/products/jacket/blue/image2.webp",
-					],
-				},
-				{
-					name: "Black",
-					images: [
-						"/assets/photos/products/jacket/black/image1.webp",
-						"/assets/photos/products/jacket/black/image2.webp",
-					],
-				},
-			],
-			addedDate: new Date("2024-09-25T18:30:00Z").getTime(),
-		},
-	];
-
-	const [cartItems, setCartItems] = useState([
-		{
-			productId: "0x1A2B3C", // Matches the ID from allProducts
-			quantity: 2, // Quantity user wants to buy
-		},
-		{
-			productId: "0x2B3C4D", // Matches the ID from allProducts
-			quantity: 3, // Quantity user wants to buy
-		},
-	]);
+	const [allProducts, setAllProducts] = useState(null);
 
 	const mostSoldProducts = allProducts;
 
-	const [wishList, setWishList] = useState([
-		{
-			productId: "0x1A2B3C", // Matches the ID from allProducts
-		},
-		{
-			productId: "0x2B3C4D", // Matches the ID from allProducts
-		},
-	]);
-
-	const getProducts = async () => {
+	const getCategories = async () => {
 		try {
-			const response = await axios.get("get-orders");
-
-			console.log(response);
+			const response = await axios.get("categories");
+			setCategories(response.data);
 		} catch (error) {
 			console.log(error);
 		}
 	};
+
+	const getProducts = async () => {
+		try {
+			const response = await axios.get("products");
+			setAllProducts(response.data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const [currentQuickViewProduct, setCurrentQuickViewProduct] = useState(null);
 
 	const [photoView, setPhotoView] = useState(null);
@@ -317,6 +40,7 @@ export function MainContextProvider({ children }) {
 	const [carListtView, setCartListView] = useState(false);
 
 	useEffect(() => {
+		getCategories();
 		getProducts();
 	}, []);
 
@@ -331,10 +55,6 @@ export function MainContextProvider({ children }) {
 				setCurrentQuickViewProduct,
 				photoView,
 				setPhotoView,
-				cartItems,
-				setCartItems,
-				wishList,
-				setWishList,
 				mostSoldProducts,
 				wishListView,
 				setWishListView,

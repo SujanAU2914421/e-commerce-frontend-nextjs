@@ -1,39 +1,37 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function BrowseByCategory({ categories }) {
 	// State to manage which categories are currently visible
-	const [visibleCategories, setVisibleCategories] = useState(
-		categories.slice(0, 6)
-	);
+	const [visibleCategories, setVisibleCategories] = useState(null);
 	const [startIndex, setStartIndex] = useState(0);
 
 	const handlePrev = () => {
 		if (startIndex > 0) {
 			setStartIndex(startIndex - 6);
-			setVisibleCategories(categories.slice(startIndex - 6, startIndex));
+			setVisibleCategories(categories?.slice(startIndex - 6, startIndex));
 		}
 	};
 
 	const handleNext = () => {
-		if (startIndex + 6 < categories.length) {
+		if (startIndex + 6 < categories?.length) {
 			setStartIndex(startIndex + 6);
-			setVisibleCategories(categories.slice(startIndex + 6, startIndex + 12));
+			setVisibleCategories(categories?.slice(startIndex + 6, startIndex + 12));
 		}
 	};
+
+	useEffect(() => {
+		setVisibleCategories(categories?.slice(0, 6));
+	}, [categories]);
 
 	return (
 		<div className="relative w-full grid gap-5 xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4">
 			<div className="relative w-full flex items-center justify-between">
 				<div className="relative grid gap-2">
 					<div className="relative flex items-center gap-2">
-						<div className="relative text-xs font-bold text-blue-400">
-							Categories
-						</div>
+						<div className="relative text-xs font-bold text-blue-400">Categories</div>
 					</div>
-					<div className="relative text-xl font-bold text-gray-800">
-						Browse By Category
-					</div>
+					<div className="relative text-xl font-bold text-gray-800">Browse By Category</div>
 				</div>
 				<div className="relative flex items-end gap-2">
 					<div
@@ -76,15 +74,17 @@ export default function BrowseByCategory({ categories }) {
 			</div>
 			<div className="relative w-full h-auto flex">
 				<div className="relative grid w-full gap-4 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 grid-cols-2">
-					{visibleCategories.map((category, index) => (
-						<Link
-							href={`/shop/${category.name}`}
-							key={index}
-							className="relative rounded-md bg-gray-200 select-none h-32 font-bold flex items-center justify-center"
-						>
-							<div className="text-center mt-2">{category.name}</div>
-						</Link>
-					))}
+					{visibleCategories?.map((category, index) => {
+						return (
+							<Link
+								href={`/shop/${category.slug}`}
+								key={index}
+								className="relative rounded-md bg-gray-200 select-none h-32 font-bold flex items-center justify-center"
+							>
+								<div className="text-center mt-2">{category.title}</div>
+							</Link>
+						);
+					})}
 				</div>
 			</div>
 		</div>

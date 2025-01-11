@@ -1,13 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -46,10 +40,7 @@ export default function ItemPage({
 
 	const pathParts = pathname.split("/");
 
-	const pathMain = pathParts[1]; // "all"
-	const pathCategory = pathParts[2]; // "all"
-
-	const [currentColor, setCurrentColor] = useState(currentItemData?.colors[0]);
+	const [currentColor, setCurrentColor] = useState(currentItemData.colors[0]);
 
 	const [currentImageIndexInView, setCurrentImageIndexInView] = useState(null);
 
@@ -85,6 +76,10 @@ export default function ItemPage({
 		}, 1800);
 	};
 
+	useEffect(() => {
+		console.log(allProducts);
+	}, [allProducts]);
+
 	return (
 		<div className="relative h-auto w-full">
 			{
@@ -116,10 +111,7 @@ export default function ItemPage({
 					<div className="relative pt-7 flex items-center justify-between px-8">
 						<div className="relative h-auto w-auto">
 							<div className="relative h-auto w-auto flex items-center gap-3 capitalize text-gray-600 hover:text-gray-800 font-medium">
-								<div
-									onClick={handleGoBack}
-									className="relative cursor-pointer font-bold flex items-center gap-4"
-								>
+								<div onClick={handleGoBack} className="relative cursor-pointer font-bold flex items-center gap-4">
 									<ChevronLeft size={14} />
 									<div className="relative">Go Back</div>
 								</div>
@@ -140,10 +132,10 @@ export default function ItemPage({
 									<div className="relative grid gap-3">
 										<div className="relative flex">
 											<div className="relative text-3xl font-bold text-gray-700">
-												{currentItemData["name"]}
-												{currentItemData.discountPercent > 0 && (
+												{currentItemData.title}
+												{currentItemData.discount > 0 && (
 													<div className="absolute -right-16 -top-2 px-2 z-10 py-1 shadow-md shadow-gray-700 bg-gray-700 text-yellow-300 text-sm">
-														{currentItemData.discountPercent}% OFF
+														{currentItemData.discount}% OFF
 													</div>
 												)}
 											</div>
@@ -152,40 +144,39 @@ export default function ItemPage({
 											<div className="relative font-bold text-gray-800 text-3xl font-sans flex items-center gap-2">
 												<div className="relative">
 													$
-													{currentItemData["price"] -
-														(currentItemData["discountPercent"] *
-															currentItemData["price"]) /
-															100}
+													{currentItemData.price && currentItemData.discount
+														? Math.round(
+																parseFloat(currentItemData.price) -
+																	(parseFloat(currentItemData.discount) * parseFloat(currentItemData.price)) / 100
+														  )
+														: "N/A"}
 												</div>
 												<div className="relative text-gray-500">-</div>
 												<div className="relative line-through font-medium text-xl text-gray-500">
-													${currentItemData["price"]}
+													{currentItemData.price ? `$${Math.round(parseFloat(currentItemData.price))}` : "N/A"}
 												</div>
 											</div>
 										</div>
-										<div className="relative text-sm text-gray-600">
-											{currentItemData["description"]}
-										</div>
+										<div
+											className="relative text-sm text-gray-600"
+											dangerouslySetInnerHTML={{ __html: currentItemData.description }}
+										></div>
+
 										<div className="relative h-auto w-full grid gap-5 pt-4">
 											<div className="relative h-auto w-auto flex items-center">
 												<div className="relative h-10 w-24 flex items-center">
-													<div className="relative text-xs uppercase font-bold text-gray-500">
-														Size
-													</div>
+													<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
 												</div>
 												<div className="relative h-auto w-[calc(100%-6rem)]">
 													<Select>
 														<SelectTrigger className="w-full">
-															<SelectValue
-																placeholder="Select Size"
-																className="relative"
-															/>
+															<SelectValue placeholder="Select Size" className="relative" />
 														</SelectTrigger>
 														<SelectContent>
 															{currentItemData["sizes"].map((size, index) => {
 																return (
 																	<SelectItem
-																		className="text-xs"
+																		className="text-xs cursor-pointer hover:bg-gray-100"
 																		key={index}
 																		value={size}
 																	>
@@ -199,9 +190,7 @@ export default function ItemPage({
 											</div>
 											<div className="relative h-auto w-auto flex items-center">
 												<div className="relative h-10 w-24 flex items-center">
-													<div className="relative text-xs uppercase font-bold text-gray-500">
-														Color
-													</div>
+													<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
 												</div>
 												<div className="relative h-auto w-[calc(100%-6rem)]">
 													<div className="relative h-10 flex items-center gap-4">
@@ -229,11 +218,7 @@ export default function ItemPage({
 													<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
 														<div
 															onClick={() => {
-																setSelectedNumberItems(
-																	selectedNumberItems >= 2
-																		? selectedNumberItems - 1
-																		: 1
-																);
+																setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
 															}}
 															className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
 														>
@@ -274,30 +259,18 @@ export default function ItemPage({
 													<div className="relative h-auto w-auto flex items-center gap-2">
 														<Button variant="default" className="select-none">
 															<div className="relative text-yellow-500">
-																<Zap
-																	fill="currentColor"
-																	stroke="currentColor"
-																	size={20}
-																/>
+																<Zap fill="currentColor" stroke="currentColor" size={20} />
 															</div>
-															<div className="relative text-xs font-bold">
-																Buy Now
-															</div>
+															<div className="relative text-xs font-bold">Buy Now</div>
 														</Button>
 														<Button
 															onClick={() => {
 																toggleLiked();
 															}}
 															variant="outline"
-															className={`${
-																liked ? "text-red-600" : "text-gray-500"
-															} select-none`}
+															className={`${liked ? "text-red-600" : "text-gray-500"} select-none`}
 														>
-															<Heart
-																stroke="currentColor"
-																fill={liked ? "currentColor" : "none"}
-																size={20}
-															/>
+															<Heart stroke="currentColor" fill={liked ? "currentColor" : "none"} size={20} />
 														</Button>
 													</div>
 												</div>
@@ -306,12 +279,8 @@ export default function ItemPage({
 												<div className="relative">
 													<Truck size={20} strokeWidth={1.4} />
 												</div>
-												<div
-													className="relative text-sm"
-													style={{ fontFamily: "afacad-flux" }}
-												>
-													Free delivery over{" "}
-													<span className="relative font-bold">$30.0</span>
+												<div className="relative text-sm" style={{ fontFamily: "afacad-flux" }}>
+													Free delivery over <span className="relative font-bold">$30.0</span>
 												</div>
 											</div>
 										</div>
@@ -326,10 +295,7 @@ export default function ItemPage({
 									<div className="relative w-full h-auto">
 										<div className="relative h-auto w-full pt-6">
 											<div className="relative h-auto w-full grid gap-6">
-												<div
-													className="relative text-sm text-gray-800"
-													style={{ fontFamily: "afacad-flux" }}
-												>
+												<div className="relative text-sm text-gray-800" style={{ fontFamily: "afacad-flux" }}>
 													Estimated Delivary: 3days
 												</div>
 												<ShareUi />
@@ -343,9 +309,7 @@ export default function ItemPage({
 				</div>
 				<div className="relative h-auto w-full px-8">
 					<div className="relative w-full h-auto grid gap-8 pt-8">
-						<div className="relative font-bold text-gray-800 uppercase">
-							Related Products
-						</div>
+						<div className="relative font-bold text-gray-800 uppercase">Related Products</div>
 						<ExploreProducts
 							allProducts={allProducts}
 							neglectItem={currentItemData}

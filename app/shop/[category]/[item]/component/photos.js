@@ -1,11 +1,7 @@
 import { ZoomIn } from "lucide-react/dist/cjs/lucide-react";
 import React, { useEffect, useState } from "react";
 
-export default function PhotosUi({
-	photos,
-	setPhotoView,
-	setCurrentImageIndexInView,
-}) {
+export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInView }) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
 	const handleImageClick = (index) => {

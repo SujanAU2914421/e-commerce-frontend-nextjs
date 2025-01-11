@@ -1,6 +1,7 @@
 import AuthContextProvider from "@/contexts/AuthContext";
 import { MainContextProvider } from "../contexts/MainContext";
 import "./globals.css";
+import UserInterractionContextProvider from "@/contexts/UserInterractionContext";
 
 export const metadata = {
 	title: "FigPic",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
 		<html lang="en">
 			<body className={`w-full h-screen antialiased`}>
 				<AuthContextProvider>
-					<MainContextProvider>{children}</MainContextProvider>
+					<MainContextProvider>
+						<UserInterractionContextProvider>{children}</UserInterractionContextProvider>
+					</MainContextProvider>
 				</AuthContextProvider>
 			</body>
 		</html>

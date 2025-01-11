@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./button";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useMainContext } from "@/contexts/MainContext";
+import { MiniCartViewer } from "./miniCartViewer";
 
 export default function ShopNavbar() {
 	const pathName = usePathname();
@@ -94,39 +95,7 @@ export default function ShopNavbar() {
 					showCartList ? "right-0" : "-right-1/3"
 				} top-16 w-1/3 h-[calc(100vh-4rem)] bg-white duration-300 border-l ease-in-out flex`}
 			>
-				<div className="relative h-full w-full px-8">
-					<div className="relative w-full h-[calc(100%-14rem)] overflow-y-auto">
-						<div className="relative w-full h-auto">
-							<div className="relative"></div>
-						</div>
-					</div>
-					<div className="relative w-full h-56 border-t">
-						<div className="relative h-full w-full flex pt-8">
-							<div className="relative h-auto w-full flex flex-col gap-4">
-								<div className="relative flex uppercase items-center justify-between">
-									<div className="relative text-gray-600 text-sm">SUBTOTAL:</div>
-									<div className="relative font-bold text-gray-800">$999.9</div>
-								</div>
-								<div className="relative flex uppercase items-center justify-between">
-									<div className="relative text-gray-600 text-sm">Shipping: </div>
-									<div className="relative font-bold text-gray-800 text-sm">Free</div>
-								</div>
-								<div className="relative underline text-sm">Have a Coupon?</div>
-								<div className="relative flex gap-4">
-									<Link
-										href="/cart"
-										className="relative cursor-pointer rounded h-10 w-1/2 text-gray-800 bg-gray-200 flex items-center justify-center font-bold text-sm"
-									>
-										View In Detail
-									</Link>
-									<div className="relative cursor-pointer rounded h-10 w-1/2 bg-gray-800 text-gray-200 flex items-center justify-center font-bold text-sm">
-										Check Out
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+				<MiniCartViewer />
 			</div>
 			<div className="relative h-full w-full flex justify-between items-center py-4 px-8 bg-white flex-wrap">
 				<div className="relative flex gap-5 items-center">
@@ -154,8 +123,12 @@ export default function ShopNavbar() {
 						{pathName != "/cart" && pathName != "/checkout" && (
 							<div
 								onClick={() => {
-									setShowCartList(!showCartList);
-									setShowSearching(false);
+									if (user) {
+										setShowCartList(!showCartList);
+										setShowSearching(false);
+									} else {
+										console.log("User not logged in");
+									}
 								}}
 								className="relative h-auto w-auto flex items-center justify-center text-gray-700 hover:rotate-6 cursor-pointer rounded-full"
 							>

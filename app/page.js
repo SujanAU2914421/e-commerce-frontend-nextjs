@@ -9,17 +9,10 @@ import BrowseByCategory from "@/components/ui/browseByCategory";
 import TrendingProduct from "@/components/ui/trendingProduct";
 import Footer from "@/components/ui/footer";
 import FlashSale from "@/components/ui/flashSale";
-import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function LandingPage() {
 	const { categories, allProducts, currentQuickViewProduct, setCurrentQuickViewProduct, mostSoldProducts } =
 		useMainContext();
-
-	const { user } = useAuthContext();
-
-	useEffect(() => {
-		console.log(user);
-	}, [user]);
 
 	return (
 		<div className="relative h-screen w-screen overflow-hidden">
@@ -42,46 +35,52 @@ export default function LandingPage() {
 					</div>
 					<div className="relative grid w-full gap-4 pb-16">
 						<div className="relative h-auto w-full grid gap-16">
-							<div className="relative h-auto w-full flex justify-center">
-								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
-									<TrendingProduct trendingProduct={allProducts[1]} />
+							{allProducts && (
+								<div className="relative h-auto w-full flex justify-center">
+									<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
+										<TrendingProduct trendingProduct={allProducts[0]} />
+									</div>
 								</div>
-							</div>
+							)}
 							<div className="relative w-full h-auto pt-16 flex justify-center">
 								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
 									<BrowseByCategory categories={categories} />
 								</div>
 							</div>
-							<div className="relative h-auto w-full flex justify-center">
-								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
-									<div className="relative w-full h-auto grid gap-8">
-										<div className="relative xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4 flex w-full justify-between">
-											<div className="relative font-bold text-3xl">Most Sold</div>
-											<div className="relative flex items-center gap-2 cursor-pointer">
-												<div className="relative uppercase text-gray-800 text-sm font-bold">View all</div>
-												<div className="relative h-[2px] w-3 bg-gray-800"></div>
+							{mostSoldProducts && (
+								<div className="relative h-auto w-full flex justify-center">
+									<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
+										<div className="relative w-full h-auto grid gap-8">
+											<div className="relative xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4 flex w-full justify-between">
+												<div className="relative font-bold text-3xl">Most Sold</div>
+												<div className="relative flex items-center gap-2 cursor-pointer">
+													<div className="relative uppercase text-gray-800 text-sm font-bold">View all</div>
+													<div className="relative h-[2px] w-3 bg-gray-800"></div>
+												</div>
 											</div>
+											<ExploreProducts
+												allProducts={mostSoldProducts}
+												setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+											/>
 										</div>
-										<ExploreProducts
-											allProducts={mostSoldProducts}
-											setCurrentQuickViewProduct={setCurrentQuickViewProduct}
-										/>
 									</div>
 								</div>
-							</div>
-							<div className="relative h-auto w-full flex justify-center">
-								<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
-									<div className="relative w-full h-auto grid gap-8">
-										<div className="relative font-bold text-3xl xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4">
-											Goofy Collections
+							)}
+							{mostSoldProducts && (
+								<div className="relative h-auto w-full flex justify-center">
+									<div className="relative h-auto xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] w-full">
+										<div className="relative w-full h-auto grid gap-8">
+											<div className="relative font-bold text-3xl xl:px-0 lg:px-0 md:px-8 sm:px-8 px-4">
+												Goofy Collections
+											</div>
+											<ExploreProducts
+												allProducts={mostSoldProducts}
+												setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+											/>
 										</div>
-										<ExploreProducts
-											allProducts={mostSoldProducts}
-											setCurrentQuickViewProduct={setCurrentQuickViewProduct}
-										/>
 									</div>
 								</div>
-							</div>
+							)}
 							<FlashSale />
 						</div>
 						<Footer />

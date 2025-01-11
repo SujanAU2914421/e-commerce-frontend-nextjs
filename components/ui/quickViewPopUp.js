@@ -10,22 +10,30 @@ import {
 	XIcon,
 	Zap,
 } from "lucide-react/dist/cjs/lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ShareUi from "./share";
 import RatingsStar from "./ratingsStar";
 import AccordionContentDesignForQuickView from "./accordionContentDesignForQuickView";
 import Link from "next/link";
+import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 
-export default function QuickViewPopUp({
-	filteredData,
-	currentQuickViewProduct,
-	setCurrentQuickViewProduct,
-}) {
+export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, setCurrentQuickViewProduct }) {
 	const [selectedNumberItems, setSelectedNumberItems] = useState(1); // Number of items in the cart
 	const [currentIndex, setCurrentIndex] = useState(
 		filteredData.findIndex((item) => item.id === currentQuickViewProduct.id)
 	);
+
+	const {
+		wishList,
+		setWishList,
+		addToWishList,
+		removeFromWishList,
+		cartItems,
+		setCartItems,
+		addToCart,
+		removeFromCart,
+	} = useUserInterractionContext();
 
 	const [posX, setPosX] = useState(0);
 	const [posY, setPosY] = useState(0);
@@ -42,8 +50,7 @@ export default function QuickViewPopUp({
 
 	// Move to the previous product
 	const handleMoveLeft = () => {
-		const newIndex =
-			(currentIndex - 1 + filteredData.length) % filteredData.length;
+		const newIndex = (currentIndex - 1 + filteredData.length) % filteredData.length;
 		setCurrentIndex(newIndex);
 		setCurrentQuickViewProduct(filteredData[newIndex]);
 	};
@@ -89,9 +96,7 @@ export default function QuickViewPopUp({
 		}
 	}, [currentQuickViewProduct]);
 
-	const [currentColor, setCurrentColor] = useState(
-		currentQuickViewProduct?.colors[0]
-	);
+	const [currentColor, setCurrentColor] = useState(currentQuickViewProduct?.colors[0]);
 
 	const mainContainerRef = useRef(null);
 
@@ -173,9 +178,7 @@ export default function QuickViewPopUp({
 												<div
 													key={index}
 													className={`relative bg-white shadow-xl border border-gray-100 h-16 cursor-pointer w-16 ${
-														currentImageIndex === index
-															? "scale-110"
-															: "scale-100 hover:scale-110"
+														currentImageIndex === index ? "scale-110" : "scale-100 hover:scale-110"
 													}`}
 													style={{ transitionDelay: `${index * 50}ms` }}
 												>
@@ -203,9 +206,7 @@ export default function QuickViewPopUp({
 											{/* Move Left Button */}
 											<div
 												className={`relative h-10 w-12 flex items-center justify-center duration-200 ${
-													previousDataExists
-														? "text-black group cursor-pointer"
-														: "text-gray-400"
+													previousDataExists ? "text-black group cursor-pointer" : "text-gray-400"
 												}`}
 												onClick={() => {
 													if (previousDataExists) {
@@ -219,9 +220,7 @@ export default function QuickViewPopUp({
 											{/* Move Right Button */}
 											<div
 												className={`relative h-10 w-12 flex items-center justify-center ${
-													nextDataExists
-														? "text-black group cursor-pointer"
-														: "text-gray-400"
+													nextDataExists ? "text-black group cursor-pointer" : "text-gray-400"
 												}`}
 												onClick={() => {
 													if (nextDataExists) {
@@ -240,10 +239,7 @@ export default function QuickViewPopUp({
 											}}
 											className="relative group"
 										>
-											<X
-												size={30}
-												className="relative group-hover:scale-105 scale-100 duration-200 hover:rotate-3"
-											/>
+											<X size={30} className="relative group-hover:scale-105 scale-100 duration-200 hover:rotate-3" />
 										</div>
 									</div>
 								</div>
@@ -257,7 +253,7 @@ export default function QuickViewPopUp({
 											style={{ opacity: 0, transform: "translateY(20px)" }}
 											className="relative text-5xl font-bold xl:w-4/5 lg:w-4/5 w-full"
 										>
-											{currentQuickViewProduct.name}
+											{currentQuickViewProduct.title}
 										</div>
 										<div
 											ref={setAllTransitionElementsRef}
@@ -265,11 +261,7 @@ export default function QuickViewPopUp({
 											className="relative flex items-center gap-y-2 gap-x-4 flex-wrap"
 										>
 											<div className="relative">
-												<RatingsStar
-													currentProduct={currentQuickViewProduct}
-													size={14}
-													color="red"
-												/>
+												<RatingsStar currentProduct={currentQuickViewProduct} size={14} color="red" />
 											</div>
 											<div className="relative text-sm">
 												{currentQuickViewProduct.reviews?.length > 0
@@ -293,9 +285,8 @@ export default function QuickViewPopUp({
 											ref={setAllTransitionElementsRef}
 											style={{ opacity: 0, transform: "translateY(20px)" }}
 											className="relative xl:w-4/5 lg:w-4/5 w-full text-gray-700"
-										>
-											{currentQuickViewProduct.description}
-										</div>
+											dangerouslySetInnerHTML={{ __html: currentQuickViewProduct.description }}
+										></div>
 										<div
 											ref={setAllTransitionElementsRef}
 											style={{ opacity: 0, transform: "translateY(20px)" }}
@@ -307,11 +298,7 @@ export default function QuickViewPopUp({
 														<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
 															<div
 																onClick={() => {
-																	setSelectedNumberItems(
-																		selectedNumberItems >= 2
-																			? selectedNumberItems - 1
-																			: 1
-																	);
+																	setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
 																}}
 																className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
 															>
@@ -323,8 +310,7 @@ export default function QuickViewPopUp({
 															<div
 																onClick={() => {
 																	setSelectedNumberItems(
-																		selectedNumberItems <
-																			currentQuickViewProduct.stock
+																		selectedNumberItems < currentQuickViewProduct.stock
 																			? selectedNumberItems + 1
 																			: selectedNumberItems
 																	);
@@ -336,14 +322,33 @@ export default function QuickViewPopUp({
 														</div>
 													</div>
 													<div className="relative h-auto w-auto flex items-center flex-wrap gap-2">
-														<Button variant="outline" className="select-none">
+														<Button
+															variant={
+																cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)
+																	? "outline"
+																	: "default"
+															}
+															className="select-none"
+															onClick={() => {
+																if (cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)) {
+																	// If item is already in the cart, remove it
+																	removeFromCart(currentQuickViewProduct.id, setCartItems);
+																} else {
+																	// If item is not in the cart, add it
+																	addToCart(currentQuickViewProduct.id, setCartItems, selectedNumberItems);
+																}
+															}}
+														>
 															<div className="relative">
 																<ShoppingBag size={20} />
 															</div>
 															<div className="relative text-xs font-bold">
-																Add to cart
+																{cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)
+																	? "Added to cart"
+																	: "Add to cart"}
 															</div>
 														</Button>
+
 														<Link
 															href={`/shop/product/${currentQuickViewProduct.id}`}
 															onClick={() => {
@@ -351,34 +356,31 @@ export default function QuickViewPopUp({
 															}}
 														>
 															<Button variant="outline" className="select-none">
-																<div className="relative text-xs font-bold">
-																	Check Out
-																</div>
+																<div className="relative text-xs font-bold">Check Out</div>
 															</Button>
 														</Link>
 														<div className="relative h-auto w-auto flex items-center gap-2">
-															<Link
-																href="/checkout"
-																className="relative rounded-md"
-															>
-																<Button
-																	variant="default"
-																	className="select-none"
-																>
+															<Link href="/checkout" className="relative rounded-md">
+																<Button variant="default" className="select-none">
 																	<div className="relative text-yellow-500">
-																		<Zap
-																			fill="currentColor"
-																			stroke="currentColor"
-																			size={20}
-																		/>
+																		<Zap fill="currentColor" stroke="currentColor" size={20} />
 																	</div>
-																	<div className="relative text-xs font-bold">
-																		Buy Now
-																	</div>
+																	<div className="relative text-xs font-bold">Buy Now</div>
 																</Button>
 															</Link>
-															<Button variant="outline">
-																<Heart size={20} />
+															<Button
+																variant="outline"
+																onClick={() =>
+																	wishList.some((item) => item.product_id === currentQuickViewProduct.id)
+																		? removeFromWishList(currentQuickViewProduct.id, setWishList)
+																		: addToWishList(currentQuickViewProduct.id, setWishList)
+																}
+															>
+																{wishList.some((item) => item.product_id === currentQuickViewProduct.id) ? (
+																	<Heart size={20} fill="red" stroke="red" />
+																) : (
+																	<Heart size={20} />
+																)}
 															</Button>
 														</div>
 													</div>
@@ -387,28 +389,19 @@ export default function QuickViewPopUp({
 													<div className="relative">
 														<Truck size={20} strokeWidth={1.4} />
 													</div>
-													<div
-														className="relative text-sm"
-														style={{ fontFamily: "afacad-flux" }}
-													>
-														Free delivery over{" "}
-														<span className="relative font-bold">$30.0</span>
+													<div className="relative text-sm" style={{ fontFamily: "afacad-flux" }}>
+														Free delivery over <span className="relative font-bold">$30.0</span>
 													</div>
 												</div>
 											</div>
 										</div>
 										<div className="relative w-full pt-8">
-											<AccordionContentDesignForQuickView
-												currentItemData={currentQuickViewProduct}
-											/>
+											<AccordionContentDesignForQuickView currentItemData={currentQuickViewProduct} />
 										</div>
 										<div className="relative w-full h-auto">
 											<div className="relative h-auto w-full pt-6">
 												<div className="relative h-auto w-full grid gap-6">
-													<div
-														className="relative text-sm text-gray-800"
-														style={{ fontFamily: "afacad-flux" }}
-													>
+													<div className="relative text-sm text-gray-800" style={{ fontFamily: "afacad-flux" }}>
 														Estimated Delivery: 3 days
 													</div>
 													<ShareUi />

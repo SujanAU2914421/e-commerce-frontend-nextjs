@@ -2,12 +2,7 @@ import { X, XIcon } from "lucide-react/dist/cjs/lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
-export default function PhotoView({
-	photoView,
-	setPhotoView,
-	currentImageIndexInView,
-	setCurrentImageIndexInView,
-}) {
+export default function PhotoView({ photoView, setPhotoView, currentImageIndexInView, setCurrentImageIndexInView }) {
 	const handleKeyDown = (e) => {
 		if (e.key === "Escape") {
 			setPhotoView(null);
@@ -56,14 +51,7 @@ export default function PhotoView({
 						style={{
 							background: `url(${photoView[currentImageIndexInView]}) center / cover`,
 						}}
-					>
-						<Image
-							src={photoView[currentImageIndexInView]}
-							alt="nothing but a heart ache"
-							layout="fill"
-							objectFit="cover"
-						/>
-					</div>
+					></div>
 					<div className="absolute top-0 left-0 h-full w-full group flex items-center justify-between">
 						<div
 							className="absolute top-0 right-0 h-10 w-10 cursor-pointer flex items-center justify-center bg-white text-gray-700 z-20"
@@ -91,12 +79,10 @@ export default function PhotoView({
 													className="relative h-full w-full opacity-0 group-hover:opacity-100 duration-200 translate-y-1 group-hover:translate-y-0 border-white border rounded shadow-xl"
 													style={{ transitionDelay: `${index * 50}ms` }}
 												>
-													<Image
-														alt="Thumbnail"
-														src={image}
-														layout="fill"
-														objectFit="cover"
-													/>
+													<div
+														className="relative h-full w-full"
+														style={{ background: `url(${image}) center / cover` }}
+													></div>
 												</div>
 											</div>
 										);

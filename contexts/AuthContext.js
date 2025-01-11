@@ -16,9 +16,10 @@ export default function AuthContextProvider({ children }) {
 
 	const checkAuth = async () => {
 		try {
-			const response = await axios.post("check-auth");
+			const response = await axios.post("customer/check-auth");
 
 			setUser(response.user);
+
 			if (response.user) {
 				if (path === "/auth/login" || path === "/auth/signup") {
 					window.location.href = "/";
