@@ -91,6 +91,8 @@ export function MainContextProvider({ children }) {
 				setSearchQuery,
 				searchProducts,
 				searchProductsResult,
+				getCategories,
+				getProducts,
 			}}
 		>
 			{children}

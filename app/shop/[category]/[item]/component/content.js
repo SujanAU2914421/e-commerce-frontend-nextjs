@@ -159,7 +159,7 @@ export default function ItemPage({
 																<div
 																	onClick={() => {
 																		setCurrentColor(color);
-																		setSelectedColor(color);
+																		setSelectedColor(color.name);
 																	}}
 																	key={index}
 																	className={`relative h-full cursor-pointer w-8 rounded shadow-md shadow-gray-400`}
@@ -203,30 +203,41 @@ export default function ItemPage({
 													</div>
 												</div>
 												<div className="relative h-auto w-auto flex items-center flex-wrap gap-2 pt-4">
-													<Button
-														onClick={() => {
-															if (selectedNumberItems > 0 && selectedSize && selectedColor) {
-																cartItems.some((item) => item.product_id === currentItemData.id)
-																	? addToCart(
-																			currentItemData.id,
-																			setCartItems,
-																			selectedNumberItems,
-																			selectedColor,
-																			selectedSize
-																	  )
-																	: removeFromCart(currentItemData.id, setCartItems);
-															}
-														}}
-														variant={addedToCart ? "outline" : "default"}
-														className="select-none"
-													>
-														<div className="relative">
-															<ShoppingBag size={20} />
-														</div>
-														<div className="relative text-xs font-bold">
-															{addedToCart ? "Added To Cart" : "Add to cart"}
-														</div>
-													</Button>
+													{cartItems.some((cartItem) => cartItem.product_id === currentItemData.id) ? (
+														<Button
+															variant={"outline"}
+															className="select-none"
+															onClick={() => {
+																console.log(currentItemData, cartItems);
+
+																removeFromCart(currentItemData.id, setCartItems);
+															}}
+														>
+															<div className="relative">
+																<ShoppingBag size={20} />
+															</div>
+															<div className="relative text-xs font-bold">Remove From Cart</div>
+														</Button>
+													) : (
+														<Button
+															variant={"default"}
+															className="select-none"
+															onClick={() => {
+																addToCart(
+																	currentItemData.id,
+																	setCartItems,
+																	selectedNumberItems,
+																	selectedColor,
+																	selectedSize
+																);
+															}}
+														>
+															<div className="relative">
+																<ShoppingBag size={20} />
+															</div>
+															<div className="relative text-xs font-bold">Add To Cart</div>
+														</Button>
+													)}
 													<div className="relative h-auto w-auto flex items-center gap-2">
 														<Button variant="default" className="select-none">
 															<div className="relative text-yellow-500">
