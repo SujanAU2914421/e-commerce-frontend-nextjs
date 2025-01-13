@@ -30,7 +30,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 									<div
 										className={`relative h-full w-full`}
 										style={{
-											background: `url(${image}) center / cover`,
+											background: `url(${image}) center / contain no-repeat`,
 										}}
 									></div>
 								</div>
@@ -59,7 +59,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 						<div
 							className="relative h-full w-full rounded"
 							style={{
-								background: `url(${photos?.images[currentImageIndex]}) center / cover`,
+								background: `url(${photos?.images[currentImageIndex]}) center / contain no-repeat`,
 							}}
 							onMouseMove={(e) => {
 								const rect = e.currentTarget.getBoundingClientRect();
@@ -70,7 +70,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 							}}
 							onMouseLeave={(e) => {
 								e.currentTarget.style.backgroundPosition = "center";
-								e.currentTarget.style.backgroundSize = "cover"; // Reset zoom
+								e.currentTarget.style.backgroundSize = "contain"; // Reset zoom
 							}}
 						></div>
 					</div>

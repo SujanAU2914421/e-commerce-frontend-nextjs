@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { use } from "react";
-import RatingsStar from "./ratingsStar";
+import CommentRatingsStar from "./commentRatingsStar";
 import { Trash } from "lucide-react";
 import { ImageWithSkeleton } from "./imageWithSkeleton";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
@@ -41,7 +41,7 @@ export default function AllWishList({
 								<div className="relative">
 									<div className="relative grid gap-1 pt-5 px-2">
 										<div className="relative text-yellow-500">
-											<RatingsStar currentProduct={temp} size={10} gap={0} />
+											<CommentRatingsStar currentProduct={temp} size={10} gap={0} />
 										</div>
 										<Link
 											href={`/shop/${temp.category.slug}/${temp.id}`}

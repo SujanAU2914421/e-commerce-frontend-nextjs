@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import AllReview from "@/components/ui/allReview";
+import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import { fetchAllComments } from "@/lib/reviewHandle";
 import RatingsStar from "@/components/ui/ratingsStar";
 
 export default function AccordionContentDesign({ currentColor, setCurrentColor, currentItemData }) {
+	const { comments, setComments } = useUserInterractionContext();
+
+	useEffect(() => {
+		if (currentItemData) {
+			fetchAllComments(currentItemData.id, setComments);
+		}
+	}, [currentItemData, setComments]);
+
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="discription">
@@ -82,13 +92,13 @@ export default function AccordionContentDesign({ currentColor, setCurrentColor, 
 						<div className="relative flex">
 							<div className="relative">
 								Reviews(
-								<span className="relative font-sans">{currentItemData.comments.length}</span>)
+								<span className="relative font-sans">{comments.length}</span>)
 							</div>
 						</div>
 						<div className="relative">
 							<div className="relative flex gap-3 items-center">
 								{/* Render stars based on the rating */}
-								<RatingsStar currentProduct={currentItemData} size={10} />
+								<RatingsStar currentProduct={comments} size={10} />
 							</div>
 						</div>
 					</div>

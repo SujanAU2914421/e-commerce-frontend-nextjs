@@ -19,7 +19,6 @@ import Link from "next/link";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 
 export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, setCurrentQuickViewProduct }) {
-	const [selectedNumberItems, setSelectedNumberItems] = useState(1); // Number of items in the cart
 	const [currentIndex, setCurrentIndex] = useState(
 		filteredData.findIndex((item) => item.id === currentQuickViewProduct.id)
 	);
@@ -55,12 +54,17 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 		setCurrentQuickViewProduct(filteredData[newIndex]);
 	};
 
+	const [selectedNumberItems, setSelectedNumberItems] = useState(1); // Number of items in the cart
+	const [selectedColor, setSelectedColor] = useState(currentQuickViewProduct?.colors[0].name);
+	const [selectedSize, setSelectedSize] = useState(currentQuickViewProduct?.sizes[0]);
+
 	// Move to the next product
 	const handleMoveRight = () => {
 		const newIndex = (currentIndex + 1) % filteredData.length;
 		setCurrentIndex(newIndex);
 		setCurrentQuickViewProduct(filteredData[newIndex]);
 	};
+
 	const previousDataExists = currentIndex > 0; // Check if there's a previous product
 	const nextDataExists = currentIndex < filteredData.length - 1; // Check if there's a next product
 
@@ -248,13 +252,14 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 									className="relative h-[calc(100%-4rem)] duration-300 w-full px-8 overflow-y-auto overflow-x-hidden"
 								>
 									<div className="relative h-auto w-full grid gap-4 pb-16">
-										<div
+										<Link
+											href={`/shop/${currentQuickViewProduct.category.slug}/${currentQuickViewProduct.product_id}`}
 											ref={setAllTransitionElementsRef}
 											style={{ opacity: 0, transform: "translateY(20px)" }}
 											className="relative text-5xl font-bold xl:w-4/5 lg:w-4/5 w-full"
 										>
 											{currentQuickViewProduct.title}
-										</div>
+										</Link>
 										<div
 											ref={setAllTransitionElementsRef}
 											style={{ opacity: 0, transform: "translateY(20px)" }}
@@ -293,8 +298,60 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 											className="relative h-auto w-full"
 										>
 											<div className="relative h-auto w-full grid gap-2">
-												<div className="relative h-auto w-full grid gap-4">
-													<div className="relative flex">
+												<div className="relative h-auto w-full flex-col">
+													<div className="relative h-auto w-full grid gap-5 pt-4">
+														<div className="relative h-auto w-auto flex items-center">
+															<div className="relative h-10 w-24 flex items-center">
+																<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
+															</div>
+															<div className="relative h-auto w-[calc(100%-6rem)]">
+																<div className="flex gap-2 flex-wrap">
+																	{currentQuickViewProduct["sizes"].map((size, index) => (
+																		<div
+																			key={index}
+																			className={`px-4 py-2 text-xs border rounded-md cursor-pointer duration-200 ${
+																				selectedSize === size
+																					? "bg-gray-800 text-white scale-105"
+																					: "bg-transparent hover:bg-gray-100 scale-100"
+																			}`}
+																			onClick={() => {
+																				setSelectedSize(size);
+																			}}
+																		>
+																			{size}
+																		</div>
+																	))}
+																</div>
+															</div>
+														</div>
+														<div className="relative h-auto w-auto flex items-center">
+															<div className="relative h-10 w-24 flex items-center">
+																<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
+															</div>
+															<div className="relative h-auto w-[calc(100%-6rem)]">
+																<div className="relative h-10 flex items-center gap-4">
+																	{currentQuickViewProduct["colors"].map((color, index) => {
+																		return (
+																			<div
+																				onClick={() => {
+																					setCurrentColor(color);
+																					setSelectedColor(color.name);
+																				}}
+																				key={index}
+																				className={`relative h-full cursor-pointer ${
+																					selectedColor == color.name
+																						? "scale-110 shadow-md duration-200 border-none shadow-gray-500"
+																						: "scale-100 border border-gray-600"
+																				} w-8 rounded`}
+																				style={{ background: `${color.name}` }}
+																			></div>
+																		);
+																	})}
+																</div>
+															</div>
+														</div>
+													</div>
+													<div className="relative flex pt-4">
 														<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
 															<div
 																onClick={() => {
@@ -321,44 +378,42 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 															</div>
 														</div>
 													</div>
-													<div className="relative h-auto w-auto flex items-center flex-wrap gap-2">
-														<Button
-															variant={
-																cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)
-																	? "outline"
-																	: "default"
-															}
-															className="select-none"
-															onClick={() => {
-																if (cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)) {
-																	// If item is already in the cart, remove it
-																	removeFromCart(currentQuickViewProduct.id, setCartItems);
-																} else {
-																	// If item is not in the cart, add it
-																	addToCart(currentQuickViewProduct.id, setCartItems, selectedNumberItems);
-																}
-															}}
-														>
-															<div className="relative">
-																<ShoppingBag size={20} />
-															</div>
-															<div className="relative text-xs font-bold">
-																{cartItems.some((cartItem) => cartItem.product.id === currentQuickViewProduct.id)
-																	? "Added to cart"
-																	: "Add to cart"}
-															</div>
-														</Button>
+													<div className="relative h-auto w-auto flex items-center flex-wrap gap-2 pt-4">
+														{cartItems.some((cartItem) => cartItem.product_id === currentQuickViewProduct.id) ? (
+															<Button
+																variant={"outline"}
+																className="select-none"
+																onClick={() => {
+																	console.log(currentQuickViewProduct, cartItems);
 
-														<Link
-															href={`/shop/product/${currentQuickViewProduct.id}`}
-															onClick={() => {
-																setCurrentQuickViewProduct(null);
-															}}
-														>
-															<Button variant="outline" className="select-none">
-																<div className="relative text-xs font-bold">Check Out</div>
+																	removeFromCart(currentQuickViewProduct.id, setCartItems);
+																}}
+															>
+																<div className="relative">
+																	<ShoppingBag size={20} />
+																</div>
+																<div className="relative text-xs font-bold">Remove From Cart</div>
 															</Button>
-														</Link>
+														) : (
+															<Button
+																variant={"default"}
+																className="select-none"
+																onClick={() => {
+																	addToCart(
+																		currentQuickViewProduct.id,
+																		setCartItems,
+																		selectedNumberItems,
+																		selectedColor,
+																		selectedSize
+																	);
+																}}
+															>
+																<div className="relative">
+																	<ShoppingBag size={20} />
+																</div>
+																<div className="relative text-xs font-bold">Add To Cart</div>
+															</Button>
+														)}
 														<div className="relative h-auto w-auto flex items-center gap-2">
 															<Link href="/checkout" className="relative rounded-md">
 																<Button variant="default" className="select-none">
@@ -368,29 +423,35 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 																	<div className="relative text-xs font-bold">Buy Now</div>
 																</Button>
 															</Link>
-															<Button
-																variant="outline"
-																onClick={() =>
-																	wishList.some((item) => item.product_id === currentQuickViewProduct.id)
-																		? removeFromWishList(currentQuickViewProduct.id, setWishList)
-																		: addToWishList(currentQuickViewProduct.id, setWishList)
-																}
-															>
-																{wishList.some((item) => item.product_id === currentQuickViewProduct.id) ? (
-																	<Heart size={20} fill="red" stroke="red" />
-																) : (
-																	<Heart size={20} />
-																)}
-															</Button>
 														</div>
 													</div>
-												</div>
-												<div className="relative flex items-center gap-2 text-gray-800">
-													<div className="relative">
-														<Truck size={20} strokeWidth={1.4} />
-													</div>
-													<div className="relative text-sm" style={{ fontFamily: "afacad-flux" }}>
-														Free delivery over <span className="relative font-bold">$30.0</span>
+													<div className="relative flex mt-3">
+														<div
+															onClick={() => {
+																if (wishList.some((item) => item.product_id === currentQuickViewProduct.id)) {
+																	removeFromWishList(currentQuickViewProduct.id, setWishList);
+																	console.log(currentQuickViewProduct.id);
+																} else {
+																	addToWishList(currentQuickViewProduct.id, setWishList);
+																}
+															}}
+															className={` select-none text-gray-900 flex items-center gap-2 cursor-pointer group`}
+														>
+															<Heart
+																stroke="currentColor"
+																fill={
+																	wishList.some((item) => item.product_id === currentQuickViewProduct.id)
+																		? "currentColor"
+																		: "none"
+																}
+																size={16}
+															/>
+															<div className="relative text-sm text-gray-700 group-hover:underline">
+																{wishList.some((item) => item.product_id === currentQuickViewProduct.id)
+																	? "Remove From WishList"
+																	: "Add To Your WishList"}
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>

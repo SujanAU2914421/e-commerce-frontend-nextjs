@@ -27,7 +27,6 @@ export default function CheckOut() {
 
 	useEffect(() => {
 		setCurrentItemData(allProducts?.find((product) => product.id.toString() === productId));
-		console.log(allProducts, productId);
 	}, [allProducts, productId]);
 
 	return (

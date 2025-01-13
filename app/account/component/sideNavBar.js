@@ -1,9 +1,4 @@
-import {
-	Activity,
-	ChevronLeft,
-	ShoppingBag,
-	ShoppingCart,
-} from "lucide-react/dist/cjs/lucide-react";
+import { Activity, ChevronLeft, ShoppingBag, ShoppingBasket, ShoppingCart } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
@@ -31,9 +26,7 @@ export default function SideNavBar() {
 					</Link>
 					<div className="relative h-3 w-[1px] bg-black"></div>
 					<Link href="/shop" className="relative flex gap-3 items-center">
-						<div className="relative h-auto text-sm font-bold capitalize">
-							{"shop"}
-						</div>
+						<div className="relative h-auto text-sm font-bold capitalize">{"shop"}</div>
 					</Link>
 				</div>
 				<div className="relative pt-2">
@@ -67,14 +60,21 @@ export default function SideNavBar() {
 					</Link>
 					<Link
 						href={"/cart"}
-						className={`${isactive(
-							"cart"
-						)} relative h-10 w-full rounded flex items-center px-5 gap-4 cursor-pointer`}
+						className={`${isactive("cart")} relative h-10 w-full rounded flex items-center px-5 gap-4 cursor-pointer`}
 					>
 						<div className="relative h-auto w-auto">
 							<ShoppingCart size={20} />
 						</div>
 						<div className="relative h-auto w-auto">View Cart</div>
+					</Link>
+					<Link
+						href={"/orders"}
+						className={`${isactive("orders")} relative h-10 w-full rounded flex items-center px-5 gap-4 cursor-pointer`}
+					>
+						<div className="relative h-auto w-auto">
+							<ShoppingBasket size={20} />
+						</div>
+						<div className="relative h-auto w-auto">View Orders</div>
 					</Link>
 					<Link
 						href={"/account/purchase-details"}

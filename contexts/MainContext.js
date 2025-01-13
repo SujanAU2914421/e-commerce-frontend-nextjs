@@ -12,7 +12,27 @@ export function MainContextProvider({ children }) {
 
 	const [allProducts, setAllProducts] = useState(null);
 
-	const mostSoldProducts = allProducts;
+	const [mostSoldProducts, setMostSoldProducts] = useState(null);
+
+	const [searchQuery, setSearchQuery] = useState("");
+
+	const [searchProductsResult, setSearchProductsResult] = useState(null);
+
+	useEffect(() => {
+		if (allProducts) {
+			setMostSoldProducts(allProducts);
+		}
+	}, [allProducts]);
+
+	const searchProducts = async (query) => {
+		try {
+			// Make sure the full URL is passed if you're calling the Laravel API directly
+			const response = await axios.get("search-products", {
+				params: { query: query }, // Pass 'query' as a query parameter
+			});
+			setSearchProductsResult(response.data); // Update the search result
+		} catch (error) {}
+	};
 
 	const getCategories = async () => {
 		try {
@@ -40,8 +60,15 @@ export function MainContextProvider({ children }) {
 	const [carListtView, setCartListView] = useState(false);
 
 	useEffect(() => {
-		getCategories();
-		getProducts();
+		if (
+			window.location.pathname != "/auth/login" &&
+			window.location.pathname != "/auth/signup" &&
+			window.location.pathname != "/checkout/information" &&
+			window.location.pathname != "/checkout/check"
+		) {
+			getCategories();
+			getProducts();
+		}
 	}, []);
 
 	return (
@@ -60,6 +87,10 @@ export function MainContextProvider({ children }) {
 				setWishListView,
 				carListtView,
 				setCartListView,
+				searchQuery,
+				setSearchQuery,
+				searchProducts,
+				searchProductsResult,
 			}}
 		>
 			{children}

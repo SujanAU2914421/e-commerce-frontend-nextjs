@@ -6,6 +6,7 @@ import { CookieConsent } from "../component/cookiePopUp";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { Eye, EyeOff } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Login() {
 	const { login } = useAuthContext();
@@ -72,10 +73,16 @@ export default function Login() {
 
 	return (
 		<div
-			className="size-full p-6 bg-white content-center"
+			className={`p-6 bg-transparent content-center ${
+				usePathname() === "/auth/login" ? "size-full bg-white" : "h-auto w-auto z-50"
+			}`}
 			style={{ fontFamily: "afacad-flux" }}
 		>
-			<div className="mx-auto xl:w-96 lg:w-96 md:w-96 sm:w-96 w-full max-w-lg h-auto duration-200">
+			<div
+				className={`mx-auto xl:w-96 lg:w-96 md:w-96 sm:w-96 w-full max-w-lg h-auto duration-200 ${
+					usePathname() != "/auth/login" && "px-8 pt-8 pb-8 bg-white rounded-md"
+				}`}
+			>
 				<CookieConsent />
 
 				<div
@@ -95,13 +102,8 @@ export default function Login() {
 				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-4 pt-8">
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Email
-						</label>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">Email</label>
 						<input
 							type="email"
 							name="email"
@@ -112,51 +114,44 @@ export default function Login() {
 							className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
 						/>
 
-						{errors.email && (
-							<span className="text-red-500">{errors.email[0] ?? ""}</span>
-						)}
+						{errors.email && <span className="text-red-500">{errors.email[0] ?? ""}</span>}
 					</div>
 
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Password
-						</label>
-						<div className="relative w-full flex items-center gap-5">
-							<div className="relative w-full">
-								<input
-									type={showPassword ? "text" : "password"}
-									name="password"
-									value={data.password}
-									onChange={handleInputChange}
-									required
-									placeholder="Enter your Password"
-									className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
-								/>
-								<div className="relative text-sm pt-2 flex justify-end">
-									<Link
-										href="/auth/forget-password"
-										className="relative underline text-gray-600 hover:text-gray-800 hover:font-bold duration-200"
-									>
-										Forget Password?
-									</Link>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">Password</label>
+						<div className="relative w-full">
+							<div className="relative w-full flex items-center gap-5">
+								<div className="relative w-full">
+									<input
+										type={showPassword ? "text" : "password"}
+										name="password"
+										value={data.password}
+										onChange={handleInputChange}
+										required
+										placeholder="Enter your Password"
+										className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
+									/>
+								</div>
+								<div
+									onClick={() => {
+										setShowPassword(!showPassword);
+									}}
+									className="relative h-auto w-auto flex items-center justify-normal text-gray-600 hover:text-gray-800 duration-200 cursor-pointer"
+								>
+									{showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
 								</div>
 							</div>
-							<div
-								onClick={() => {
-									setShowPassword(!showPassword);
-								}}
-								className="relative h-auto w-auto flex items-center justify-normal text-gray-600 hover:text-gray-800 duration-200 cursor-pointer"
-							>
-								{showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+							<div className="relative text-sm pt-2 flex justify-end pr-10">
+								<Link
+									href="/auth/forget-password"
+									className="relative underline text-gray-600 hover:text-gray-800 hover:font-bold duration-200"
+								>
+									Forget Password?
+								</Link>
 							</div>
 						</div>
 
-						{errors.password && (
-							<span className="text-red-500">{errors.password[0] ?? ""}</span>
-						)}
+						{errors.password && <span className="text-red-500">{errors.password[0] ?? ""}</span>}
 					</div>
 
 					<div

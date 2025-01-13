@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import CartList from "../component/cartlist";
-import Commented from "../component/commented";
-import Liked from "../component/liked";
-import Orders from "../component/orders";
 
 export default function Activity() {
 	const [activeTab, setActiveTab] = useState(null);
@@ -58,9 +54,7 @@ export default function Activity() {
 									<div className="relative">Commented</div>
 									<div
 										className={`absolute bottom-0 left-0 bg-black ${
-											activeTab == "commented"
-												? "w-2/3"
-												: " group-hover:w-2/3 w-0"
+											activeTab == "commented" ? "w-2/3" : " group-hover:w-2/3 w-0"
 										} h-[2px] rounded-full duration-200`}
 									></div>
 								</div>
@@ -81,15 +75,11 @@ export default function Activity() {
 								</div>
 							</div>
 							<div className="relative h-auto w-full">
-								{activeTab === "orders" ? (
-									<Orders />
-								) : activeTab === "cart" ? (
-									<CartList />
-								) : activeTab === "commented" ? (
-									<Commented />
-								) : (
-									activeTab === "liked" && <Liked />
-								)}
+								{activeTab === "orders"
+									? "orders"
+									: activeTab === "commented"
+									? "commented"
+									: activeTab === "liked" && "liked"}
 							</div>
 						</div>
 					</div>

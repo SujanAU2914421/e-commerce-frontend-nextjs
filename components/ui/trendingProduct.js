@@ -119,7 +119,7 @@ export default function TrendingProduct({ trendingProduct }) {
 							<div
 								className="relative xl:w-full lg:w-full md:w-full w-full h-full"
 								style={{
-									background: `url("${trendingProduct?.colors[0].images[0]}") center / cover`,
+									background: `url("${trendingProduct?.colors[0].images[0]}") center / contain no-repeat`,
 								}}
 							></div>
 						</div>
@@ -127,7 +127,9 @@ export default function TrendingProduct({ trendingProduct }) {
 						<div className="absolute shadow-xl bottom-[40%] left-[4%] z-20 bg-white rounded-full h-32 w-32 flex items-center justify-center">
 							<div className="relative grid gap-1">
 								<div className="relative text-center text-sm text-gray-500">Price:</div>
-								<div className="relative font-bold text-3xl text-gray-800 text-center">${trendingProduct?.price}</div>
+								<div className="relative font-bold text-3xl text-gray-800 text-center">
+									${(trendingProduct.price - (trendingProduct.discount / 100) * trendingProduct.price).toFixed(1)}
+								</div>
 							</div>
 						</div>
 					</div>

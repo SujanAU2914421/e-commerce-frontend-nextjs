@@ -12,6 +12,9 @@ export default function AuthContextProvider({ children }) {
 
 	// To prevent the checkAuthenticated function from running multiple times
 	const operationExecuted = useRef(false);
+
+	const [showLoginPopUp, setShowLoginPopUp] = useState(false);
+
 	const path = usePathname();
 
 	const checkAuth = async () => {
@@ -37,6 +40,8 @@ export default function AuthContextProvider({ children }) {
 		});
 		if (path == "/auth/login" || path == "/auth/signup") {
 			window.location.href = "/";
+		} else {
+			window.location.reload();
 		}
 	};
 
@@ -54,7 +59,11 @@ export default function AuthContextProvider({ children }) {
 		};
 	}, []);
 
-	return <AuthContext.Provider value={{ login, logout, user }}>{children}</AuthContext.Provider>;
+	return (
+		<AuthContext.Provider value={{ login, logout, user, showLoginPopUp, setShowLoginPopUp }}>
+			{children}
+		</AuthContext.Provider>
+	);
 }
 
 export const useAuthContext = () => {

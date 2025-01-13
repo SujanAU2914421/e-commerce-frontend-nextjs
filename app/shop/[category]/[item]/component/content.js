@@ -1,20 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-	ChevronLeft,
-	ChevronRight,
-	Heart,
-	Minus,
-	Plus,
-	ShoppingBag,
-	ShoppingBasket,
-	Trash,
-	Truck,
-	Zap,
-} from "lucide-react/dist/cjs/lucide-react";
-import Link from "next/link";
+import { ChevronLeft, Heart, Minus, Plus, ShoppingBag, Truck, Zap } from "lucide-react/dist/cjs/lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import AccordionContentDesign from "./accordionItem";
@@ -23,7 +10,9 @@ import ExploreProducts from "@/components/ui/exploreProducts";
 import ShareUi from "@/components/ui/share";
 import QuickViewPopUp from "@/components/ui/quickViewPopUp";
 import PhotoView from "@/components/ui/photoView";
-import ToggleNotifier from "@/components/ui/wishListToggleNotifier";
+import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import { addToCart, removeFromCart } from "@/lib/cartsHandle";
+import { addToWishList, removeFromWishList } from "@/lib/wishListHandle";
 
 export default function ItemPage({
 	currentItemData,
@@ -33,12 +22,7 @@ export default function ItemPage({
 	photoView,
 	setPhotoView,
 }) {
-	const [selectedNumberItems, setSelectedNumberItems] = useState(1); // Number of items in the cart
-
-	// Handle image click to update the slide and thumbnail
-	const pathname = usePathname(); // Get the current pathname
-
-	const pathParts = pathname.split("/");
+	const { cartItems, setCartItems, wishList, setWishList } = useUserInterractionContext();
 
 	const [currentColor, setCurrentColor] = useState(currentItemData.colors[0]);
 
@@ -46,20 +30,9 @@ export default function ItemPage({
 
 	const [addedToCart, setAddedToCart] = useState(false);
 
-	const [showNotifierPopUp, setShowNotifirerPopUp] = useState(false);
-
-	const [liked, setLiked] = useState(false);
-
-	const [likeOrCart, setLikeOrCart] = useState(null);
-
-	const toggleCartAdded = () => {
-		setAddedToCart(!addedToCart);
-		setLikeOrCart("cart");
-		setShowNotifirerPopUp(true);
-		setTimeout(() => {
-			setShowNotifirerPopUp(false);
-		}, 1800);
-	};
+	const [selectedNumberItems, setSelectedNumberItems] = useState(1);
+	const [selectedSize, setSelectedSize] = useState(currentItemData.sizes[0]);
+	const [selectedColor, setSelectedColor] = useState(currentItemData.colors[0].name);
 
 	const router = useRouter();
 
@@ -67,31 +40,26 @@ export default function ItemPage({
 		router.back();
 	};
 
-	const toggleLiked = () => {
-		setLiked(!liked);
-		setLikeOrCart("like");
-		setShowNotifirerPopUp(true);
-		setTimeout(() => {
-			setShowNotifirerPopUp(false);
-		}, 1800);
-	};
+	useEffect(() => {
+		console.log(wishList);
+	}, [wishList]);
 
 	useEffect(() => {
-		console.log(allProducts);
-	}, [allProducts]);
+		if (currentItemData) {
+			setSelectedColor(currentItemData.colors[0].name);
+			setSelectedSize(currentItemData.sizes[0]);
+		}
+	}, [currentItemData]);
 
 	return (
 		<div className="relative h-auto w-full">
-			{
-				// If quickViewPopUp is true, render the QuickViewPopUp component
-				currentQuickViewProduct != null && currentQuickViewProduct != [] && (
-					<QuickViewPopUp
-						filteredData={allProducts}
-						currentQuickViewProduct={currentQuickViewProduct}
-						setCurrentQuickViewProduct={setCurrentQuickViewProduct}
-					/>
-				)
-			}
+			{currentQuickViewProduct != null && currentQuickViewProduct != [] && (
+				<QuickViewPopUp
+					filteredData={allProducts}
+					currentQuickViewProduct={currentQuickViewProduct}
+					setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+				/>
+			)}
 			{photoView != null && (
 				<PhotoView
 					photoView={photoView}
@@ -100,11 +68,6 @@ export default function ItemPage({
 					setCurrentImageIndexInView={setCurrentImageIndexInView}
 				/>
 			)}
-			<ToggleNotifier
-				showPopUp={showNotifierPopUp}
-				addedOrRemoved={likeOrCart === "like" ? liked : addedToCart}
-				likeOrCart={likeOrCart}
-			/>
 
 			<div className="relative h-auto w-full grid gap-16">
 				<div className="relative h-auto w-full grid gap-4">
@@ -168,24 +131,21 @@ export default function ItemPage({
 													<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
 												</div>
 												<div className="relative h-auto w-[calc(100%-6rem)]">
-													<Select>
-														<SelectTrigger className="w-full">
-															<SelectValue placeholder="Select Size" className="relative" />
-														</SelectTrigger>
-														<SelectContent>
-															{currentItemData["sizes"].map((size, index) => {
-																return (
-																	<SelectItem
-																		className="text-xs cursor-pointer hover:bg-gray-100"
-																		key={index}
-																		value={size}
-																	>
-																		{size}
-																	</SelectItem>
-																);
-															})}
-														</SelectContent>
-													</Select>
+													<div className="flex gap-2 flex-wrap">
+														{currentItemData["sizes"].map((size, index) => (
+															<div
+																key={index}
+																className={`px-4 py-2 text-xs border rounded-md cursor-pointer ${
+																	selectedSize === size ? "bg-gray-800 text-white" : "hover:bg-gray-100"
+																}`}
+																onClick={() => {
+																	setSelectedSize(size);
+																}}
+															>
+																{size}
+															</div>
+														))}
+													</div>
 												</div>
 											</div>
 											<div className="relative h-auto w-auto flex items-center">
@@ -199,6 +159,7 @@ export default function ItemPage({
 																<div
 																	onClick={() => {
 																		setCurrentColor(color);
+																		setSelectedColor(color);
 																	}}
 																	key={index}
 																	className={`relative h-full cursor-pointer w-8 rounded shadow-md shadow-gray-400`}
@@ -213,7 +174,7 @@ export default function ItemPage({
 									</div>
 									<div className="relative h-auto w-full">
 										<div className="relative h-auto w-full grid gap-2">
-											<div className="relative h-auto w-full grid gap-4">
+											<div className="relative h-auto w-full flex-col">
 												<div className="relative flex">
 													<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
 														<div
@@ -241,10 +202,20 @@ export default function ItemPage({
 														</div>
 													</div>
 												</div>
-												<div className="relative h-auto w-auto flex items-center flex-wrap gap-2">
+												<div className="relative h-auto w-auto flex items-center flex-wrap gap-2 pt-4">
 													<Button
 														onClick={() => {
-															toggleCartAdded();
+															if (selectedNumberItems > 0 && selectedSize && selectedColor) {
+																cartItems.some((item) => item.product_id === currentItemData.id)
+																	? addToCart(
+																			currentItemData.id,
+																			setCartItems,
+																			selectedNumberItems,
+																			selectedColor,
+																			selectedSize
+																	  )
+																	: removeFromCart(currentItemData.id, setCartItems);
+															}
 														}}
 														variant={addedToCart ? "outline" : "default"}
 														className="select-none"
@@ -263,19 +234,38 @@ export default function ItemPage({
 															</div>
 															<div className="relative text-xs font-bold">Buy Now</div>
 														</Button>
-														<Button
-															onClick={() => {
-																toggleLiked();
-															}}
-															variant="outline"
-															className={`${liked ? "text-red-600" : "text-gray-500"} select-none`}
-														>
-															<Heart stroke="currentColor" fill={liked ? "currentColor" : "none"} size={20} />
-														</Button>
+													</div>
+												</div>
+												<div className="relative flex mt-3">
+													<div
+														onClick={() => {
+															if (wishList.some((item) => item.product_id === currentItemData.id)) {
+																removeFromWishList(currentItemData.id, setWishList);
+																console.log(currentItemData.id);
+															} else {
+																addToWishList(currentItemData.id, setWishList);
+															}
+														}}
+														className={` select-none text-gray-900 flex items-center gap-2 cursor-pointer group`}
+													>
+														<Heart
+															stroke="currentColor"
+															fill={
+																wishList.some((item) => item.product_id === currentItemData.id)
+																	? "currentColor"
+																	: "none"
+															}
+															size={16}
+														/>
+														<div className="relative text-sm text-gray-700 group-hover:underline">
+															{wishList.some((item) => item.product_id === currentItemData.id)
+																? "Remove From WishList"
+																: "Add To Your WishList"}
+														</div>
 													</div>
 												</div>
 											</div>
-											<div className="relative flex items-center gap-2 text-gray-800">
+											<div className="relative flex items-center gap-2 text-gray-800 pt-4">
 												<div className="relative">
 													<Truck size={20} strokeWidth={1.4} />
 												</div>

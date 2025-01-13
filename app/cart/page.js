@@ -10,6 +10,7 @@ import { Trash, X } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import AllWishList from "@/components/ui/allWishList";
+import { removeFromCart } from "@/lib/cartsHandle";
 
 export default function CartPage() {
 	const { currentQuickViewProduct, setCurrentQuickViewProduct } = useMainContext();
@@ -41,10 +42,6 @@ export default function CartPage() {
 					// Add to total
 					return total + priceAfterDiscount * item.quantity;
 			  }, 0);
-
-	const removeItemFromCartHandler = (itemId) => {
-		console.log(itemId);
-	};
 
 	return user ? (
 		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto">
@@ -152,9 +149,9 @@ export default function CartPage() {
 												</div>
 												<div
 													onClick={() => {
-														removeItemFromCartHandler(product.id);
+														removeFromCart(product.id, setCartItems);
 													}}
-													className="relative cursor-pointer h-10 w-10 flex items-center justify-center"
+													className="relative cursor-pointer h-10 w-10 hover:bg-gray-200 rounded-md flex items-center justify-center"
 												>
 													<X size={14} />
 												</div>
@@ -180,7 +177,10 @@ export default function CartPage() {
 										<hr className="my-4" />
 										<div className="flex justify-between text-lg font-bold">
 											<span>Total</span>
-											<span>${totalPrice}</span>
+											<div className="relative font-bold text-gray-800">
+												<span className="text-xl">${Math.floor(totalPrice)}</span>
+												<span className="text-sm">.{(totalPrice % 1).toFixed(2).split(".")[1]}</span>
+											</div>
 										</div>
 										<Link
 											href={"/checkout"}
@@ -195,7 +195,12 @@ export default function CartPage() {
 									<>
 										<div className="relative font-bold text-xl pt-8">Some Of Your Favorite Products</div>
 										<div className="relative w-full">
-											<AllWishList allProducts={wishList} setCurrentQuickViewProduct={setCurrentQuickViewProduct} />
+											<AllWishList
+												allProducts={wishList.filter(
+													(product) => !cartItems.some((cartItem) => cartItem.product_id === product.product_id)
+												)}
+												setCurrentQuickViewProduct={setCurrentQuickViewProduct}
+											/>
 										</div>
 									</>
 								) : (
@@ -231,7 +236,10 @@ export default function CartPage() {
 									<hr className="my-4" />
 									<div className="flex justify-between text-lg font-bold">
 										<span>Total</span>
-										<span>${totalPrice}</span>
+										<div className="relative font-bold text-gray-800">
+											<span className="text-xl">${Math.floor(totalPrice)}</span>
+											<span className="text-sm">.{(totalPrice % 1).toFixed(2).split(".")[1]}</span>
+										</div>
 									</div>
 									<div className="relative w-full flex mt-6 justify-center font-sans">
 										<Link href={"/checkout"} disabled={cartItems.length === 0}>

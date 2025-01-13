@@ -1,39 +1,44 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import RatingsStar from "./ratingsStar";
 import { Heart } from "lucide-react";
 import { ImageWithSkeleton } from "./imageWithSkeleton";
 import ToggleNotifier from "./wishListToggleNotifier";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import RatingsStarExploreProducts from "./ratingStarExploreProducts";
+import Login from "@/app/auth/login/page";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useMainContext } from "@/contexts/MainContext";
 
-export default function ExploreProducts({
-	allProducts,
-	shopCurrentCategory = null,
-	neglectItem = null,
-	setCurrentQuickViewProduct,
-}) {
+export default function ExploreProducts({ allProducts, shopCurrentCategory = null, neglectItem = null }) {
 	const [showLikedPopUp, setShowLikedPopUp] = useState(false);
 	const [likedOrDisliked, setLikedOrDisliked] = useState(false);
+	const { user, showLoginPopUp, setShowLoginPopUp } = useAuthContext();
+
+	const { setCurrentQuickViewProduct } = useMainContext();
 
 	// Wishlist context
 	const { wishList, setWishList, addToWishList, removeFromWishList } = useUserInterractionContext();
 
 	const toggleLike = (product) => {
-		const isAlreadyLiked = Array.isArray(wishList) ? wishList.some((item) => item.product_id === product.id) : false;
+		if (user) {
+			const isAlreadyLiked = Array.isArray(wishList) ? wishList.some((item) => item.product_id === product.id) : false;
 
-		if (isAlreadyLiked) {
-			removeFromWishList(product.id, setWishList);
+			if (isAlreadyLiked) {
+				removeFromWishList(product.id, setWishList);
+			} else {
+				addToWishList(product.id, setWishList);
+			}
+
+			// Update the popup state
+			setLikedOrDisliked(!isAlreadyLiked);
+			setShowLikedPopUp(true);
+			setTimeout(() => {
+				setShowLikedPopUp(false);
+			}, 1000);
 		} else {
-			addToWishList(product.id, setWishList);
+			setShowLoginPopUp(true);
 		}
-
-		// Update the popup state
-		setLikedOrDisliked(!isAlreadyLiked);
-		setShowLikedPopUp(true);
-		setTimeout(() => {
-			setShowLikedPopUp(false);
-		}, 1000);
 	};
 
 	return (
@@ -42,6 +47,7 @@ export default function ExploreProducts({
 			<ToggleNotifier showPopUp={showLikedPopUp} addedOrRemoved={likedOrDisliked} likeOrCart="like" />
 
 			{/* Product grid */}
+
 			<div className="relative w-full grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-5 gap-y-10 px-4 md:px-8 xl:px-0">
 				{allProducts?.map((product, index) => {
 					if (neglectItem && neglectItem?.id === product.id) return null;
@@ -51,20 +57,22 @@ export default function ExploreProducts({
 					return (
 						<div key={index} className="relative flex">
 							<div className="group relative w-full">
-								<div className="relative h-auto w-full flex items-center hover:scale-[1.02] scale-100 duration-200">
+								<div className="relative h-auto w-full flex items-center hover:scale-[1.02] scale-100 duration-200 border border-gray-100">
 									<Link href={`/shop/${product.category.slug}/${product.id}`} className="relative w-full h-auto">
 										<div className="relative h-full w-full bg-gray-100">
 											<ImageWithSkeleton src={product.colors[0]?.images[0]} />
 										</div>
-										<div
-											className="absolute top-0 left-0 h-full w-full opacity-0 group-hover:opacity-100 duration-300"
-											style={{
-												background: `url(${product.colors[0]?.images[1]}) center / cover`,
-											}}
-										></div>
+										<div className="absolute top-0 left-0 h-full w-full opacity-0 group-hover:opacity-100 duration-300 bg-white">
+											<div
+												className="relative h-full w-full"
+												style={{
+													background: `url(${product.colors[0]?.images[1]}) center / contain no-repeat`,
+												}}
+											></div>
+										</div>
 									</Link>
 									{product.discount > 0 && (
-										<div className="absolute left-0 font-sans px-2 py-1 shadow-md shadow-gray-500 top-4 bg-gray-500 text-white text-xs">
+										<div className="absolute left-0 font-sans px-2 py-1 shadow-md shadow-gray-800 top-4 bg-gray-800 text-white text-xs">
 											{product.discount}% OFF
 										</div>
 									)}
@@ -83,7 +91,7 @@ export default function ExploreProducts({
 								<div className="relative">
 									<div className="relative grid gap-1 pt-5 px-2">
 										<div className="relative text-yellow-500">
-											<RatingsStar currentProduct={product} size={10} gap={0} />
+											<RatingsStarExploreProducts currentProduct={product} size={10} gap={0} />
 										</div>
 										<Link
 											href={`/shop/${product.category.slug}/${product.id}`}

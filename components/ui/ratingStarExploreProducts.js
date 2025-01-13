@@ -1,18 +1,18 @@
-import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function RatingsStar({ currentProduct, size = 18, gap = 2, color = "red" }) {
-	const { comments } = useUserInterractionContext();
+export default function RatingsStarExploreProducts({ currentProduct, size = 18, gap = 2, color = "red" }) {
 	const [averageRating, setAverageRating] = useState(0);
 
 	useEffect(() => {
-		if (comments.length > 0) {
-			console.log(comments);
-			const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
-			const avgRating = totalRating / comments.length;
+		if (currentProduct.comments.length > 0) {
+			const totalRating = currentProduct.comments.reduce((sum, comment) => sum + comment.rating, 0);
+			const avgRating = totalRating / currentProduct.comments.length;
 			setAverageRating(avgRating);
+		} else {
+			setAverageRating(0); // If there are no comments, set the rating to 0
 		}
-	}, [comments]);
+	}, [currentProduct]); // This effect will run whenever the currentProduct changes
+
 	return (
 		<div className="flex items-center" style={{ gap: `${gap}px` }}>
 			{Array.from({ length: 5 }, (_, index) => {

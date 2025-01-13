@@ -1,11 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RatingsStar from "./ratingsStar";
 import { User } from "lucide-react/dist/cjs/lucide-react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./select";
+import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import { CommentForm } from "./addReviewField";
+import CommentRatingsStar from "./commentRatingsStar";
 
 export default function AllReview({ currentItemData }) {
+	const { fetchAllComments, addComment, removeComment, updateComment, comments, setComments } =
+		useUserInterractionContext();
+
+	useEffect(() => {
+		if (currentItemData) {
+			// addComment(currentItemData.id, "Test Comment", 4, setComments);
+			fetchAllComments(currentItemData.id, setComments);
+		}
+	}, [currentItemData]);
+	useEffect(() => {
+		console.log(comments);
+	}, [comments]);
+
 	const formatDate = (timestamp) => {
 		const date = new Date(timestamp); // Create a Date object from the timestamp
 		const year = date.getFullYear(); // Get the year
@@ -16,13 +32,16 @@ export default function AllReview({ currentItemData }) {
 	const [sortOption, setSortOption] = useState("newest");
 
 	// Sorting functions
-	const sortByDateNewest = (a, b) => b.date - a.date;
-	const sortByDateOldest = (a, b) => a.date - b.date;
+	const sortByDateNewest = (a, b) => new Date(b.created_at) - new Date(a.created_at);
+	const sortByDateOldest = (a, b) => new Date(a.created_at) - new Date(b.created_at);
 	const sortByHighestRating = (a, b) => b.rating - a.rating;
 	const sortByLowestRating = (a, b) => a.rating - b.rating;
 
+	const [newComment, setNewComment] = useState(null);
+	const [newRating, setNewRating] = useState(null);
+
 	// Sort the reviews based on the selected sort option
-	const sortedReviews = currentItemData.comments.sort((a, b) => {
+	const sortedReviews = comments.sort((a, b) => {
 		switch (sortOption) {
 			case "newest":
 				return sortByDateNewest(a, b);
@@ -138,14 +157,14 @@ export default function AllReview({ currentItemData }) {
 								</div>
 								<div className="relative h-auto w-[calc(100%-4rem)] border p-4 grid gap-3">
 									<div className="relative flex items-center gap-2">
-										<RatingsStar currentProduct={review} size={10} gap={0} color={"#ff4000"} />
+										<CommentRatingsStar currentProduct={review} size={10} gap={0} color={"#ff4000"} />
 										<div className="relative text-sm">{review.rating}/5</div>
 									</div>
 									<div className="relative text-xs uppercase font-sans">
-										<span className="font-bold">{review.username} </span>
-										<span className="text-gray-400 italic">(verified owner) – {formatDate(review.date)}</span>
+										<span className="font-bold">{review.customer.username} </span>
+										<span className="text-gray-400 italic">(verified owner) – {formatDate(review.created_at)}</span>
 									</div>
-									<div className="relative">{review.comments}</div>
+									<div className="relative">{review.comment}</div>
 								</div>
 							</div>
 						);
@@ -166,10 +185,7 @@ export default function AllReview({ currentItemData }) {
 					</div>
 				) : (
 					<div className="relative px-2">
-						<div className="flex w-full max-w-sm items-center xl:space-x-2 lg:space-x-2 md:space-x-2 sm:space-x-2 space-y-2 xl:flex-nowrap lg:flex-nowrap md:flex-nowrap sm:flex-nowrap flex-wrap">
-							<Input type="email" placeholder="Email" />
-							<Button type="submit">submit</Button>
-						</div>
+						<CommentForm currentItemData={currentItemData} setAddingReview={setAddingReview} />
 					</div>
 				)}
 			</div>
