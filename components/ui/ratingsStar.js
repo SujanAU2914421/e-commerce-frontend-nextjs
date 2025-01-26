@@ -7,7 +7,6 @@ export default function RatingsStar({ currentProduct, size = 18, gap = 2, color 
 
 	useEffect(() => {
 		if (comments.length > 0) {
-			console.log(comments);
 			const totalRating = comments.reduce((sum, comment) => sum + comment.rating, 0);
 			const avgRating = totalRating / comments.length;
 			setAverageRating(avgRating);

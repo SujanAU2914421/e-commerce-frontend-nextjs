@@ -6,33 +6,32 @@ import { ChevronLeft, ChevronRight, Trash, X } from "lucide-react/dist/cjs/lucid
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import OrderInformationForm from "@/components/ui/orderInformationForm";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import CheckoutShipInformationDetail from "@/components/ui/checkoutShipInformationDetail";
+import CheckoutPaymentPage from "@/components/ui/orderPayment";
+import { useOrderContext } from "@/contexts/OrderContext";
 
-export default function CartPage() {
+export default function CheckOutPage() {
 	const pathname = usePathname();
 	const currentStage = pathname.split("/")[2];
-
-	const [formData, setFormData] = useState({
-		firstName: "",
-		lastName: "",
-		streetAddress: "",
-		houseNumberAndStreetName: "",
-		apartmentDetails: "",
-		city: "",
-		state: "",
-		zip: "",
-		phone: "",
-		orderNotes: "",
-	});
+	const router = useRouter();
 
 	const { cartItems, setCartItems } = useUserInterractionContext();
+	const { orderDataInitial, setOrderDataInitial, billingAddress, setBillingAddress } = useOrderContext();
 
-	const totalPrice = cartItems.reduce((total, item) => {
-		const discount = (item.product.price * item.product.discount) / 100;
-		const priceAfterDiscount = item.product.price - discount;
-		return total + priceAfterDiscount * item.quantity;
-	}, 0);
+	const totalPrice = cartItems
+		? cartItems.length < 0
+			? 0
+			: cartItems.reduce((total, item) => {
+					const discount = (item.product.price * item.product.discount) / 100;
+					const priceAfterDiscount = item.product.price - discount;
+					return total + priceAfterDiscount * item.quantity;
+			  }, 0)
+		: 0;
+
+	const handleGoBack = () => {
+		router.back();
+	};
 
 	return (
 		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto">
@@ -41,10 +40,21 @@ export default function CartPage() {
 			</div>
 
 			{/* Cart Content */}
-			<div className="relative grid gap-8 pt-16 px-8 pb-24" style={{ fontFamily: "afacad-flux" }}>
+			<div
+				className="relative grid gap-8 pt-16 xl:px-32 lg:px-32 md:px-16 sm:px-8 px-4 pb-24"
+				style={{ fontFamily: "afacad-flux" }}
+			>
 				{/* Title */}
 				<div className="relative text-5xl font-extrabold font-sans xl:px-16 lg:px-16 md:px-8 px-4 text-gray-800">
-					Information
+					{currentStage === "information" ? (
+						<div className="relative w-full h-auto">Information</div>
+					) : currentStage === "shipping-detail" ? (
+						<div className="relative w-full h-auto">Order Destination Detail</div>
+					) : currentStage === "payment" ? (
+						<div className="relative w-full h-auto">Payment Details</div>
+					) : (
+						""
+					)}
 				</div>
 
 				{/* Cart Items and Summary */}
@@ -52,21 +62,57 @@ export default function CartPage() {
 					{/* Left Section: Cart Items */}
 					<div className="relative h-auto w-full lg:w-3/5 xl:w-3/5 flex-col xl:px-16 lg:px-16 md:px-8 px-4 pb-16">
 						<div className="relative flex items-center gap-4 text-gray-500 text-sm uppercase pb-8">
-							<Link href="/cart" className="relative">
+							<div className="relative mr-5">
+								<Button className="bg-gray-600" onClick={handleGoBack}>
+									<ChevronLeft size={14} />
+									Go Back
+								</Button>
+							</div>
+							<div
+								className={`relative text-gray-800 ${currentStage === "cart" ? "font-bold" : "font-normal text-xs"}`}
+							>
 								Cart
-							</Link>
+							</div>
 							<div className="relative">
 								<ChevronRight size={14} />
 							</div>
-							<div className="relative text-gray-800 font-bold">Information</div>
+							<div
+								className={`relative text-gray-800 ${
+									currentStage === "information" ? "font-bold" : "font-normal text-xs"
+								}`}
+							>
+								Information
+							</div>
+							<div className="relative">
+								<ChevronRight size={14} />
+							</div>
+							<div
+								className={`relative text-gray-800 ${
+									currentStage === "shipping-detail" ? "font-bold" : "font-normal text-xs"
+								}`}
+							>
+								Review
+							</div>
+							<div className="relative">
+								<ChevronRight size={14} />
+							</div>
+							<div
+								className={`relative text-gray-800 ${currentStage === "payment" ? "font-bold" : "font-normal text-xs"}`}
+							>
+								Payment Detail
+							</div>
 						</div>
 						{currentStage === "information" ? (
 							<div className="relative w-full h-auto">
-								<OrderInformationForm formData={formData} setFormData={setFormData} />
+								<OrderInformationForm />
 							</div>
 						) : currentStage === "shipping-detail" ? (
 							<div className="relative w-full h-auto">
-								<CheckoutShipInformationDetail formData={formData} setFormData={setFormData} />
+								<CheckoutShipInformationDetail />
+							</div>
+						) : currentStage === "payment" ? (
+							<div className="relative w-full h-auto">
+								<CheckoutPaymentPage />
 							</div>
 						) : (
 							""
@@ -76,8 +122,8 @@ export default function CartPage() {
 					{/* Right Section: Summary */}
 					{cartItems && cartItems.length > 0 ? (
 						<div className="relative lg:w-2/5 xl:w-2/5 w-full h-auto">
-							<div className="relative w-full bg-white p-6 border rounded-md flex flex-col">
-								<div className="text-xl font-bold mb-4 uppercase font-sans">Your Order</div>{" "}
+							<div className="relative w-full bg-white p-8 border rounded-md flex flex-col">
+								<div className="text-xl font-bold mb-6 uppercase font-sans">Your Order</div>{" "}
 								<div className="relative w-full h-auto pb-8">
 									{cartItems.map((item, index) => {
 										const product = item.product;
@@ -131,7 +177,7 @@ export default function CartPage() {
 										<Button variant="default">Apply</Button>
 									</div>
 								</div>
-								<div className="relative flex flex-col gap-4 border-t pt-8">
+								<div className="relative flex flex-col gap-4 pt-8">
 									<hr className="my-4" />
 									<div className="flex justify-between">
 										<span className="text-sm font-bold uppercase text-gray-800">Sub Total</span>

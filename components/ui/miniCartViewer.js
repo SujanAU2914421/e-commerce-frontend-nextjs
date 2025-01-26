@@ -7,10 +7,14 @@ export const MiniCartViewer = () => {
 		useUserInterractionContext();
 
 	// Calculate the subtotal based on cart items' prices
-	const subtotal = cartItems.reduce(
-		(total, item) => total + (item.product.price - (item.product.discount * item.product.price) / 100) * item.quantity,
-		0
-	);
+	const subtotal =
+		cartItems && cartItems.length > 0
+			? cartItems.reduce(
+					(total, item) =>
+						total + (item.product.price - (item.product.discount * item.product.price) / 100) * item.quantity,
+					0
+			  )
+			: 0;
 
 	return (
 		<div className="relative h-full w-full">
@@ -20,7 +24,8 @@ export const MiniCartViewer = () => {
 					{cartItems.length > 0 ? (
 						cartItems.map((item, index) => {
 							return (
-								<div
+								<Link
+									href={`/shop/${item.product.category.slug}/${item.product.id}`}
 									key={index}
 									className="relative flex items-center justify-between py-2 hover:bg-gray-100 px-8 cursor-pointer"
 								>
@@ -50,7 +55,7 @@ export const MiniCartViewer = () => {
 											<div className="relative flex gap-4 items-center">
 												<div className="text-xs text-gray-600 flex items-center gap-2">
 													<div className="relative">
-														${item.product.price - (item.product.discount * item.product.price) / 100}
+														${(item.product.price - (item.product.discount * item.product.price) / 100).toFixed(2)}
 													</div>
 													<div className="relative">x</div>
 													<div className="relative font-bold text-sm">{item.quantity}</div>
@@ -67,14 +72,15 @@ export const MiniCartViewer = () => {
 										<div className="relative font-bold text-gray-800">
 											<span className="text-sm">
 												$
-												{Math.floor(item.product.price - (item.product.discount * item.product.price) / 100) *
-													item.quantity}
+												{Math.floor(
+													(item.product.price - (item.product.discount * item.product.price) / 100) * item.quantity
+												)}
 											</span>
 											<span className="text-xs">
 												.
 												{
 													(
-														(Math.floor(item.product.price - (item.product.discount * item.product.price) / 100) *
+														((item.product.price - (item.product.discount * item.product.price) / 100) *
 															item.quantity) %
 														1
 													)
@@ -84,7 +90,7 @@ export const MiniCartViewer = () => {
 											</span>
 										</div>
 									</div>
-								</div>
+								</Link>
 							);
 						})
 					) : (

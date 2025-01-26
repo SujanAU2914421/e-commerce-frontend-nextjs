@@ -1,54 +1,58 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "./button";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react/dist/cjs/lucide-react";
+import { useOrderContext } from "@/contexts/OrderContext";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts/AuthContext";
 
-export default function OrderInformationForm({ formData, setFormData }) {
+export default function OrderInformationForm() {
+	const { user } = useAuthContext();
+	const { orderDataInitial, setOrderDataInitial, billingAddress, setBillingAddress } = useOrderContext();
+
 	const [errors, setErrors] = useState({});
 
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData({ ...formData, [name]: value });
-		setErrors({ ...errors, [name]: "" });
-	};
+	const router = useRouter(); // Use Next.js router for navigation
 
 	const validateForm = () => {
 		const newErrors = {};
-		if (!formData.firstName.trim()) newErrors.firstName = "First name is required.";
-		if (!formData.lastName.trim()) newErrors.lastName = "Last name is required.";
-		if (!formData.streetAddress.trim()) newErrors.streetAddress = "Street address is required.";
-		if (!formData.houseNumberAndStreetName.trim())
+		if (!orderDataInitial.streetAddress?.trim()) newErrors.streetAddress = "Street address is required.";
+		if (!orderDataInitial.houseNumberAndStreetName?.trim())
 			newErrors.houseNumberAndStreetName = "House number and street name are required.";
-		if (!formData.city.trim()) newErrors.city = "Town/City is required.";
-		if (!formData.state.trim()) newErrors.state = "State is required.";
-		if (!formData.zip.trim()) newErrors.zip = "PIN Code is required.";
-		if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
+		if (!orderDataInitial.city?.trim()) newErrors.city = "Town/City is required.";
+		if (!orderDataInitial.state?.trim()) newErrors.state = "State is required.";
+		if (!orderDataInitial.zip?.trim()) newErrors.zip = "PIN Code is required.";
+		if (!orderDataInitial.phone?.trim()) newErrors.phone = "Phone number is required.";
 
 		setErrors(newErrors);
 		return Object.keys(newErrors).length === 0;
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setOrderDataInitial({ ...orderDataInitial, [name]: value });
+		setErrors({ ...errors, [name]: "" });
+	};
+
+	const handleShippingClick = (e) => {
 		if (validateForm()) {
-			console.log("Form Data Submitted:", formData);
-			alert("Order Placed Successfully!");
+			router.push("/checkout/shipping-detail"); // Navigate to the Shipping page
 		}
 	};
 
 	return (
 		<div className="w-full">
-			<form onSubmit={handleSubmit}>
+			<div>
 				<div className="mb-4">
 					<label className="block text-gray-700">Street Address *</label>
 					<input
 						type="text"
 						name="streetAddress"
-						value={formData.streetAddress}
+						value={orderDataInitial.streetAddress || ""}
 						onChange={handleInputChange}
-						placeholder="House Number and Street Adress"
+						placeholder="House Number and Street Address"
 						className={`w-full border ${
 							errors.streetAddress ? "border-red-500" : "border-gray-300"
 						} rounded-md px-3 h-9 focus:outline-gray-200`}
@@ -59,7 +63,7 @@ export default function OrderInformationForm({ formData, setFormData }) {
 					<input
 						type="text"
 						name="houseNumberAndStreetName"
-						value={formData.houseNumberAndStreetName}
+						value={orderDataInitial.houseNumberAndStreetName || ""}
 						onChange={handleInputChange}
 						placeholder="Apartment, Suite, Unit, etc. (optional)"
 						className={`w-full border ${
@@ -68,13 +72,13 @@ export default function OrderInformationForm({ formData, setFormData }) {
 					/>
 					{errors.houseNumberAndStreetName && <p className="text-red-500 text-sm">{errors.houseNumberAndStreetName}</p>}
 				</div>
-				<div className="relative flex gap-5 mb-4">
-					<div className="w-1/3">
+				<div className="relative flex gap-5 mb-4 flex-wrap">
+					<div className="xl:w-1/3 lg:w-1/3 md:w-1/2 w-full">
 						<label className="block text-gray-700">Town / City *</label>
 						<input
 							type="text"
 							name="city"
-							value={formData.city}
+							value={orderDataInitial.city || ""}
 							onChange={handleInputChange}
 							className={`w-full border ${
 								errors.city ? "border-red-500" : "border-gray-300"
@@ -82,12 +86,12 @@ export default function OrderInformationForm({ formData, setFormData }) {
 						/>
 						{errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
 					</div>
-					<div className="w-1/3">
+					<div className="xl:w-1/3 lg:w-1/3 md:w-1/2 w-full">
 						<label className="block text-gray-700">State *</label>
 						<input
 							type="text"
 							name="state"
-							value={formData.state}
+							value={orderDataInitial.state || ""}
 							onChange={handleInputChange}
 							className={`w-full border ${
 								errors.state ? "border-red-500" : "border-gray-300"
@@ -95,12 +99,12 @@ export default function OrderInformationForm({ formData, setFormData }) {
 						/>
 						{errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
 					</div>
-					<div className="w-1/3">
+					<div className="xl:w-1/3 lg:w-1/3 md:w-1/2 w-full">
 						<label className="block text-gray-700">PIN Code *</label>
 						<input
 							type="text"
 							name="zip"
-							value={formData.zip}
+							value={orderDataInitial.zip || ""}
 							onChange={handleInputChange}
 							className={`w-full border ${
 								errors.zip ? "border-red-500" : "border-gray-300"
@@ -114,7 +118,7 @@ export default function OrderInformationForm({ formData, setFormData }) {
 					<input
 						type="tel"
 						name="phone"
-						value={formData.phone}
+						value={orderDataInitial.phone || ""}
 						onChange={handleInputChange}
 						className={`w-full border ${
 							errors.phone ? "border-red-500" : "border-gray-300"
@@ -123,16 +127,18 @@ export default function OrderInformationForm({ formData, setFormData }) {
 					{errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
 				</div>
 				<div className="relative w-full flex justify-between pt-5">
-					<Button type="submit" variant="outline" size="lg">
-						<ChevronLeft size={18} />
-						<span className="relative text-sm">Cart</span>
-					</Button>
-					<Button type="submit" size="lg">
+					<Link href="/checkout/cart" className="text-gray-700 text-sm">
+						<Button variant="outline" size="lg">
+							<ChevronLeft size={18} />
+							<span className="relative text-sm">Cart</span>
+						</Button>
+					</Link>
+					<Button size="lg" onClick={handleShippingClick}>
 						<span className="relative text-sm">Shipping</span>
 						<ChevronRight size={18} />
 					</Button>
 				</div>
-			</form>
+			</div>
 		</div>
 	);
 }

@@ -21,10 +21,6 @@ export default function SearchPageUi() {
 		}
 	}, []);
 
-	useEffect(() => {
-		console.log(searchProductsResult);
-	}, [searchProductsResult]);
-
 	const searchHandler = () => {
 		if (searchQuery && searchQuery.trim() !== "") {
 			searchProducts(searchQuery);

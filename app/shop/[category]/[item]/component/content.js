@@ -41,10 +41,6 @@ export default function ItemPage({
 	};
 
 	useEffect(() => {
-		console.log(wishList);
-	}, [wishList]);
-
-	useEffect(() => {
 		if (currentItemData) {
 			setSelectedColor(currentItemData.colors[0].name);
 			setSelectedSize(currentItemData.sizes[0]);
@@ -97,7 +93,7 @@ export default function ItemPage({
 											<div className="relative text-3xl font-bold text-gray-700">
 												{currentItemData.title}
 												{currentItemData.discount > 0 && (
-													<div className="absolute -right-16 -top-2 px-2 z-10 py-1 shadow-md shadow-gray-700 bg-gray-700 text-yellow-300 text-sm">
+													<div className="absolute left-0 -top-6 px-2 z-10 py-1 shadow-md shadow-gray-700 bg-gray-700 text-yellow-300 text-sm">
 														{currentItemData.discount}% OFF
 													</div>
 												)}
@@ -124,92 +120,93 @@ export default function ItemPage({
 											className="relative text-sm text-gray-600"
 											dangerouslySetInnerHTML={{ __html: currentItemData.description }}
 										></div>
-
-										<div className="relative h-auto w-full grid gap-5 pt-4">
-											<div className="relative h-auto w-auto flex items-center">
-												<div className="relative h-10 w-24 flex items-center">
-													<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
-												</div>
-												<div className="relative h-auto w-[calc(100%-6rem)]">
-													<div className="flex gap-2 flex-wrap">
-														{currentItemData["sizes"].map((size, index) => (
-															<div
-																key={index}
-																className={`px-4 py-2 text-xs border rounded-md cursor-pointer ${
-																	selectedSize === size ? "bg-gray-800 text-white" : "hover:bg-gray-100"
-																}`}
-																onClick={() => {
-																	setSelectedSize(size);
-																}}
-															>
-																{size}
-															</div>
-														))}
+										{!cartItems.some((cartItem) => cartItem.product_id === currentItemData.id) && (
+											<div className="relative h-auto w-full grid gap-5 pt-4">
+												<div className="relative h-auto w-auto flex items-center">
+													<div className="relative h-10 w-24 flex items-center">
+														<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
 													</div>
-												</div>
-											</div>
-											<div className="relative h-auto w-auto flex items-center">
-												<div className="relative h-10 w-24 flex items-center">
-													<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
-												</div>
-												<div className="relative h-auto w-[calc(100%-6rem)]">
-													<div className="relative h-10 flex items-center gap-4">
-														{currentItemData["colors"].map((color, index) => {
-															return (
+													<div className="relative h-auto w-[calc(100%-6rem)]">
+														<div className="flex gap-2 flex-wrap">
+															{currentItemData["sizes"].map((size, index) => (
 																<div
-																	onClick={() => {
-																		setCurrentColor(color);
-																		setSelectedColor(color.name);
-																	}}
 																	key={index}
-																	className={`relative h-full cursor-pointer w-8 rounded shadow-md shadow-gray-400`}
-																	style={{ background: `${color.name}` }}
-																></div>
-															);
-														})}
+																	className={`px-4 py-2 text-xs border rounded-md cursor-pointer ${
+																		selectedSize === size ? "bg-gray-800 text-white" : "hover:bg-gray-100"
+																	}`}
+																	onClick={() => {
+																		setSelectedSize(size);
+																	}}
+																>
+																	{size}
+																</div>
+															))}
+														</div>
+													</div>
+												</div>
+												<div className="relative h-auto w-auto flex items-center">
+													<div className="relative h-10 w-24 flex items-center">
+														<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
+													</div>
+													<div className="relative h-auto w-[calc(100%-6rem)]">
+														<div className="relative h-10 flex items-center gap-4">
+															{currentItemData["colors"].map((color, index) => {
+																return (
+																	<div
+																		onClick={() => {
+																			setCurrentColor(color);
+																			setSelectedColor(color.name);
+																		}}
+																		key={index}
+																		className={`relative h-full cursor-pointer w-8 rounded shadow-md shadow-gray-400`}
+																		style={{ background: `${color.name}` }}
+																	></div>
+																);
+															})}
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>
+										)}
 									</div>
 									<div className="relative h-auto w-full">
 										<div className="relative h-auto w-full grid gap-2">
 											<div className="relative h-auto w-full flex-col">
-												<div className="relative flex">
-													<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
-														<div
-															onClick={() => {
-																setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
-															}}
-															className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
-														>
-															<Minus size={18} stroke="currentColor" />
-														</div>
-														<div className="relative select-none h-1/2 w-auto px-2 flex items-center justify-center text-sm font-mono text-gray-700 font-bold border-x-[1px] border-gray-500">
-															{selectedNumberItems}
-														</div>
-														<div
-															onClick={() => {
-																setSelectedNumberItems(
-																	selectedNumberItems < currentItemData.stock
-																		? selectedNumberItems + 1
-																		: selectedNumberItems
-																);
-															}}
-															className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
-														>
-															<Plus size={18} stroke="currentColor" />
+												{!cartItems.some((cartItem) => cartItem.product_id === currentItemData.id) && (
+													<div className="relative flex">
+														<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
+															<div
+																onClick={() => {
+																	setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
+																}}
+																className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
+															>
+																<Minus size={18} stroke="currentColor" />
+															</div>
+															<div className="relative select-none h-1/2 w-auto px-2 flex items-center justify-center text-sm font-mono text-gray-700 font-bold border-x-[1px] border-gray-500">
+																{selectedNumberItems}
+															</div>
+															<div
+																onClick={() => {
+																	setSelectedNumberItems(
+																		selectedNumberItems < currentItemData.stock
+																			? selectedNumberItems + 1
+																			: selectedNumberItems
+																	);
+																}}
+																className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
+															>
+																<Plus size={18} stroke="currentColor" />
+															</div>
 														</div>
 													</div>
-												</div>
+												)}
 												<div className="relative h-auto w-auto flex items-center flex-wrap gap-2 pt-4">
 													{cartItems.some((cartItem) => cartItem.product_id === currentItemData.id) ? (
 														<Button
 															variant={"outline"}
 															className="select-none"
 															onClick={() => {
-																console.log(currentItemData, cartItems);
-
 																removeFromCart(currentItemData.id, setCartItems);
 															}}
 														>
@@ -252,7 +249,6 @@ export default function ItemPage({
 														onClick={() => {
 															if (wishList.some((item) => item.product_id === currentItemData.id)) {
 																removeFromWishList(currentItemData.id, setWishList);
-																console.log(currentItemData.id);
 															} else {
 																addToWishList(currentItemData.id, setWishList);
 															}

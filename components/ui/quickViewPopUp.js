@@ -253,7 +253,7 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 								>
 									<div className="relative h-auto w-full grid gap-4 pb-16">
 										<Link
-											href={`/shop/${currentQuickViewProduct.category.slug}/${currentQuickViewProduct.product_id}`}
+											href={`/shop/${currentQuickViewProduct.category.slug}/${currentQuickViewProduct.id}`}
 											ref={setAllTransitionElementsRef}
 											style={{ opacity: 0, transform: "translateY(20px)" }}
 											className="relative text-5xl font-bold xl:w-4/5 lg:w-4/5 w-full"
@@ -299,93 +299,95 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 										>
 											<div className="relative h-auto w-full grid gap-2">
 												<div className="relative h-auto w-full flex-col">
-													<div className="relative h-auto w-full grid gap-5 pt-4">
-														<div className="relative h-auto w-auto flex items-center">
-															<div className="relative h-10 w-24 flex items-center">
-																<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
-															</div>
-															<div className="relative h-auto w-[calc(100%-6rem)]">
-																<div className="flex gap-2 flex-wrap">
-																	{currentQuickViewProduct["sizes"].map((size, index) => (
-																		<div
-																			key={index}
-																			className={`px-4 py-2 text-xs border rounded-md cursor-pointer duration-200 ${
-																				selectedSize === size
-																					? "bg-gray-800 text-white scale-105"
-																					: "bg-transparent hover:bg-gray-100 scale-100"
-																			}`}
-																			onClick={() => {
-																				setSelectedSize(size);
-																			}}
-																		>
-																			{size}
+													{!cartItems.some((cartItem) => cartItem.product_id === currentQuickViewProduct.id) && (
+														<div className="relative flex flex-col">
+															<div className="relative h-auto w-full grid gap-5 pt-4">
+																<div className="relative h-auto w-auto flex items-center">
+																	<div className="relative h-10 w-24 flex items-center">
+																		<div className="relative text-xs uppercase font-bold text-gray-500">Size</div>
+																	</div>
+																	<div className="relative h-auto w-[calc(100%-6rem)]">
+																		<div className="flex gap-2 flex-wrap">
+																			{currentQuickViewProduct["sizes"].map((size, index) => (
+																				<div
+																					key={index}
+																					className={`px-4 py-2 text-xs border rounded-md cursor-pointer duration-200 ${
+																						selectedSize === size
+																							? "bg-gray-800 text-white scale-105"
+																							: "bg-transparent hover:bg-gray-100 scale-100"
+																					}`}
+																					onClick={() => {
+																						setSelectedSize(size);
+																					}}
+																				>
+																					{size}
+																				</div>
+																			))}
 																		</div>
-																	))}
+																	</div>
+																</div>
+																<div className="relative h-auto w-auto flex items-center">
+																	<div className="relative h-10 w-24 flex items-center">
+																		<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
+																	</div>
+																	<div className="relative h-auto w-[calc(100%-6rem)]">
+																		<div className="relative h-10 flex items-center gap-4">
+																			{currentQuickViewProduct["colors"].map((color, index) => {
+																				return (
+																					<div
+																						onClick={() => {
+																							setCurrentColor(color);
+																							setSelectedColor(color.name);
+																						}}
+																						key={index}
+																						className={`relative h-full cursor-pointer ${
+																							selectedColor == color.name
+																								? "scale-110 shadow-md duration-200 border-none shadow-gray-500"
+																								: "scale-100 border border-gray-600"
+																						} w-8 rounded`}
+																						style={{ background: `${color.name}` }}
+																					></div>
+																				);
+																			})}
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div className="relative flex pt-4">
+																<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
+																	<div
+																		onClick={() => {
+																			setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
+																		}}
+																		className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
+																	>
+																		<Minus size={18} stroke="currentColor" />
+																	</div>
+																	<div className="relative select-none h-1/2 w-auto px-2 flex items-center justify-center text-sm font-mono text-gray-700 font-bold border-x-[1px] border-gray-500">
+																		{selectedNumberItems}
+																	</div>
+																	<div
+																		onClick={() => {
+																			setSelectedNumberItems(
+																				selectedNumberItems < currentQuickViewProduct.stock
+																					? selectedNumberItems + 1
+																					: selectedNumberItems
+																			);
+																		}}
+																		className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
+																	>
+																		<Plus size={18} stroke="currentColor" />
+																	</div>
 																</div>
 															</div>
 														</div>
-														<div className="relative h-auto w-auto flex items-center">
-															<div className="relative h-10 w-24 flex items-center">
-																<div className="relative text-xs uppercase font-bold text-gray-500">Color</div>
-															</div>
-															<div className="relative h-auto w-[calc(100%-6rem)]">
-																<div className="relative h-10 flex items-center gap-4">
-																	{currentQuickViewProduct["colors"].map((color, index) => {
-																		return (
-																			<div
-																				onClick={() => {
-																					setCurrentColor(color);
-																					setSelectedColor(color.name);
-																				}}
-																				key={index}
-																				className={`relative h-full cursor-pointer ${
-																					selectedColor == color.name
-																						? "scale-110 shadow-md duration-200 border-none shadow-gray-500"
-																						: "scale-100 border border-gray-600"
-																				} w-8 rounded`}
-																				style={{ background: `${color.name}` }}
-																			></div>
-																		);
-																	})}
-																</div>
-															</div>
-														</div>
-													</div>
-													<div className="relative flex pt-4">
-														<div className="relative flex h-10 w-auto items-center divide-gray-200 border border-gray-200 rounded">
-															<div
-																onClick={() => {
-																	setSelectedNumberItems(selectedNumberItems >= 2 ? selectedNumberItems - 1 : 1);
-																}}
-																className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
-															>
-																<Minus size={18} stroke="currentColor" />
-															</div>
-															<div className="relative select-none h-1/2 w-auto px-2 flex items-center justify-center text-sm font-mono text-gray-700 font-bold border-x-[1px] border-gray-500">
-																{selectedNumberItems}
-															</div>
-															<div
-																onClick={() => {
-																	setSelectedNumberItems(
-																		selectedNumberItems < currentQuickViewProduct.stock
-																			? selectedNumberItems + 1
-																			: selectedNumberItems
-																	);
-																}}
-																className="relative h-full flex items-center justify-center text-gray-600 w-8 cursor-pointer"
-															>
-																<Plus size={18} stroke="currentColor" />
-															</div>
-														</div>
-													</div>
+													)}
 													<div className="relative h-auto w-auto flex items-center flex-wrap gap-2 pt-4">
 														{cartItems.some((cartItem) => cartItem.product_id === currentQuickViewProduct.id) ? (
 															<Button
 																variant={"outline"}
 																className="select-none"
 																onClick={() => {
-																	console.log(currentQuickViewProduct, cartItems);
-
 																	removeFromCart(currentQuickViewProduct.id, setCartItems);
 																}}
 															>
@@ -430,7 +432,6 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 															onClick={() => {
 																if (wishList.some((item) => item.product_id === currentQuickViewProduct.id)) {
 																	removeFromWishList(currentQuickViewProduct.id, setWishList);
-																	console.log(currentQuickViewProduct.id);
 																} else {
 																	addToWishList(currentQuickViewProduct.id, setWishList);
 																}

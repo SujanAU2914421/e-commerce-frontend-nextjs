@@ -33,8 +33,6 @@ export default function Signup() {
 			...prevData,
 			[name]: value,
 		}));
-
-		console.log(data);
 	};
 
 	// Handle form submission
@@ -81,10 +79,7 @@ export default function Signup() {
 	}, []);
 
 	return (
-		<div
-			className="size-full p-6 bg-white content-center px-6"
-			style={{ fontFamily: "afacad-flux" }}
-		>
+		<div className="size-full p-6 bg-white content-center px-6" style={{ fontFamily: "afacad-flux" }}>
 			<div className="mx-auto xl:w-96 lg:w-96 md:w-96 sm:w-96 w-full max-w-lg h-auto duration-200">
 				<CookieConsent />
 
@@ -105,36 +100,24 @@ export default function Signup() {
 				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-4 pt-8">
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Name
-						</label>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">UserName</label>
 						<input
 							type="text"
-							name="name"
+							name="username"
 							value={data.name}
 							onChange={handleInputChange}
 							required
-							placeholder="Enter your Name"
+							placeholder="Enter your UserName"
 							autoFocus
 							className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
 						/>
 
-						{errors.name && (
-							<span className="text-red-500">{errors.name[0] ?? ""}</span>
-						)}
+						{errors.name && <span className="text-red-500">{errors.name[0] ?? ""}</span>}
 					</div>
 
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Email
-						</label>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">Email</label>
 						<input
 							type="email"
 							name="email"
@@ -145,18 +128,11 @@ export default function Signup() {
 							className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
 						/>
 
-						{errors.email && (
-							<span className="text-red-500">{errors.email[0] ?? ""}</span>
-						)}
+						{errors.email && <span className="text-red-500">{errors.email[0] ?? ""}</span>}
 					</div>
 
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Password
-						</label>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">Password</label>
 						<div className="relative w-full flex items-center gap-5">
 							<input
 								type={showPassword ? "text" : "password"}
@@ -178,17 +154,10 @@ export default function Signup() {
 							</div>
 						</div>
 
-						{errors.password && (
-							<span className="text-red-500">{errors.password[0] ?? ""}</span>
-						)}
+						{errors.password && <span className="text-red-500">{errors.password[0] ?? ""}</span>}
 					</div>
-					<div
-						ref={setAllTransitionElementsRef}
-						style={{ opacity: 0, transform: "translateY(20px)" }}
-					>
-						<label className="block text-sm font-medium text-gray-700">
-							Confirm Password
-						</label>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<label className="block text-sm font-medium text-gray-700">Confirm Password</label>
 						<div className="relative w-full flex items-center gap-5">
 							<input
 								type={showPassword ? "text" : "password"}
@@ -214,9 +183,7 @@ export default function Signup() {
 							</div>
 						</div>
 
-						{errors.password && (
-							<span className="text-red-500">{errors.password[0] ?? ""}</span>
-						)}
+						{errors.password && <span className="text-red-500">{errors.password[0] ?? ""}</span>}
 					</div>
 					<div
 						ref={setAllTransitionElementsRef}

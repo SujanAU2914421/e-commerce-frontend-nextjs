@@ -98,25 +98,29 @@ export default function CartPage() {
 													<div className="relative col-span-3 flex items-center">
 														<div className="relative flex items-center gap-4">
 															<Link href={`/shop/${product.category.slug}/${product.id}`}>
-																<div
-																	className="h-12 w-12 rounded-md hover:scale-105 scale-100 duration-200"
-																	style={{
-																		background: `url(${product.colors[0]?.images[0]}) center / cover`,
-																	}}
-																></div>
+																<div className="relative h-auto w-auto bg-gray-100 rounded-md">
+																	<div
+																		className="h-12 w-12 rounded-md hover:scale-105 scale-100 duration-200"
+																		style={{
+																			background: `url(${product.colors[0]?.images[0]}) center / cover`,
+																		}}
+																	></div>
+																</div>
 															</Link>
 															<div className="relative grid gap-2">
 																<Link
 																	href={`/shop/${product.category.slug}/${product.id}`}
 																	className="text-sm font-medium"
 																>
-																	{product.name}
+																	{product.title}
 																</Link>
 																<div className="relative xl:hidden lg:hidden md:hidden flex items-center gap-2">
 																	<div className="relative font-bold font-sans">
-																		${product.price - (product.discount / 100) * product.price}
+																		${(product.price - (product.discount / 100) * product.price).toFixed(2)}
 																	</div>
-																	<div className="relative text-gray-700 line-through">${product.price}</div>
+																	<div className="relative text-gray-700 line-through">
+																		${parseFloat(product.price).toFixed(2)}
+																	</div>
 																</div>
 															</div>
 														</div>
@@ -124,9 +128,11 @@ export default function CartPage() {
 													<div className="relative col-span-3 xl:grid-cols-3 justify-center grid-cols-3 xl:grid lg:grid md:grid flex items-center gap-2 xl:pt-0 lg:pt-0 md:pt-0 pt-4">
 														<div className="relative col-span-1 xl:flex lg:flex md:flex hidden items-center gap-2 flex-wrap">
 															<div className="relative font-bold font-sans">
-																${product.price - (product.discount / 100) * product.price}
+																${(product.price - (product.discount / 100) * product.price).toFixed(2)}
 															</div>
-															<div className="relative text-gray-700 line-through">${product.price}</div>
+															<div className="relative text-gray-700 line-through">
+																${parseFloat(product.price).toFixed(2)}
+															</div>
 														</div>
 														<div className="relative col-span-1 flex items-center">
 															{/* Pass quantity and available stock */}
@@ -139,10 +145,13 @@ export default function CartPage() {
 														</div>
 														<div className="relative col-span-1 flex items-center gap-2 flex-wrap">
 															<div className="relative font-bold font-sans">
-																${(product.price - (product.discount / 100) * product.price) * item.quantity}
+																$
+																{((product.price - (product.discount / 100) * product.price) * item.quantity).toFixed(
+																	2
+																)}
 															</div>
 															<div className="relative text-gray-700 line-through">
-																${product.price * item.quantity}
+																${(product.price * item.quantity).toFixed(2)}
 															</div>
 														</div>
 													</div>
@@ -183,7 +192,7 @@ export default function CartPage() {
 											</div>
 										</div>
 										<Link
-											href={"/checkout"}
+											href={"/checkout/information"}
 											className="mt-6 h-10 cursor-pointer flex items-center justify-center w-full bg-black text-white rounded-md text-sm font-bold hover:bg-gray-800 transition"
 											disabled={cartItems.length === 0}
 										>
@@ -242,7 +251,7 @@ export default function CartPage() {
 										</div>
 									</div>
 									<div className="relative w-full flex mt-6 justify-center font-sans">
-										<Link href={"/checkout"} disabled={cartItems.length === 0}>
+										<Link href={"/checkout/information"} disabled={cartItems.length === 0}>
 											<Button>Proceed to Checkout</Button>
 										</Link>
 									</div>

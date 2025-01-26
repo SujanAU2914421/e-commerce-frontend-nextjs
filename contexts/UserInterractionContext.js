@@ -16,6 +16,9 @@ export default function UserInterractionContextProvider({ children }) {
 	const [togglingCart, setTogglingCart] = useState(false);
 	const [togglingWishList, setTogglingWishList] = useState(false);
 
+	const [togglePrivacyPolicy, setTogglePrivacyPolicy] = useState(false);
+	const [toggleTermsAndConditions, setToggleTermsAndConditions] = useState(false);
+
 	useEffect(() => {
 		if (user) {
 			fetchWishlist(setWishList);

@@ -1,8 +1,15 @@
-import React from "react";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useOrderContext } from "@/contexts/OrderContext";
+import Link from "next/link";
+import React, { useEffect } from "react";
+import { Button } from "./button";
 
-export default function CheckoutShipInformationDetail({ formData, setFormData }) {
+export default function CheckoutShipInformationDetail() {
+	const { user } = useAuthContext();
+	const { orderDataInitial, setOrderDataInitial } = useOrderContext();
+
 	const handleChange = (field, value) => {
-		setFormData((prev) => ({ ...prev, [field]: value }));
+		setOrderDataInitial((prev) => ({ ...prev, [field]: value }));
 	};
 
 	return (
@@ -10,37 +17,19 @@ export default function CheckoutShipInformationDetail({ formData, setFormData })
 			{/* Contact Section */}
 			<div className="mb-4">
 				<h2 className="text-gray-700 font-semibold">Contact</h2>
-				<p className="text-gray-600">{formData.email}</p>
-				<button
-					onClick={() => handleChange("email", prompt("Enter new email address:", formData.email) || formData.email)}
-					className="text-blue-500 hover:underline text-sm"
-				>
-					Change
-				</button>
+				<p className="text-gray-600">{orderDataInitial.email}</p>
 			</div>
 
 			{/* Ship To Section */}
-			<div className="mb-4">
+			<div className="mb-8">
 				<h2 className="text-gray-700 font-semibold">Ship To</h2>
 				<p className="text-gray-600">
-					{formData.streetAddress}, {formData.houseNumberAndStreetName}, {formData.city} {formData.zip},{" "}
-					{formData.state}
+					{orderDataInitial.streetAddress}, {orderDataInitial.houseNumberAndStreetName}, {orderDataInitial.city}{" "}
+					{orderDataInitial.zip}, {orderDataInitial.state}
 				</p>
-				<button
-					onClick={() => {
-						const newStreet = prompt("Enter new street address:", formData.streetAddress) || formData.streetAddress;
-						const newCity = prompt("Enter new city:", formData.city) || formData.city;
-						const newState = prompt("Enter new state:", formData.state) || formData.state;
-						const newZip = prompt("Enter new PIN code:", formData.zip) || formData.zip;
-						handleChange("streetAddress", newStreet);
-						handleChange("city", newCity);
-						handleChange("state", newState);
-						handleChange("zip", newZip);
-					}}
-					className="text-blue-500 hover:underline text-sm"
-				>
+				<Link href={"/checkout/information"} className="text-blue-500 hover:underline text-sm">
 					Change
-				</button>
+				</Link>
 			</div>
 
 			{/* Order Notes Section */}
@@ -48,10 +37,15 @@ export default function CheckoutShipInformationDetail({ formData, setFormData })
 				<h2 className="text-gray-700 font-semibold">Order Notes</h2>
 				<textarea
 					placeholder="Add any notes for your order (optional)"
-					value={formData.orderNotes}
+					value={orderDataInitial.orderNotes}
 					onChange={(e) => handleChange("orderNotes", e.target.value)}
 					className="w-full border border-gray-300 rounded-md px-3 py-2 h-20 focus:outline-gray-200"
 				/>
+				<div className="relative h-auto w-full flex items-center justify-end">
+					<Link href={"/checkout/payment"}>
+						<Button>Continue To payment</Button>
+					</Link>
+				</div>
 			</div>
 		</div>
 	);

@@ -203,8 +203,6 @@ export default function ShopNavbar() {
 									if (user) {
 										setShowCartList(!showCartList);
 										setShowSearching(false);
-									} else {
-										console.log("User not logged in");
 									}
 								}}
 								className="relative h-auto w-auto flex items-center justify-center text-gray-700 hover:rotate-6 cursor-pointer rounded-full"

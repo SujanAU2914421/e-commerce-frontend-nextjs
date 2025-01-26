@@ -3,6 +3,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import SideNavBar from "../component/sideNavBar";
 import Profile from "./contents/profile";
+import OrdersUiPage from "./contents/orders";
 
 export default function AccountPage() {
 	const pathname = usePathname(); // Get the current pathname
@@ -19,6 +20,8 @@ export default function AccountPage() {
 								<div className="relative h-auto w-full pb-16 pt-10">
 									{pathname.split("/")[2] === "profile" ? (
 										<Profile />
+									) : pathname.split("/")[2] === "orders" ? (
+										<OrdersUiPage />
 									) : pathname.split("/")[2] === "activity" ? (
 										"sdlsld"
 									) : pathname.split("/")[2] === "purchase-details" ? (

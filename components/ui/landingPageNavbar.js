@@ -1,10 +1,12 @@
 "use client";
 import Login from "@/app/auth/login/page";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { User } from "lucide-react";
 import { XIcon } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Button } from "./button";
 
 export default function LandingPageNavbar() {
 	const pathname = usePathname();
@@ -66,7 +68,7 @@ export default function LandingPageNavbar() {
 				<div className="relative font-bold text-xl font-sans">FP</div>
 			</div>
 			<div className="relative flex items-center gap-8">
-				<div className="relative h-auto w-auto flex gap-8 text-sm font-sans text-gray-700">
+				<div className="relative h-auto w-auto flex gap-8 text-sm font-sans text-gray-700 items-center">
 					{/* Home Menu Item */}
 					<Link href="/shop" className="relative group">
 						<div
@@ -114,6 +116,16 @@ export default function LandingPageNavbar() {
 							} duration-300 h-[2px] rounded-full bg-gray-600`}
 						></div>
 					</Link>
+					{!user && (
+						<div className="relative flex items-center gap-4">
+							<Link href="/auth/signup">
+								<Button variant="outline">Sign Up?</Button>
+							</Link>
+							<Link href="/auth/login">
+								<Button variant="default">Login</Button>
+							</Link>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

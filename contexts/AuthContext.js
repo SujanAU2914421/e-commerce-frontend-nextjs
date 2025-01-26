@@ -46,8 +46,11 @@ export default function AuthContextProvider({ children }) {
 	};
 
 	const logout = async () => {
-		const response = await axios.get("logout");
-		console.log(response);
+		const response = await axios.get("customer/logout");
+		if (response.status === 200) {
+			Cookies.remove("auth_token");
+			window.location.href = "/auth/login";
+		}
 	};
 
 	useEffect(() => {
