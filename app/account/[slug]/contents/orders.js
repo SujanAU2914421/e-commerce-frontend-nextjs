@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useOrderContext } from "@/contexts/OrderContext";
-import OrderView from "@/components/ui/orderView";
+import OrderView from "@/components/orderView";
 import { usePathname } from "next/navigation";
 import { useAuthContext } from "@/contexts/AuthContext";
 
@@ -85,22 +85,31 @@ export default function OrdersUiPage() {
 								return (
 									<div
 										key={index}
-										onClick={() => handleOrderClick(order.id)}
+										onClick={() =>
+											handleOrderClick(order.id)
+										}
 										className="relative h-auto w-full shadow-xl border rounded-md p-5"
 									>
 										<div className="relative h-auto w-full space-y-2">
 											{/* Order ID */}
-											<div className="relative text-lg font-bold">Order #{order.id}</div>
+											<div className="relative text-lg font-bold">
+												Order #{order.id}
+											</div>
 
 											{/* Order Date */}
 											<div className="text-sm text-gray-500">
-												Placed on: {new Date(order.created_at).toLocaleDateString()}
+												Placed on:{" "}
+												{new Date(
+													order.created_at
+												).toLocaleDateString()}
 											</div>
 
 											{/* Order Status */}
 											<div
 												className={`text-sm font-medium ${
-													order.status === "Delivered" ? "text-green-600" : "text-orange-600"
+													order.status === "Delivered"
+														? "text-green-600"
+														: "text-orange-600"
 												}`}
 											>
 												Status: {order.status}
@@ -110,26 +119,56 @@ export default function OrdersUiPage() {
 											<div className="text-sm text-gray-700">
 												Products:
 												<ul className="list-disc ml-4">
-													{order.order_items.map((product, productIndex) => {
-														total_price += parseFloat(product.total_price);
-														return (
-															<li key={productIndex}>
-																{product.product.title} - {product.quantity} x ${parseFloat(product.product.price)}
-															</li>
-														);
-													})}
+													{order.order_items.map(
+														(
+															product,
+															productIndex
+														) => {
+															total_price +=
+																parseFloat(
+																	product.total_price
+																);
+															return (
+																<li
+																	key={
+																		productIndex
+																	}
+																>
+																	{
+																		product
+																			.product
+																			.title
+																	}{" "}
+																	-{" "}
+																	{
+																		product.quantity
+																	}{" "}
+																	x $
+																	{parseFloat(
+																		product
+																			.product
+																			.price
+																	)}
+																</li>
+															);
+														}
+													)}
 												</ul>
 											</div>
 
 											{/* Total Amount */}
-											<div className="font-semibold text-gray-800">Total: ${total_price}</div>
+											<div className="font-semibold text-gray-800">
+												Total: ${total_price}
+											</div>
 										</div>
 									</div>
 								);
 							})}
 						</div>
 					) : (
-						<div className="text-center text-gray-500">You don’t have any orders.</div>
+						<div className="text-center text-gray-500">
+							You don’t have any orders.
+						</div>
 					)}
 				</>
 			)}

@@ -1,21 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import ShopNavbar from "@/components/ui/navbar";
-import NumberOfItems from "@/components/ui/numberOfItems";
-import QuickViewPopUp from "@/components/ui/quickViewPopUp";
+import ShopNavbar from "@/components/navbar";
+import NumberOfItems from "@/components/numberOfItems";
+import QuickViewPopUp from "@/components/quickViewPopUp";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { useMainContext } from "@/contexts/MainContext";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 import { Trash, X } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import AllWishList from "@/components/ui/allWishList";
+import AllWishList from "@/components/allWishList";
 import { removeFromCart } from "@/lib/cartsHandle";
-import ExploreProducts from "@/components/ui/exploreProducts";
-import Footer from "@/components/ui/footer";
+import ExploreProducts from "@/components/exploreProducts";
+import Footer from "@/components/footer";
 
 export default function CartPage() {
-	const { currentQuickViewProduct, setCurrentQuickViewProduct } = useMainContext();
+	const { currentQuickViewProduct, setCurrentQuickViewProduct } =
+		useMainContext();
 
 	const { wishList, cartItems, setCartItems } = useUserInterractionContext();
 
@@ -27,7 +28,9 @@ export default function CartPage() {
 	// Derive wishListProducts from wishList
 	useEffect(() => {
 		if (wishList && wishList.length > 0) {
-			const products = wishList.map((wishlistItem) => wishlistItem.product).filter(Boolean); // Filter out any null/undefined products
+			const products = wishList
+				.map((wishlistItem) => wishlistItem.product)
+				.filter(Boolean); // Filter out any null/undefined products
 			setWishListProducts(products);
 		} else {
 			setWishListProducts([]);
@@ -39,7 +42,8 @@ export default function CartPage() {
 		? cartItems.length < 0
 			? 0
 			: cartItems.reduce((total, item) => {
-					const discount = (item.product.price * item.product.discount) / 100;
+					const discount =
+						(item.product.price * item.product.discount) / 100;
 					const priceAfterDiscount = item.product.price - discount;
 					// Add to total
 					return total + priceAfterDiscount * item.quantity;
@@ -49,7 +53,10 @@ export default function CartPage() {
 	return user ? (
 		<div className="relative h-screen w-screen overflow-x-hidden overflow-y-auto">
 			<QuickViewPopUp filteredData={wishListProducts} />
-			<div className="sticky left-0 top-0 z-20 bg-white" style={{ fontFamily: "outfit" }}>
+			<div
+				className="sticky left-0 top-0 z-20 bg-white"
+				style={{ fontFamily: "outfit" }}
+			>
 				<ShopNavbar />
 			</div>
 
@@ -61,16 +68,28 @@ export default function CartPage() {
 				>
 					{wishList.length > 0 ? (
 						<>
-							<div className="relative font-bold text-xl pt-8">Your WishList Collections</div>
+							<div className="relative font-bold text-xl pt-8">
+								Your WishList Collections
+							</div>
 							<div className="relative w-full">
-								<AllWishList allProducts={wishList} setCurrentQuickViewProduct={setCurrentQuickViewProduct} />
+								<AllWishList
+									allProducts={wishList}
+									setCurrentQuickViewProduct={
+										setCurrentQuickViewProduct
+									}
+								/>
 							</div>
 						</>
 					) : (
 						<div className="relative grid gap-2">
-							<div className="relative font-bold text-xl pt-8 text-gray-600">You dont have any Favorite Items</div>
+							<div className="relative font-bold text-xl pt-8 text-gray-600">
+								You dont have any Favorite Items
+							</div>
 							<div className="relative flex">
-								<Link href={"shop"} className="relative font-bold text-xl text-gray-800 hover:underline">
+								<Link
+									href={"shop"}
+									className="relative font-bold text-xl text-gray-800 hover:underline"
+								>
 									Explore Now?
 								</Link>
 							</div>

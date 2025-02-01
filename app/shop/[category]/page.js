@@ -2,12 +2,15 @@
 
 import React, { useEffect } from "react";
 import Contents from "../components/contents";
-import ShopNavbar from "@/components/ui/navbar";
-import Footer from "@/components/ui/footer";
+import ShopNavbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export default function Home() {
 	return (
-		<div className="relative h-screen w-screen overflow-hidden" style={{ fontFamily: "afacad-flux" }}>
+		<div
+			className="relative h-screen w-screen overflow-hidden"
+			style={{ fontFamily: "afacad-flux" }}
+		>
 			<div className="relative h-full w-full overflow-x-hidden overflow-y-auto">
 				<div className="relative h-auto w-full">
 					<div className="relative min-h-screen h-auto w-full">

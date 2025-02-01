@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 
 export const CommentForm = ({ currentItemData, setAddingReview }) => {
@@ -24,7 +24,10 @@ export const CommentForm = ({ currentItemData, setAddingReview }) => {
 	const isFormReady = commentText.trim() !== "" && rating > 0;
 
 	return (
-		<form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col gap-4">
+		<form
+			onSubmit={handleSubmit}
+			className="w-full max-w-sm flex flex-col gap-4"
+		>
 			<div className="flex flex-col gap-2">
 				{/* Comment Input */}
 				<input
@@ -42,7 +45,11 @@ export const CommentForm = ({ currentItemData, setAddingReview }) => {
 							key={star}
 							type="button"
 							onClick={() => setRating(star)}
-							className={`text-xl ${rating >= star ? "text-yellow-500" : "text-gray-400"}`}
+							className={`text-xl ${
+								rating >= star
+									? "text-yellow-500"
+									: "text-gray-400"
+							}`}
 						>
 							★
 						</button>
@@ -53,7 +60,9 @@ export const CommentForm = ({ currentItemData, setAddingReview }) => {
 			<Button
 				type="submit"
 				className={`px-4 py-2 rounded-md ${
-					isFormReady ? "bg-gray-800 text-white" : "bg-gray-500 text-gray-300 cursor-not-allowed"
+					isFormReady
+						? "bg-gray-800 text-white"
+						: "bg-gray-500 text-gray-300 cursor-not-allowed"
 				}`}
 				disabled={!isFormReady}
 			>

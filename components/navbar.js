@@ -1,15 +1,15 @@
 "use client";
-import { Search, ShoppingCart, User, XIcon } from "lucide-react/dist/cjs/lucide-react";
+
+import Login from "@/app/auth/login/page";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useMainContext } from "@/contexts/MainContext";
+import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import { Heart, Search, ShoppingCart, User, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "./button";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { useMainContext } from "@/contexts/MainContext";
 import { MiniCartViewer } from "./miniCartViewer";
-import Login from "@/app/auth/login/page";
-import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
-import { Heart } from "lucide-react";
+import { Button } from "./ui/button";
 
 export default function ShopNavbar() {
 	const router = useRouter();
@@ -17,7 +17,8 @@ export default function ShopNavbar() {
 
 	const { user, showLoginPopUp, setShowLoginPopUp } = useAuthContext();
 
-	const { searchQuery, setSearchQuery, getCategories, getProducts } = useMainContext();
+	const { searchQuery, setSearchQuery, getCategories, getProducts } =
+		useMainContext();
 
 	const { cartItems } = useUserInterractionContext();
 
@@ -161,8 +162,13 @@ export default function ShopNavbar() {
 				<div className="relative h-auto w-full bg-white flex items-center justify-center pt-8 pb-4">
 					<div className="relative h-auto xl:w-[50vw] lg:w-[50vw] md:w-[70vw] sm:w-[80vw] w-full px-4">
 						<div className="relative grid gap-8">
-							<div className="relative text-sm text-gray-700">Search for your favorite clothing items.</div>
-							<form onSubmit={searchSubmitHandler} className="relative w-full h-auto flex items-center gap-4">
+							<div className="relative text-sm text-gray-700">
+								Search for your favorite clothing items.
+							</div>
+							<form
+								onSubmit={searchSubmitHandler}
+								className="relative w-full h-auto flex items-center gap-4"
+							>
 								<div className="relative h-auto w-full">
 									<input
 										type="text"
@@ -196,12 +202,24 @@ export default function ShopNavbar() {
 				<div className="relative h-full w-full flex justify-between items-center py-4 flex-wrap xl:w-[80vw] lg:w-[80vw] md:w-[90vw] sm:w-[95vw] xl:px-0 lg:px-0 md:px-0 px-4">
 					<div className="relative flex gap-8 items-center">
 						<div className="relative flex gap-5 items-center">
-							<Link href="/" className="relative flex items-center justify-center">
-								<div className="relative text-sm font-bold font-sans">FP</div>
+							<Link
+								href="/"
+								className="relative flex items-center justify-center"
+							>
+								<div className="relative text-sm font-bold font-sans">
+									FP
+								</div>
 							</Link>
+
 							<div className="relative h-3 w-[1px] bg-black"></div>
-							<Link href="/shop/all" className="relative flex gap-3 items-center">
-								<div className="relative h-auto text-sm font-bold capitalize">{"shop"}</div>
+
+							<Link
+								href="/shop/all"
+								className="relative flex gap-3 items-center"
+							>
+								<div className="relative h-auto text-sm font-bold capitalize">
+									{"shop"}
+								</div>
 							</Link>
 						</div>
 					</div>
@@ -218,7 +236,9 @@ export default function ShopNavbar() {
 							</div>
 							<div
 								className={`absolute -bottom-1 ${
-									mainPathName == "shop" ? "w-1/2" : "w-0 group-hover:w-1/2"
+									mainPathName == "shop"
+										? "w-1/2"
+										: "w-0 group-hover:w-1/2"
 								} duration-300 h-[2px] rounded-full bg-gray-600`}
 							></div>
 						</Link>
@@ -234,7 +254,9 @@ export default function ShopNavbar() {
 							</div>
 							<div
 								className={`absolute -bottom-1 ${
-									pathName === "services" ? "w-1/2" : "w-0 group-hover:w-1/2"
+									pathName === "services"
+										? "w-1/2"
+										: "w-0 group-hover:w-1/2"
 								} duration-300 h-[2px] rounded-full bg-gray-600`}
 							></div>
 						</Link>
@@ -250,7 +272,9 @@ export default function ShopNavbar() {
 							</div>
 							<div
 								className={`absolute -bottom-1 ${
-									pathName === "about" ? "w-1/2" : "w-0 group-hover:w-1/2"
+									pathName === "about"
+										? "w-1/2"
+										: "w-0 group-hover:w-1/2"
 								} duration-300 h-[2px] rounded-full bg-gray-600`}
 							></div>
 						</Link>
@@ -266,7 +290,11 @@ export default function ShopNavbar() {
 										}}
 										className="relative h-auto w-auto flex items-center justify-center text-gray-700 hover:rotate-6 cursor-pointer rounded-full"
 									>
-										{!showSearching ? <Search size={20} /> : <XIcon size={20} />}
+										{!showSearching ? (
+											<Search size={20} />
+										) : (
+											<XIcon size={20} />
+										)}
 									</div>
 								)}
 								<div
@@ -282,7 +310,14 @@ export default function ShopNavbar() {
 									}}
 									className="relative h-auto w-auto flex items-center justify-center text-gray-700 hover:rotate-6 cursor-pointer rounded-full"
 								>
-									<ShoppingCart fill={mainPathName === "cart" ? "currentColor" : "none"} size={20} />
+									<ShoppingCart
+										fill={
+											mainPathName === "cart"
+												? "currentColor"
+												: "none"
+										}
+										size={20}
+									/>
 									{cartItems && cartItems.length > 0 && (
 										<div className="absolute z-10 flex items-center justify-center h-6 w-6 -top-3 -right-4 rounded-full bg-white">
 											<div className="relative h-4 select-none w-4 bg-black rounded-full flex items-center justify-center text-xs text-white">
@@ -293,7 +328,14 @@ export default function ShopNavbar() {
 								</div>
 								<Link href="/wishlist">
 									<div className="relative h-auto w-auto flex items-center justify-center text-gray-700 hover:rotate-6 cursor-pointer rounded-full">
-										<Heart fill={mainPathName === "wishlist" ? "currentColor" : "none"} size={20} />
+										<Heart
+											fill={
+												mainPathName === "wishlist"
+													? "currentColor"
+													: "none"
+											}
+											size={20}
+										/>
 										{cartItems && cartItems.length > 0 && (
 											<div className="absolute z-10 flex items-center justify-center h-6 w-6 -top-3 -right-4 rounded-full bg-white">
 												<div className="relative h-4 select-none w-4 bg-black rounded-full flex items-center justify-center text-xs text-white">
@@ -314,7 +356,9 @@ export default function ShopNavbar() {
 							) : (
 								<div className="relative flex items-center gap-4">
 									<Link href="/auth/signup">
-										<Button variant="outline">Sign Up?</Button>
+										<Button variant="outline">
+											Sign Up?
+										</Button>
 									</Link>
 									<Link href="/auth/login">
 										<Button variant="default">Login</Button>

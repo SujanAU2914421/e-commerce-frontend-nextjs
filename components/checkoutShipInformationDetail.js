@@ -2,7 +2,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { useOrderContext } from "@/contexts/OrderContext";
 import Link from "next/link";
 import React, { useEffect } from "react";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 
 export default function CheckoutShipInformationDetail() {
 	const { user } = useAuthContext();
@@ -24,10 +24,15 @@ export default function CheckoutShipInformationDetail() {
 			<div className="mb-8">
 				<h2 className="text-gray-700 font-semibold">Ship To</h2>
 				<p className="text-gray-600">
-					{orderDataInitial.streetAddress}, {orderDataInitial.houseNumberAndStreetName}, {orderDataInitial.city}{" "}
-					{orderDataInitial.zip}, {orderDataInitial.state}
+					{orderDataInitial.streetAddress},{" "}
+					{orderDataInitial.houseNumberAndStreetName},{" "}
+					{orderDataInitial.city} {orderDataInitial.zip},{" "}
+					{orderDataInitial.state}
 				</p>
-				<Link href={"/checkout/information"} className="text-blue-500 hover:underline text-sm">
+				<Link
+					href={"/checkout/information"}
+					className="text-blue-500 hover:underline text-sm"
+				>
 					Change
 				</Link>
 			</div>

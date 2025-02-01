@@ -1,9 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import ExploreProducts from "@/components/ui/exploreProducts";
-import Footer from "@/components/ui/footer";
-import ShopNavbar from "@/components/ui/navbar";
-import QuickViewPopUp from "@/components/ui/quickViewPopUp";
+import ExploreProducts from "@/components/exploreProducts";
+import Footer from "@/components/footer";
+import ShopNavbar from "@/components/navbar";
+import QuickViewPopUp from "@/components/quickViewPopUp";
 import { useMainContext } from "@/contexts/MainContext";
 import { Loader } from "lucide-react";
 import { ChevronLeft } from "lucide-react/dist/cjs/lucide-react";
@@ -11,8 +11,14 @@ import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useRef, useCallback, useState } from "react";
 
 export default function SearchPageUi() {
-	const { searchQuery, setSearchQuery, searchProducts, searchPagination, searchProductsResult, loadingSearchData } =
-		useMainContext();
+	const {
+		searchQuery,
+		setSearchQuery,
+		searchProducts,
+		searchPagination,
+		searchProductsResult,
+		loadingSearchData,
+	} = useMainContext();
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const inputRef = useRef(null);
@@ -58,7 +64,10 @@ export default function SearchPageUi() {
 	};
 
 	return (
-		<div className="relative h-screen w-screen overflow-x-hidden pb-16" style={{ fontFamily: "afacad-flux" }}>
+		<div
+			className="relative h-screen w-screen overflow-x-hidden pb-16"
+			style={{ fontFamily: "afacad-flux" }}
+		>
 			<div className="sticky top-0 left-0 z-40">
 				<ShopNavbar />
 			</div>
@@ -76,9 +85,14 @@ export default function SearchPageUi() {
 							</div>
 						</div>
 						<div className="relative flex flex-col gap-4">
-							<div className="relative text-sm text-gray-700">Search for your favorite clothing items.</div>
+							<div className="relative text-sm text-gray-700">
+								Search for your favorite clothing items.
+							</div>
 							{/* Search input wrapped in a form */}
-							<form className="relative w-full h-auto flex items-center gap-4" onSubmit={searchSubmitHandler}>
+							<form
+								className="relative w-full h-auto flex items-center gap-4"
+								onSubmit={searchSubmitHandler}
+							>
 								<div className="relative h-auto w-full">
 									<input
 										type="text"
@@ -95,44 +109,60 @@ export default function SearchPageUi() {
 							<div className="relative flex flex-col gap-2">
 								<div className="relative text-gray-700 mb-4">
 									Showing Results For:{" "}
-									<span className="relative font-bold text-xl text-gray-700">{searchQuery || "..."}</span>
+									<span className="relative font-bold text-xl text-gray-700">
+										{searchQuery || "..."}
+									</span>
 								</div>
 							</div>
-							{searchPagination && searchPagination.total_pages > 1 && (
-								<div className="relative flex h-auto w-auto gap-2">
-									{Array.from({ length: searchPagination.total_pages }, (_, i) => i + 1)
-										.slice(0, 3) // Show the first 3 pages
-										.map((page) => (
-											<div
-												key={page}
-												onClick={() => {
-													setPageNum(page); // Directly set the page number
-												}}
-												className={`relative cursor-pointer h-8 w-8 flex items-center justify-center text-xs font-bold rounded-sm ${
-													page === searchPagination.current_page ? "bg-gray-800 text-white" : "bg-gray-200"
-												}`}
-											>
-												{page}
-											</div>
-										))}
+							{searchPagination &&
+								searchPagination.total_pages > 1 && (
+									<div className="relative flex h-auto w-auto gap-2">
+										{Array.from(
+											{
+												length: searchPagination.total_pages,
+											},
+											(_, i) => i + 1
+										)
+											.slice(0, 3) // Show the first 3 pages
+											.map((page) => (
+												<div
+													key={page}
+													onClick={() => {
+														setPageNum(page); // Directly set the page number
+													}}
+													className={`relative cursor-pointer h-8 w-8 flex items-center justify-center text-xs font-bold rounded-sm ${
+														page ===
+														searchPagination.current_page
+															? "bg-gray-800 text-white"
+															: "bg-gray-200"
+													}`}
+												>
+													{page}
+												</div>
+											))}
 
-									{searchPagination.total_pages > 5 && searchPagination.has_more_pages && (
-										<>
-											<div className="relative cursor-pointer h-8 w-8 flex items-end justify-center text-xs font-bold">
-												...
-											</div>
-											<div
-												onClick={() => {
-													setPageNum(searchPagination.total_pages);
-												}}
-												className={`relative cursor-pointer h-8 w-8 flex items-center justify-center text-xs font-bold bg-gray-200 rounded-sm`}
-											>
-												{searchPagination.total_pages}
-											</div>
-										</>
-									)}
-								</div>
-							)}
+										{searchPagination.total_pages > 5 &&
+											searchPagination.has_more_pages && (
+												<>
+													<div className="relative cursor-pointer h-8 w-8 flex items-end justify-center text-xs font-bold">
+														...
+													</div>
+													<div
+														onClick={() => {
+															setPageNum(
+																searchPagination.total_pages
+															);
+														}}
+														className={`relative cursor-pointer h-8 w-8 flex items-center justify-center text-xs font-bold bg-gray-200 rounded-sm`}
+													>
+														{
+															searchPagination.total_pages
+														}
+													</div>
+												</>
+											)}
+									</div>
+								)}
 						</div>
 					</div>
 					{/* Display search results or fallback message */}
@@ -149,7 +179,9 @@ export default function SearchPageUi() {
 							) : searchQuery === "" || searchQuery == null ? (
 								<div>Give the related information</div>
 							) : (
-								<div>Ops! No Products with given information.</div>
+								<div>
+									Ops! No Products with given information.
+								</div>
 							)}
 						</div>
 					)}

@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/ui/landingPageNavbar";
+import Navbar from "../../components/landingPageNavbar";
 import Link from "next/link";
 
 export default function ContentLandingPage() {
@@ -24,12 +24,15 @@ export default function ContentLandingPage() {
 											</div>
 											<div className="relative h-auto grid gap-2">
 												<div className="relative text-xs font-light">
-													Discover the best of online shopping with figPic -
-													where quality meets convenience.
+													Discover the best of online
+													shopping with figPic - where
+													quality meets convenience.
 												</div>
 												<div className="relative text-xs font-light">
-													Shop a curated selection of premium products at
-													figpic, where quality and convenience meet.
+													Shop a curated selection of
+													premium products at figpic,
+													where quality and
+													convenience meet.
 												</div>
 											</div>
 										</div>
@@ -55,7 +58,12 @@ export default function ContentLandingPage() {
 												points="440.61 79.12 466.22 87.54 466.22 50.67 442.98 50.67 440.61 79.12"
 												fill="#f8a8ab"
 											/>
-											<circle cx="463.05" cy="35.35" r="25.52" fill="#f8a8ab" />
+											<circle
+												cx="463.05"
+												cy="35.35"
+												r="25.52"
+												fill="#f8a8ab"
+											/>
 											<path
 												d="m456.55,37.35l3.52,4.27,6.36-11.14s8.12.42,8.12-5.61,7.45-6.2,7.45-6.2c0,0,10.55-18.42-11.3-13.57,0,0-15.16-10.38-22.69-1.51,0,0-23.11,11.64-16.5,31.9l10.99,20.89,2.49-4.73s-1.51-19.85,11.56-14.32v.02Z"
 												fill="#2f2e43"
@@ -135,7 +143,12 @@ export default function ContentLandingPage() {
 												points="278.34 105.33 255.98 112.68 255.98 80.5 276.27 80.5 278.34 105.33"
 												fill="#f8a8ab"
 											/>
-											<circle cx="258.75" cy="67.13" r="22.28" fill="#f8a8ab" />
+											<circle
+												cx="258.75"
+												cy="67.13"
+												r="22.28"
+												fill="#f8a8ab"
+											/>
 											<path
 												d="m264.87,64.92c-3.73-.11-6.18-3.88-7.63-7.32s-2.94-7.39-6.4-8.81c-2.83-1.16-7.82,6.69-10.05,4.6-2.33-2.18-.06-13.37,2.41-15.38s5.85-2.4,9.03-2.55c7.76-.36,15.57.27,23.18,1.86,4.71.98,9.55,2.46,12.95,5.86,4.3,4.32,5.4,10.83,5.71,16.92.32,6.23-.04,12.75-3.07,18.2-3.03,5.45-9.37,9.47-15.45,8.08-.61-3.3.01-6.69.25-10.05.23-3.35-.01-6.97-2.06-9.64s-6.42-3.73-8.8-1.36"
 												fill="#2f2e43"

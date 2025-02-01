@@ -3,14 +3,15 @@
 import { useEffect, useState } from "react";
 import { useOrderContext } from "@/contexts/OrderContext";
 import { useRouter } from "next/navigation";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import { ChevronLeft, Trash, X } from "lucide-react";
 import { useAuthContext } from "@/contexts/AuthContext";
 import Link from "next/link";
 import NumberOfItems from "./numberOfItems";
 
 export default function OrderView() {
-	const { currentViewOrder, setCurrentViewOrder, cancelOrder, getOrder } = useOrderContext();
+	const { currentViewOrder, setCurrentViewOrder, cancelOrder, getOrder } =
+		useOrderContext();
 
 	const { user } = useAuthContext();
 
@@ -76,7 +77,9 @@ export default function OrderView() {
 	if (!currentViewOrder) {
 		return (
 			<div className="relative">
-				<div className="text-center text-xl font-semibold text-gray-800">Loading order details...</div>
+				<div className="text-center text-xl font-semibold text-gray-800">
+					Loading order details...
+				</div>
 			</div>
 		);
 	}
@@ -87,8 +90,13 @@ export default function OrderView() {
 			{showModal && (
 				<div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
 					<div className="bg-white rounded-lg p-6 w-96">
-						<h2 className="text-lg font-semibold mb-4">Confirm Cancellation</h2>
-						<div className="text-gray-600 mb-6">Are you sure you want to cancel order #{currentViewOrder.id}?</div>
+						<h2 className="text-lg font-semibold mb-4">
+							Confirm Cancellation
+						</h2>
+						<div className="text-gray-600 mb-6">
+							Are you sure you want to cancel order #
+							{currentViewOrder.id}?
+						</div>
 						<div className="flex justify-end gap-4">
 							<button
 								onClick={() => setShowModal(false)}
@@ -97,7 +105,9 @@ export default function OrderView() {
 								No
 							</button>
 							<button
-								onClick={() => handleCancelOrder(currentViewOrder.id)}
+								onClick={() =>
+									handleCancelOrder(currentViewOrder.id)
+								}
 								className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
 							>
 								Yes, Cancel
@@ -111,18 +121,19 @@ export default function OrderView() {
 					<ChevronLeft size={16} />
 					<span>Go Back</span>
 				</Button>
-				{currentViewOrder.status != "cancelled" && currentViewOrder.status != "approved" && (
-					<div className="relative flex justify-end">
-						<div
-							onClick={() => {
-								confirmCancel(currentViewOrder.id);
-							}}
-							className="relative cursor-pointer py-2 flex items-center justify-center shadow px-8 rounded-md order bg-red-500 text-white"
-						>
-							Cancel?
+				{currentViewOrder.status != "cancelled" &&
+					currentViewOrder.status != "approved" && (
+						<div className="relative flex justify-end">
+							<div
+								onClick={() => {
+									confirmCancel(currentViewOrder.id);
+								}}
+								className="relative cursor-pointer py-2 flex items-center justify-center shadow px-8 rounded-md order bg-red-500 text-white"
+							>
+								Cancel?
+							</div>
 						</div>
-					</div>
-				)}
+					)}
 			</div>
 
 			<div className="space-y-8 pt-8">
@@ -130,12 +141,24 @@ export default function OrderView() {
 					<div className="relative grid gap-2">
 						<div className="relative h-auto w-auto bg-white xl:flex lg:flex md:flex hidden items-center px-4">
 							<div className="relative h-auto py-4 w-full grid grid-cols-8 items-center uppercase font-bold text-sm">
-								<div className="relative col-span-3 flex items-center">Product</div>
-								<div className="relative col-span-1 flex items-center">Size</div>
-								<div className="relative col-span-1 flex items-center">Color</div>
-								<div className="relative col-span-1 flex items-center">Price</div>
-								<div className="relative col-span-1 flex items-center">Quantity</div>
-								<div className="relative col-span-1 flex items-center">Sub Total</div>
+								<div className="relative col-span-3 flex items-center">
+									Product
+								</div>
+								<div className="relative col-span-1 flex items-center">
+									Size
+								</div>
+								<div className="relative col-span-1 flex items-center">
+									Color
+								</div>
+								<div className="relative col-span-1 flex items-center">
+									Price
+								</div>
+								<div className="relative col-span-1 flex items-center">
+									Quantity
+								</div>
+								<div className="relative col-span-1 flex items-center">
+									Sub Total
+								</div>
 							</div>
 						</div>
 						<div className="relative grid gap-2">
@@ -149,7 +172,9 @@ export default function OrderView() {
 										<div className="relative h-auto py-4 w-full xl:grid lg:grid md:grid block grid-cols-8 items-center uppercase text-xs">
 											<div className="relative col-span-3 flex items-center">
 												<div className="relative flex items-center gap-4">
-													<Link href={`/shop/all/${product.id}`}>
+													<Link
+														href={`/shop/all/${product.id}`}
+													>
 														<div className="relative h-auto w-auto bg-gray-100 rounded-md">
 															<div
 																className="h-12 w-12 rounded-md hover:scale-105 scale-100 duration-200"
@@ -159,46 +184,94 @@ export default function OrderView() {
 															>
 																<div
 																	className="absolute -top-1 -right-1 h-4 w-4 border-2 border-white rounded-full"
-																	style={{ background: item.color }}
+																	style={{
+																		background:
+																			item.color,
+																	}}
 																></div>
 															</div>
 														</div>
 													</Link>
 													<div className="relative grid gap-2">
-														<Link href={`/shop/all/${product.id}`} className="text-sm font-medium">
-															<div className="relative truncate max-w-[150px]">{product.title}</div>
+														<Link
+															href={`/shop/all/${product.id}`}
+															className="text-sm font-medium"
+														>
+															<div className="relative truncate max-w-[150px]">
+																{product.title}
+															</div>
 														</Link>
 														<div className="relative xl:hidden lg:hidden md:hidden flex items-center gap-2">
 															<div className="relative font-bold font-sans">
-																${parseFloat(product.price - (product.discount / 100) * product.price)}
+																$
+																{parseFloat(
+																	product.price -
+																		(product.discount /
+																			100) *
+																			product.price
+																)}
 															</div>
-															{product.discount > 0 && (
-																<div className="relative text-gray-700 line-through">${parseFloat(product.price)}</div>
+															{product.discount >
+																0 && (
+																<div className="relative text-gray-700 line-through">
+																	$
+																	{parseFloat(
+																		product.price
+																	)}
+																</div>
 															)}
 														</div>
 													</div>
 												</div>
 											</div>
 											<div className="relative col-span-5 xl:grid-cols-5 justify-center grid-cols-5 xl:grid lg:grid md:grid flex items-center gap-2 xl:pt-0 lg:pt-0 md:pt-0 pt-4">
-												<div className="relative col-span-1 flex items-center">{item.size}</div>
-												<div className="relative col-span-1 flex items-center">{item.color}</div>
+												<div className="relative col-span-1 flex items-center">
+													{item.size}
+												</div>
+												<div className="relative col-span-1 flex items-center">
+													{item.color}
+												</div>
 												<div className="relative col-span-1 xl:flex lg:flex md:flex hidden items-center gap-2 flex-wrap">
 													<div className="relative font-bold font-sans">
-														${parseFloat(product.price - (product.discount / 100) * product.price)}
+														$
+														{parseFloat(
+															product.price -
+																(product.discount /
+																	100) *
+																	product.price
+														)}
 													</div>
 													{product.discount > 0 && (
-														<div className="relative text-gray-700 line-through">${parseFloat(item.price)}</div>
+														<div className="relative text-gray-700 line-through">
+															$
+															{parseFloat(
+																item.price
+															)}
+														</div>
 													)}
 												</div>
 
-												<div className="relative col-span-1 flex items-center">{item.quantity}</div>
+												<div className="relative col-span-1 flex items-center">
+													{item.quantity}
+												</div>
 												<div className="relative col-span-1 flex items-center gap-2 flex-wrap">
 													<div className="relative font-bold font-sans">
-														${parseFloat((item.price - (item.discount / 100) * item.price) * item.quantity)}
+														$
+														{parseFloat(
+															(item.price -
+																(item.discount /
+																	100) *
+																	item.price) *
+																item.quantity
+														)}
 													</div>
 													{item.discount > 0 && (
 														<div className="relative text-gray-700 line-through">
-															${parseFloat(item.price * item.quantity)}
+															$
+															{parseFloat(
+																item.price *
+																	item.quantity
+															)}
 														</div>
 													)}
 												</div>
@@ -214,7 +287,9 @@ export default function OrderView() {
 					<div className="flex flex-col space-y-2 px-4 py-4 border rounded-md">
 						{
 							<div className="relative flex items-center gap-4 flex-wrap">
-								<div className="text-gray-600">Order Status:</div>
+								<div className="text-gray-600">
+									Order Status:
+								</div>
 								<div
 									className={`relative font-bold text-white text-xs rounded px-2 capitalize ${getStatusColor(
 										currentViewOrder.status
@@ -236,18 +311,24 @@ export default function OrderView() {
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Currency:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.currency}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.currency}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Shipping Cost:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.shipping_cost}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.shipping_cost}
+							</div>
 						</div>
 					</div>
 
 					<div className="flex flex-col space-y-2 px-4 py-4 border rounded-md">
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Total Items:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_items.length}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_items.length}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Payment Status:</div>
@@ -261,14 +342,22 @@ export default function OrderView() {
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Shipping Cost:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.shipping_cost}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.shipping_cost}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Total Cost:</div>
 							<div className="relative text-gray-800 font-bold">
 								{currentViewOrder.currency}
 								{Array.isArray(currentViewOrder.order_items)
-									? currentViewOrder.order_items.reduce((total, item) => total + (parseFloat(item.total_price) || 0), 0)
+									? currentViewOrder.order_items.reduce(
+											(total, item) =>
+												total +
+												(parseFloat(item.total_price) ||
+													0),
+											0
+									  )
 									: "0.00"}
 							</div>
 						</div>
@@ -277,100 +366,150 @@ export default function OrderView() {
 				{/* Order Address */}
 				<div className="relative h-auto w-full flex *:w-1/2 gap-8 *:shadow-xl">
 					<div className="border-t pt-4 space-y-2 px-4 py-4 border rounded-md">
-						<div className="font-semibold text-xl text-gray-700 pb-4">Order Address</div>
+						<div className="font-semibold text-xl text-gray-700 pb-4">
+							Order Address
+						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Email:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_email}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_email}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Name:</div>
 							<div className="relative text-gray-800 font-bold">
-								{currentViewOrder.order_first_name} {currentViewOrder.order_last_name}
+								{currentViewOrder.order_first_name}{" "}
+								{currentViewOrder.order_last_name}
 							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Street Address:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_street_address}</div>
-						</div>
-						<div className="relative flex items-center gap-4 flex-wrap">
-							<div className="text-gray-600">House Number & Street Name:</div>
 							<div className="relative text-gray-800 font-bold">
-								{currentViewOrder.order_house_number_and_street_name}
+								{currentViewOrder.order_street_address}
 							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
-							<div className="text-gray-600">Apartment Details:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_apartment_details}</div>
+							<div className="text-gray-600">
+								House Number & Street Name:
+							</div>
+							<div className="relative text-gray-800 font-bold">
+								{
+									currentViewOrder.order_house_number_and_street_name
+								}
+							</div>
+						</div>
+						<div className="relative flex items-center gap-4 flex-wrap">
+							<div className="text-gray-600">
+								Apartment Details:
+							</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_apartment_details}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">City:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_city}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_city}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">State:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_state}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_state}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Zip:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_zip}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_zip}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Phone:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.order_phone}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.order_phone}
+							</div>
 						</div>
 					</div>
 
 					{/* Billing Address */}
 					<div className="border-t pt-4 space-y-2 px-4 py-4 border rounded-md">
-						<div className="font-semibold text-xl text-gray-700 pb-4">Billing Address</div>
+						<div className="font-semibold text-xl text-gray-700 pb-4">
+							Billing Address
+						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Email:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_email}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_email}
+							</div>
 						</div>
 						{
 							<div className="relative flex items-center gap-4 flex-wrap">
 								<div className="text-gray-600">Name:</div>
 								<div className="relative text-gray-800 font-bold">
-									{currentViewOrder.billing_first_name} {currentViewOrder.billing_last_name}
+									{currentViewOrder.billing_first_name}{" "}
+									{currentViewOrder.billing_last_name}
 								</div>
 							</div>
 						}
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Street Address:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_street_address}</div>
-						</div>
-						<div className="relative flex items-center gap-4 flex-wrap">
-							<div className="text-gray-600">House Number & Street Name:</div>
 							<div className="relative text-gray-800 font-bold">
-								{currentViewOrder.billing_house_number_and_street_name}
+								{currentViewOrder.billing_street_address}
 							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
-							<div className="text-gray-600">Apartment Details:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_apartment_details}</div>
+							<div className="text-gray-600">
+								House Number & Street Name:
+							</div>
+							<div className="relative text-gray-800 font-bold">
+								{
+									currentViewOrder.billing_house_number_and_street_name
+								}
+							</div>
+						</div>
+						<div className="relative flex items-center gap-4 flex-wrap">
+							<div className="text-gray-600">
+								Apartment Details:
+							</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_apartment_details}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">City:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_city}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_city}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">State:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_state}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_state}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Zip:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_zip}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_zip}
+							</div>
 						</div>
 						<div className="relative flex items-center gap-4 flex-wrap">
 							<div className="text-gray-600">Phone:</div>
-							<div className="relative text-gray-800 font-bold">{currentViewOrder.billing_phone}</div>
+							<div className="relative text-gray-800 font-bold">
+								{currentViewOrder.billing_phone}
+							</div>
 						</div>
 					</div>
 				</div>
 				<div className="relative h-auto w-full border rounded-md p-5 shadow-xl">
 					<div className="relative flex-col space-y-4">
-						<div className="relative text-xl text-gray-700 font-bold">Order Note</div>
-						<div className="relative text-gray-700">{currentViewOrder.order_notes}</div>
+						<div className="relative text-xl text-gray-700 font-bold">
+							Order Note
+						</div>
+						<div className="relative text-gray-700">
+							{currentViewOrder.order_notes}
+						</div>
 					</div>
 				</div>
 			</div>

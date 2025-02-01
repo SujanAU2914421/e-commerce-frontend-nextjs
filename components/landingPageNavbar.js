@@ -6,7 +6,7 @@ import { XIcon } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 
 export default function LandingPageNavbar() {
 	const pathname = usePathname();
@@ -65,7 +65,10 @@ export default function LandingPageNavbar() {
 				</div>
 			)}
 			<div className="relative flex">
-				<Link href={"/"} className="relative font-bold text-xl font-sans">
+				<Link
+					href={"/"}
+					className="relative font-bold text-xl font-sans"
+				>
 					FP
 				</Link>
 			</div>
@@ -84,7 +87,9 @@ export default function LandingPageNavbar() {
 						</div>
 						<div
 							className={`absolute -bottom-1 ${
-								pathname === "/shop" ? "w-1/2" : "w-0 group-hover:w-1/2"
+								pathname === "/shop"
+									? "w-1/2"
+									: "w-0 group-hover:w-1/2"
 							} duration-300 h-[2px] rounded-full bg-gray-600`}
 						></div>
 					</Link>
@@ -102,7 +107,9 @@ export default function LandingPageNavbar() {
 						</div>
 						<div
 							className={`absolute -bottom-1 ${
-								pathname === "/services" ? "w-1/2" : "w-0 group-hover:w-1/2"
+								pathname === "/services"
+									? "w-1/2"
+									: "w-0 group-hover:w-1/2"
 							} duration-300 h-[2px] rounded-full bg-gray-600`}
 						></div>
 					</Link>
@@ -120,7 +127,9 @@ export default function LandingPageNavbar() {
 						</div>
 						<div
 							className={`absolute -bottom-1 ${
-								pathname === "/about" ? "w-1/2" : "w-0 group-hover:w-1/2"
+								pathname === "/about"
+									? "w-1/2"
+									: "w-0 group-hover:w-1/2"
 							} duration-300 h-[2px] rounded-full bg-gray-600`}
 						></div>
 					</Link>
