@@ -1,7 +1,7 @@
 "use client";
 import Login from "@/app/auth/login/page";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import { XIcon } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,7 +33,7 @@ export default function LandingPageNavbar() {
 
 	return (
 		<div
-			className="relative h-full w-full flex justify-between items-center xl:px-0 lg:px-0 px-4 border-b py-4 border-gray-100"
+			className="relative h-full w-full flex justify-between items-center xl:px-0 lg:px-0 md:px-0 px-4 py-4"
 			onMouseMove={(e) => {
 				setPosX(e.clientX);
 				setPosY(e.clientY);
@@ -65,15 +65,19 @@ export default function LandingPageNavbar() {
 				</div>
 			)}
 			<div className="relative flex">
-				<div className="relative font-bold text-xl font-sans">FP</div>
+				<Link href={"/"} className="relative font-bold text-xl font-sans">
+					FP
+				</Link>
 			</div>
 			<div className="relative flex items-center gap-8">
-				<div className="relative h-auto w-auto flex gap-8 text-sm font-sans text-gray-700 items-center">
+				<div className="relative h-auto w-auto flex gap-8 text-sm text-gray-700 items-center uppercase">
 					{/* Home Menu Item */}
-					<Link href="/shop" className="relative group">
+					<Link href="/shop/all" className="relative group">
 						<div
 							className={`relative cursor-pointer ${
-								pathname === "/shop" ? "text-black font-bold" : "text-gray-700 group-hover:text-gray-700"
+								pathname === "/shop"
+									? "text-black font-bold"
+									: "text-gray-700 group-hover:text-gray-700 group-hover:font-bold"
 							}`}
 						>
 							Shop
@@ -85,48 +89,57 @@ export default function LandingPageNavbar() {
 						></div>
 					</Link>
 
-					{/* About Us Menu Item */}
-					<Link href="/about-figpic" className="relative group">
+					{/* Blog Menu Item */}
+					<Link href="/about#services" className="relative group">
 						<div
 							className={`relative cursor-pointer ${
-								pathname === "/about-figpic" ? "text-black font-bold" : "text-gray-700 group-hover:text-gray-700"
+								pathname === "/services"
+									? "text-black font-bold"
+									: "text-gray-700 group-hover:text-gray-700 group-hover:font-bold"
+							}`}
+						>
+							Services
+						</div>
+						<div
+							className={`absolute -bottom-1 ${
+								pathname === "/services" ? "w-1/2" : "w-0 group-hover:w-1/2"
+							} duration-300 h-[2px] rounded-full bg-gray-600`}
+						></div>
+					</Link>
+
+					{/* About Us Menu Item */}
+					<Link href="/about" className="relative group">
+						<div
+							className={`relative cursor-pointer ${
+								pathname === "/about"
+									? "text-black font-bold"
+									: "text-gray-700 group-hover:text-gray-700 group-hover:font-bold"
 							}`}
 						>
 							About us
 						</div>
 						<div
 							className={`absolute -bottom-1 ${
-								pathname === "/about-figpic" ? "w-1/2" : "w-0 group-hover:w-1/2"
+								pathname === "/about" ? "w-1/2" : "w-0 group-hover:w-1/2"
 							} duration-300 h-[2px] rounded-full bg-gray-600`}
 						></div>
 					</Link>
-
-					{/* Blog Menu Item */}
-					<Link href="/blog" className="relative group">
-						<div
-							className={`relative cursor-pointer ${
-								pathname === "/blog" ? "text-black font-bold" : "text-gray-700 group-hover:text-gray-700"
-							}`}
-						>
-							Blog
-						</div>
-						<div
-							className={`absolute -bottom-1 ${
-								pathname === "/blog" ? "w-1/2" : "w-0 group-hover:w-1/2"
-							} duration-300 h-[2px] rounded-full bg-gray-600`}
-						></div>
-					</Link>
-					{!user && (
-						<div className="relative flex items-center gap-4">
-							<Link href="/auth/signup">
-								<Button variant="outline">Sign Up?</Button>
-							</Link>
-							<Link href="/auth/login">
-								<Button variant="default">Login</Button>
-							</Link>
-						</div>
-					)}
 				</div>
+			</div>
+			<div className="relative flex items-center gap-4">
+				<Link href="/search" className="relative h-auto w-auto">
+					<Search size={16} />
+				</Link>
+				{!user && (
+					<div className="relative flex items-center gap-4">
+						<Link href="/auth/signup">
+							<Button variant="outline">Sign Up?</Button>
+						</Link>
+						<Link href="/auth/login">
+							<Button variant="default">Login</Button>
+						</Link>
+					</div>
+				)}
 			</div>
 		</div>
 	);

@@ -1,3 +1,4 @@
+import { useAuthContext } from "@/contexts/AuthContext";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 import Link from "next/link";
 import React from "react";
@@ -21,7 +22,7 @@ export const MiniCartViewer = () => {
 			<div className="relative w-full h-[calc(100%-14rem)] overflow-y-auto">
 				{/* Display the list of products in the cart */}
 				<div className="relative w-full h-auto pt-8">
-					{cartItems.length > 0 ? (
+					{cartItems && cartItems.length > 0 ? (
 						cartItems.map((item, index) => {
 							return (
 								<Link
@@ -100,10 +101,10 @@ export const MiniCartViewer = () => {
 			</div>
 			<div className="relative w-full h-56 border-t px-8">
 				<div className="relative h-full w-full flex pt-8">
-					<div className="relative h-auto w-full flex flex-col gap-4">
+					<div className="relative h-auto w-full flex flex-col space-y-4">
 						{/* Subtotal */}
-						<div className="relative flex uppercase items-center justify-between">
-							<div className="relative text-gray-600 text-sm">SUBTOTAL:</div>
+						<div className="relative flex items-center justify-between">
+							<div className="relative text-gray-600 text-sm">SUB-TOTAL:</div>
 							<div className="relative font-bold text-gray-800">
 								<span className="text-xl">${Math.floor(subtotal)}</span>
 								<span className="text-sm">.{(subtotal % 1).toFixed(2).split(".")[1]}</span>
@@ -111,23 +112,27 @@ export const MiniCartViewer = () => {
 						</div>
 
 						{/* Shipping */}
-						<div className="relative flex uppercase items-center justify-between">
+						<div className="relative flex items-center justify-between">
 							<div className="relative text-gray-600 text-sm">Shipping:</div>
 							<div className="relative font-bold text-gray-800 text-sm">Free</div>
 						</div>
 						{/* Coupon */}
-						<div className="relative underline text-sm">Have a Coupon?</div>
-						<div className="relative flex gap-4">
-							<Link
-								href="/cart"
-								className="relative cursor-pointer rounded h-10 w-1/2 text-gray-800 bg-gray-200 flex items-center justify-center font-bold text-sm"
-							>
-								View In Detail
-							</Link>
-							<div className="relative cursor-pointer rounded h-10 w-1/2 bg-gray-800 text-gray-200 flex items-center justify-center font-bold text-sm">
-								Check Out
+						{cartItems && cartItems.length > 0 && (
+							<div className="relative flex-col space-y-4">
+								<div className="relative underline text-sm">Have a Coupon?</div>
+								<div className="relative flex gap-4">
+									<Link
+										href="/cart"
+										className="relative cursor-pointer rounded h-10 w-1/2 text-gray-800 bg-gray-200 flex items-center justify-center font-bold text-sm"
+									>
+										View In Detail
+									</Link>
+									<div className="relative cursor-pointer rounded h-10 w-1/2 bg-gray-800 text-gray-200 flex items-center justify-center font-bold text-sm">
+										Check Out
+									</div>
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
 				</div>
 			</div>

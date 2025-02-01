@@ -36,6 +36,8 @@ export default function OrderContextProvider({ children }) {
 		if (user && user.email) {
 			setOrderDataInitial((prevData) => ({
 				...prevData,
+				firstName: user.first_name,
+				lastName: user.last_name,
 				email: user.email,
 			}));
 		}
@@ -107,8 +109,7 @@ export default function OrderContextProvider({ children }) {
 	const cancelOrder = async (id) => {
 		try {
 			const response = await axios.post("cancel-order", { id: id });
-			console.log("Order created:", response);
-			getAllOrder();
+			getOrder(id);
 		} catch (error) {
 			console.error("Error creating order:", error);
 		}

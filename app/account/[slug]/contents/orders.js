@@ -8,7 +8,6 @@ import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function OrdersUiPage() {
 	const { getAllOrder, orderData, cancelOrder } = useOrderContext();
-	const [showModal, setShowModal] = useState(false);
 
 	const { user } = useAuthContext();
 
@@ -65,16 +64,6 @@ export default function OrdersUiPage() {
 		console.log(orderData);
 	}, [orderData]);
 
-	const handleCancelOrder = (orderId) => {
-		cancelOrder(orderId);
-		setShowModal(false);
-	};
-
-	const confirmCancel = (orderId) => {
-		setSelectedOrderId(orderId);
-		setShowModal(true);
-	};
-
 	const handleOrderClick = (orderId) => {
 		// Redirect to the order details page with the order_id in query
 		window.location.search = `?order_id=${orderId}`;
@@ -82,8 +71,6 @@ export default function OrdersUiPage() {
 
 	return (
 		<div className="relative h-auto w-full px-8 py-8">
-			<h1 className="font-bold text-3xl mb-6">Your Orders</h1>
-
 			{orderIdFromQuery ? (
 				// If the query contains an order_id, render the OrderView component
 				<OrderView />
@@ -92,72 +79,59 @@ export default function OrdersUiPage() {
 				<>
 					{orderData && orderData.length > 0 ? (
 						<div className="grid grid-cols-1 gap-6">
-							{orderData.map((order) => (
-								<div key={order.id} className="p-6 bg-white shadow-md rounded-lg border border-gray-200">
-									<div className="font-semibold text-lg mb-2 cursor-pointer" onClick={() => handleOrderClick(order.id)}>
-										Order #{order.id}
-									</div>
-									<div className="relative mb-2 flex items-center gap-2">
-										<div className={`font-semibold`}>Status:</div>
-										<div className={`font-semibold ${getStatusColor(order.status)}`}>{order.status}</div>
-									</div>
-									<div className="relative mb-2 flex items-center gap-2">
-										<div className={`font-semibold`}>Payment Status:</div>
-										<div className={`font-semibold ${getPaymentStatusColor(order.payment_status)}`}>
-											{order.payment_status}
+							{orderData.map((order, index) => {
+								let total_price = 0;
+
+								return (
+									<div
+										key={index}
+										onClick={() => handleOrderClick(order.id)}
+										className="relative h-auto w-full shadow-xl border rounded-md p-5"
+									>
+										<div className="relative h-auto w-full space-y-2">
+											{/* Order ID */}
+											<div className="relative text-lg font-bold">Order #{order.id}</div>
+
+											{/* Order Date */}
+											<div className="text-sm text-gray-500">
+												Placed on: {new Date(order.created_at).toLocaleDateString()}
+											</div>
+
+											{/* Order Status */}
+											<div
+												className={`text-sm font-medium ${
+													order.status === "Delivered" ? "text-green-600" : "text-orange-600"
+												}`}
+											>
+												Status: {order.status}
+											</div>
+
+											{/* Product List */}
+											<div className="text-sm text-gray-700">
+												Products:
+												<ul className="list-disc ml-4">
+													{order.order_items.map((product, productIndex) => {
+														total_price += parseFloat(product.total_price);
+														return (
+															<li key={productIndex}>
+																{product.product.title} - {product.quantity} x ${parseFloat(product.product.price)}
+															</li>
+														);
+													})}
+												</ul>
+											</div>
+
+											{/* Total Amount */}
+											<div className="font-semibold text-gray-800">Total: ${total_price}</div>
 										</div>
 									</div>
-									<div className="text-gray-600 mb-2">
-										Total Price: {order.currency}
-										{order.order_items.reduce((total, item) => total + parseFloat(item.total_price || 0), 0).toFixed(2)}
-									</div>
-									<div className="text-gray-700 font-semibold">Items:</div>
-									<ul className="list-disc ml-6 mb-4">
-										{order.order_items.map((item, index) => (
-											<li key={index} className="text-gray-600">
-												{item.quantity} x {item.product.title} - {item.color} ({item.size})
-											</li>
-										))}
-									</ul>
-									{order.status !== "cancelled" && order.status !== "delivered" && (
-										<button
-											onClick={() => confirmCancel(order.id)}
-											className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-										>
-											Cancel Order
-										</button>
-									)}
-								</div>
-							))}
+								);
+							})}
 						</div>
 					) : (
 						<div className="text-center text-gray-500">You don’t have any orders.</div>
 					)}
 				</>
-			)}
-
-			{/* Confirmation Modal */}
-			{showModal && (
-				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-					<div className="bg-white rounded-lg p-6 w-96">
-						<h2 className="text-lg font-semibold mb-4">Confirm Cancellation</h2>
-						<div className="text-gray-600 mb-6">Are you sure you want to cancel order #{selectedOrderId}?</div>
-						<div className="flex justify-end gap-4">
-							<button
-								onClick={() => setShowModal(false)}
-								className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
-							>
-								No
-							</button>
-							<button
-								onClick={() => handleCancelOrder(selectedOrderId)}
-								className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-							>
-								Yes, Cancel
-							</button>
-						</div>
-					</div>
-				</div>
 			)}
 		</div>
 	);

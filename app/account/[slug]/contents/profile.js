@@ -114,7 +114,7 @@ export default function Profile() {
 						onClick={() => {
 							logout();
 						}}
-						className="relative h-10 w-56 bg-red-600 shadow-sm shadow-red-600 cursor-pointer text-white flex items-center justify-center rounded-md text-xs font-bold"
+						className="relative h-10 w-56 bg-red-600 shadow-sm shadow-red-600 cursor-pointer text-white flex items-center justify-center rounded-md text-sm font-bold"
 					>
 						Logout
 					</div>

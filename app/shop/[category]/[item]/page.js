@@ -8,26 +8,14 @@ import ShopNavbar from "@/components/ui/navbar";
 import Footer from "@/components/ui/footer";
 
 export default function CheckOut() {
-	const {
-		shopCurrentCategory,
-		setShopCurrentCategory,
-		allProducts,
-		currentQuickViewProduct,
-		setCurrentQuickViewProduct,
-		photoView,
-		setPhotoView,
-	} = useMainContext();
+	const { currentItemData, getProduct } = useMainContext();
 
 	const pathname = usePathname(); // Get the current pathname
 	const pathSegments = pathname.split("/"); // Split the path into segments
 	const productId = pathSegments[3]; // Extract the product ID
-
-	// Find the product with the matching ID in the allProducts array
-	const [currentItemData, setCurrentItemData] = useState(null);
-
 	useEffect(() => {
-		setCurrentItemData(allProducts?.find((product) => product.id.toString() === productId));
-	}, [allProducts, productId]);
+		getProduct(productId);
+	}, []);
 
 	return (
 		<div className="relative h-screen w-screen overflow-hidden" style={{ fontFamily: "afacad-flux" }}>
@@ -38,20 +26,7 @@ export default function CheckOut() {
 							<div className="sticky top-0 bg-white z-50 h-auto">
 								<ShopNavbar />
 							</div>
-							<div className="relative h-auto w-full">
-								{currentItemData && (
-									<Content
-										shopCurrentCategory={shopCurrentCategory}
-										setShopCurrentCategory={setShopCurrentCategory}
-										currentItemData={currentItemData}
-										allProducts={allProducts}
-										currentQuickViewProduct={currentQuickViewProduct}
-										setCurrentQuickViewProduct={setCurrentQuickViewProduct}
-										photoView={photoView}
-										setPhotoView={setPhotoView}
-									/>
-								)}
-							</div>
+							<div className="relative h-auto w-full">{currentItemData && <Content />}</div>
 						</div>
 					</div>
 					<div className="relative">

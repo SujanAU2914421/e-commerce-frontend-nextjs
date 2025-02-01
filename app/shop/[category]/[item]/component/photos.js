@@ -22,7 +22,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 							return (
 								<div
 									key={index}
-									className="relative xl:h-[6vw] lg:h-[6vw] md:h-[6vw] h-[16vw] xl:w-full lg:w-full bg-gray-200 md:w-full w-[16vw] hover:scale-105 scale-100 duration-200 cursor-pointer rounded overflow-hidden"
+									className="relative xl:h-[6vw] lg:h-[6vw] md:h-[6vw] h-[16vw] xl:w-full lg:w-full bg-gray-200 shadow-md shadow-gray-400 md:w-full w-[16vw] hover:scale-105 scale-100 duration-200 cursor-pointer rounded overflow-hidden"
 									onMouseMove={() => {
 										handleImageClick(index);
 									}}
@@ -30,7 +30,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 									<div
 										className={`relative h-full w-full`}
 										style={{
-											background: `url(${image}) center / contain no-repeat`,
+											background: `url(${image}) center / cover no-repeat`,
 										}}
 									></div>
 								</div>
@@ -38,7 +38,7 @@ export default function PhotosUi({ photos, setPhotoView, setCurrentImageIndexInV
 						})}
 					</div>
 				</div>
-				<div className="relative h-auto xl:w-[calc(100%-6vw)] lg:w-[calc(100%-6vw)] md::w-[calc(100%-6vw)] w-full group">
+				<div className="relative h-auto xl:w-[calc(100%-6vw)] lg:w-[calc(100%-6vw)] md::w-[calc(100%-6vw)] w-full group bg-gray-50 rounded-md">
 					<div className="absolute top-0 left-0 h-full w-full flex items-center justify-center text-gray-600 text-xs">
 						Loading...
 					</div>

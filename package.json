@@ -34,7 +34,8 @@
     "swiper": "6.8.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "tanstack": "^1.0.0"
+    "tanstack": "^1.0.0",
+    "tinycolor2": "^1.6.0"
   },
   "devDependencies": {
     "postcss": "^8.4.49",

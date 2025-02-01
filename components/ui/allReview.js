@@ -3,32 +3,32 @@ import RatingsStar from "./ratingsStar";
 import { User } from "lucide-react/dist/cjs/lucide-react";
 import { Button } from "./button";
 import { Input } from "./input";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "./select";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 import { CommentForm } from "./addReviewField";
 import CommentRatingsStar from "./commentRatingsStar";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { X } from "lucide-react";
 
 export default function AllReview({ currentItemData }) {
-	const { fetchAllComments, addComment, removeComment, updateComment, comments, setComments } =
-		useUserInterractionContext();
+	const { user } = useAuthContext();
+
+	const { fetchAllComments, addComment, removeComment, comments, setComments } = useUserInterractionContext();
 
 	useEffect(() => {
 		if (currentItemData) {
-			// addComment(currentItemData.id, "Test Comment", 4, setComments);
 			fetchAllComments(currentItemData.id, setComments);
 		}
 	}, [currentItemData]);
-	useEffect(() => {
-		console.log(comments);
-	}, [comments]);
 
 	const formatDate = (timestamp) => {
-		const date = new Date(timestamp); // Create a Date object from the timestamp
-		const year = date.getFullYear(); // Get the year
-		const month = String(date.getMonth() + 1).padStart(2, "0"); // Get the month (0-based, so add 1) and pad with 0
-		const day = String(date.getDate()).padStart(2, "0"); // Get the day and pad with 0
-		return `${year}-${month}-${day}`; // Format as Y-M-D
+		const date = new Date(timestamp);
+		const year = date.getFullYear();
+		const month = String(date.getMonth() + 1).padStart(2, "0");
+		const day = String(date.getDate()).padStart(2, "0");
+		return `${year}-${month}-${day}`;
 	};
+
 	const [sortOption, setSortOption] = useState("newest");
 
 	// Sorting functions
@@ -37,10 +37,6 @@ export default function AllReview({ currentItemData }) {
 	const sortByHighestRating = (a, b) => b.rating - a.rating;
 	const sortByLowestRating = (a, b) => a.rating - b.rating;
 
-	const [newComment, setNewComment] = useState(null);
-	const [newRating, setNewRating] = useState(null);
-
-	// Sort the reviews based on the selected sort option
 	const sortedReviews = comments.sort((a, b) => {
 		switch (sortOption) {
 			case "newest":
@@ -52,16 +48,22 @@ export default function AllReview({ currentItemData }) {
 			case "lowest":
 				return sortByLowestRating(a, b);
 			default:
-				return sortByDateNewest(a, b); // Default to "newest"
+				return sortByDateNewest(a, b);
 		}
 	});
 
 	const [addingReview, setAddingReview] = useState(false);
 
-	// Handle sorting button click
 	const handleSortChange = (option) => {
 		setSortOption(option);
 	};
+
+	// Check if the current user has already commented
+	const userComment = user ? comments.find((review) => review.customer_id === user.id) : null;
+
+	useEffect(() => {
+		console.log(user, comments);
+	}, [user, comments]);
 
 	return (
 		<div className="relative pt-8 flex-col">
@@ -107,55 +109,21 @@ export default function AllReview({ currentItemData }) {
 							Lowest ratings
 						</div>
 					</div>
-					<div className="relative xl:hidden lg:hidden md:hidden">
-						<Select>
-							<SelectTrigger className="w-[180px]">
-								<SelectValue placeholder="Sort By" />
-							</SelectTrigger>
-							<SelectContent>
-								<SelectGroup>
-									{/* <SelectLabel>Fruits</SelectLabel> */}
-									<SelectItem
-										className="relative text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
-										value="newest"
-										onClick={() => handleSortChange("newest")}
-									>
-										Newest
-									</SelectItem>
-									<SelectItem
-										className="relative text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
-										value="oldest"
-										onClick={() => handleSortChange("oldest")}
-									>
-										Oldest
-									</SelectItem>
-									<SelectItem
-										className="relative text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
-										value="highest-rating"
-										onClick={() => handleSortChange("highest")}
-									>
-										Highest Rating
-									</SelectItem>
-									<SelectItem
-										className="relative text-xs text-gray-600 cursor-pointer hover:bg-gray-100"
-										value="lowest-rating"
-										onClick={() => handleSortChange("lowest")}
-									>
-										Lowest Rating
-									</SelectItem>
-								</SelectGroup>
-							</SelectContent>
-						</Select>
-					</div>
 				</div>
 				<div className="relative w-full grid gap-3">
-					{sortedReviews.map((review, index) => {
-						return (
-							<div key={index} className="relative h-auto w-full flex items-center gap-4">
-								<div className="relative h-16 w-16 bg-gray-100 flex items-center justify-center text-gray-400">
+					{sortedReviews.map((review, index) => (
+						<div key={index} className="relative h-auto w-full flex items-center gap-4">
+							<div className="relative h-16 w-16 bg-gray-100 flex items-center justify-center text-gray-400">
+								{review.customer.gender === "female" ? (
+									<svg fill="currentColor" width="30" height="30" viewBox="0 0 24 24">
+										<path d="M21,20v2a1,1,0,0,1-2,0V20a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a1,1,0,0,1-2,0V20a5.006,5.006,0,0,1,5-5h8A5.006,5.006,0,0,1,21,20Zm-9-7a9.735,9.735,0,0,1-6.707-2.293,1,1,0,0,1,.26-1.6C6.945,8.409,7,6.021,7,6A5,5,0,0,1,17,6c0,.052.063,2.416,1.447,3.108a1,1,0,0,1,.26,1.6A9.735,9.735,0,0,1,12,13ZM7.649,9.953A8.816,8.816,0,0,0,12,11a8.815,8.815,0,0,0,4.351-1.047A6.716,6.716,0,0,1,15,6,3,3,0,0,0,9,6,6.716,6.716,0,0,1,7.649,9.953Z" />
+									</svg>
+								) : (
 									<User size={30} />
-								</div>
-								<div className="relative h-auto w-[calc(100%-4rem)] border p-4 grid gap-3">
+								)}
+							</div>
+							<div className="relative h-auto w-[calc(100%-4rem)] border flex">
+								<div className="relative w-[calc(100%-4rem)] flex-col space-y-3 p-4">
 									<div className="relative flex items-center gap-2">
 										<CommentRatingsStar currentProduct={review} size={10} gap={0} color={"#ff4000"} />
 										<div className="relative text-sm">{review.rating}/5</div>
@@ -166,28 +134,37 @@ export default function AllReview({ currentItemData }) {
 									</div>
 									<div className="relative">{review.comment}</div>
 								</div>
+								<div className="relative h-auto w-16">
+									{user && review.customer_id === user.id && (
+										<div className="relative h-16 w-16 flex items-center justify-center">
+											<div
+												onClick={() => {
+													removeComment(currentItemData.id, review.id, setComments);
+												}}
+												className="relative"
+											>
+												<X size={16} />
+											</div>
+										</div>
+									)}
+								</div>
 							</div>
-						);
-					})}
+						</div>
+					))}
 				</div>
 			</div>
 			<div className="relative h-auto w-full">
-				{!addingReview ? (
-					<div className="relative h-full">
-						<Button
-							onClick={() => {
-								setAddingReview(true);
-							}}
-							size={"sm"}
-						>
+				{user &&
+					!userComment &&
+					(!addingReview ? (
+						<Button onClick={() => setAddingReview(true)} size={"sm"}>
 							Add A Review
 						</Button>
-					</div>
-				) : (
-					<div className="relative px-2">
-						<CommentForm currentItemData={currentItemData} setAddingReview={setAddingReview} />
-					</div>
-				)}
+					) : (
+						<div className="relative px-2">
+							<CommentForm currentItemData={currentItemData} setAddingReview={setAddingReview} />
+						</div>
+					))}
 			</div>
 		</div>
 	);

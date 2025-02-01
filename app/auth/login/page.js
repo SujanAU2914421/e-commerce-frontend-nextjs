@@ -74,7 +74,7 @@ export default function Login() {
 	return (
 		<div
 			className={`p-6 bg-transparent content-center ${
-				usePathname() === "/auth/login" ? "size-full bg-white" : "h-auto w-auto z-50"
+				usePathname() === "/auth/login" ? "size-full bg-white" : "h-auto w-auto z-[999999]"
 			}`}
 			style={{ fontFamily: "afacad-flux" }}
 		>

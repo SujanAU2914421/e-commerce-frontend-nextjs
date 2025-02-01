@@ -33,44 +33,46 @@ export default function BrowseByCategory({ categories }) {
 					</div>
 					<div className="relative text-xl font-bold text-gray-800">Browse By Category</div>
 				</div>
-				<div className="relative flex items-end gap-2">
-					<div
-						className="relative h-10 w-10 flex rounded items-center justify-center text-gray-600 bg-gray-200 cursor-pointer"
-						onClick={handlePrev}
-					>
-						<svg
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
+				{categories && categories.length > 6 && (
+					<div className="relative flex items-end gap-2">
+						<div
+							className="relative h-10 w-10 flex rounded items-center justify-center text-gray-600 bg-gray-200 cursor-pointer"
+							onClick={handlePrev}
 						>
-							<line x1="19" y1="12" x2="5" y2="12"></line>
-							<polyline points="12 19 5 12 12 5"></polyline>
-						</svg>
-					</div>
-					<div
-						className="relative h-10 w-10 flex rounded items-center justify-center text-gray-600 bg-gray-200 cursor-pointer"
-						onClick={handleNext}
-					>
-						<svg
-							width="18"
-							height="18"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-							strokeLinejoin="round"
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<line x1="19" y1="12" x2="5" y2="12"></line>
+								<polyline points="12 19 5 12 12 5"></polyline>
+							</svg>
+						</div>
+						<div
+							className="relative h-10 w-10 flex rounded items-center justify-center text-gray-600 bg-gray-200 cursor-pointer"
+							onClick={handleNext}
 						>
-							<line x1="5" y1="12" x2="19" y2="12"></line>
-							<polyline points="12 5 19 12 12 19"></polyline>
-						</svg>
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								strokeWidth="2"
+								strokeLinecap="round"
+								strokeLinejoin="round"
+							>
+								<line x1="5" y1="12" x2="19" y2="12"></line>
+								<polyline points="12 5 19 12 12 19"></polyline>
+							</svg>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			<div className="relative w-full h-auto flex">
 				<div className="relative grid w-full gap-4 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-3 grid-cols-2">
@@ -79,7 +81,7 @@ export default function BrowseByCategory({ categories }) {
 							<Link
 								href={`/shop/${category.slug}`}
 								key={index}
-								className="relative rounded-md bg-gray-200 select-none h-32 font-bold flex items-center justify-center"
+								className="relative rounded-md bg-gray-200 select-none uppercase h-40 font-bold flex items-center justify-center"
 							>
 								<div className="text-center mt-2">{category.title}</div>
 							</Link>

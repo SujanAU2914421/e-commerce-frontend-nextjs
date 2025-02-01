@@ -4,14 +4,17 @@ import axios from "@/config/axios";
 import { useEffect, useRef, useState } from "react";
 import { CookieConsent } from "../component/cookiePopUp";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { Eye, EyeClosed, EyeOff } from "lucide-react/dist/cjs/lucide-react";
+import { Eye, EyeOff } from "lucide-react/dist/cjs/lucide-react";
 import Link from "next/link";
 export default function Signup() {
 	const { login } = useAuthContext();
 
 	const [data, setData] = useState({
-		name: "",
+		firstName: "",
+		lastName: "",
+		username: "",
 		email: "",
+		gender: "",
 		password: "",
 	});
 
@@ -21,7 +24,10 @@ export default function Signup() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const [errors, setErrors] = useState({
-		name: null,
+		firstName: null,
+		lastName: null,
+		username: null,
+		gender: null,
 		email: null,
 		password: null,
 	});
@@ -79,8 +85,11 @@ export default function Signup() {
 	}, []);
 
 	return (
-		<div className="size-full p-6 bg-white content-center px-6" style={{ fontFamily: "afacad-flux" }}>
-			<div className="mx-auto xl:w-96 lg:w-96 md:w-96 sm:w-96 w-full max-w-lg h-auto duration-200">
+		<div
+			className="size-full p-6 bg-white content-center px-6 overflow-y-auto overflow-x-hidden"
+			style={{ fontFamily: "afacad-flux" }}
+		>
+			<div className="mx-auto xl:w-96 lg:w-96 md:w-96 sm:w-96 w-full max-w-lg h-auto duration-200 py-16">
 				<CookieConsent />
 
 				<div
@@ -100,20 +109,77 @@ export default function Signup() {
 				</div>
 
 				<form onSubmit={handleSubmit} className="space-y-4 pt-8">
+					<div
+						ref={setAllTransitionElementsRef}
+						style={{ opacity: 0, transform: "translateY(20px)" }}
+						className="relative flex items-center gap-4"
+					>
+						<div className="relative w-1/2">
+							<label className="block text-sm font-medium text-gray-700">FirstName</label>
+							<input
+								type="text"
+								name="firstName"
+								value={data.firstName}
+								onChange={handleInputChange}
+								required
+								placeholder="Enter your firstName"
+								autoFocus
+								className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
+							/>
+							{errors.firstName && <span className="text-red-500">{errors.firstName[0] ?? ""}</span>}
+						</div>
+						<div className="relative w-1/2">
+							<label className="block text-sm font-medium text-gray-700">LastName</label>
+							<input
+								type="text"
+								name="lastName"
+								value={data.lastName}
+								onChange={handleInputChange}
+								required
+								placeholder="Enter your lastName"
+								className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
+							/>
+							{errors.lastName && <span className="text-red-500">{errors.lastName[0] ?? ""}</span>}
+						</div>
+					</div>
 					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
 						<label className="block text-sm font-medium text-gray-700">UserName</label>
 						<input
 							type="text"
 							name="username"
-							value={data.name}
+							value={data.username}
 							onChange={handleInputChange}
 							required
 							placeholder="Enter your UserName"
-							autoFocus
 							className="w-full h-10 px-3 border border-gray-300 rounded-md focus:outline-none text-sm focus:ring-1 focus:ring-gray-300"
 						/>
 
 						{errors.name && <span className="text-red-500">{errors.name[0] ?? ""}</span>}
+					</div>
+					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>
+						<div className="block text-sm font-medium text-gray-700">Gender</div>
+						<div className="relative flex items-center gap-5 pt-2">
+							<div className="relative flex cursor-pointer">
+								<input type="radio" id="male" name="gender" value="male" onChange={handleInputChange} />
+								<label htmlFor="male" className="block px-2 text-sm font-medium text-gray-700">
+									Male
+								</label>
+							</div>
+							<div className="relative flex cursor-pointer">
+								<input type="radio" id="female" name="gender" onChange={handleInputChange} value="female" />
+								<label htmlFor="female" className="block px-2 text-sm font-medium text-gray-700">
+									Female
+								</label>
+							</div>
+							<div className="relative flex cursor-pointer">
+								<input type="radio" id="other" name="gender" onChange={handleInputChange} value="other" />
+								<label htmlFor="other" className="block px-2 text-sm font-medium text-gray-700">
+									Other
+								</label>
+							</div>
+						</div>
+
+						{errors.gender && <span className="text-red-500">{errors.gender[0] ?? ""}</span>}
 					</div>
 
 					<div ref={setAllTransitionElementsRef} style={{ opacity: 0, transform: "translateY(20px)" }}>

@@ -9,7 +9,7 @@ const UserInterractionContext = createContext();
 
 export default function UserInterractionContextProvider({ children }) {
 	const [wishList, setWishList] = useState([]); // Wishlist state
-	const [cartItems, setCartItems] = useState([]); // Wishlist state
+	const [cartItems, setCartItems] = useState(null); // Wishlist state
 	const [comments, setComments] = useState([]);
 	const { user } = useAuthContext(); // Get user from AuthContext
 

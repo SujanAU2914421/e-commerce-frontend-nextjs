@@ -52,13 +52,23 @@ export const CookieConsent = () => {
 						We use cookies to improve your experience on our site. By accepting, you agree to our use of cookies.
 					</div>
 					<div className="relative flex items-center justify-center gap-4">
-						<Button variant="default" size="lg" onClick={handleAcceptCookies}>
+						<Button
+							className="relative text-black bg-white"
+							variant="default"
+							size="default"
+							onClick={handleAcceptCookies}
+						>
 							Accept
-							<Check size={16} />
+							<Check size={14} />
 						</Button>
-						<Button variant="default" size="lg" onClick={handleDeclineCookies}>
+						<Button
+							className="relative text-black bg-white"
+							variant="default"
+							size="default"
+							onClick={handleDeclineCookies}
+						>
 							Decline
-							<X size={16} />
+							<X size={14} />
 						</Button>
 					</div>
 				</div>

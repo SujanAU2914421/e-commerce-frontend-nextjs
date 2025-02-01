@@ -17,11 +17,17 @@ import RatingsStar from "./ratingsStar";
 import AccordionContentDesignForQuickView from "./accordionContentDesignForQuickView";
 import Link from "next/link";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useMainContext } from "@/contexts/MainContext";
 
-export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, setCurrentQuickViewProduct }) {
+const QuickViewPopUpUi = ({ filteredData }) => {
+	const { currentQuickViewProduct, setCurrentQuickViewProduct } = useMainContext();
+
 	const [currentIndex, setCurrentIndex] = useState(
 		filteredData.findIndex((item) => item.id === currentQuickViewProduct.id)
 	);
+
+	const { user } = useAuthContext();
 
 	const {
 		wishList,
@@ -41,32 +47,30 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 
 	const setAllTransitionElementsRef = (el) => {
 		if (el && !allTransitionElementsRef.current.includes(el)) {
-			allTransitionElementsRef.current.push(el); // Add element to refs array
+			allTransitionElementsRef.current.push(el);
 		}
 	};
 
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-	// Move to the previous product
 	const handleMoveLeft = () => {
 		const newIndex = (currentIndex - 1 + filteredData.length) % filteredData.length;
 		setCurrentIndex(newIndex);
 		setCurrentQuickViewProduct(filteredData[newIndex]);
 	};
 
-	const [selectedNumberItems, setSelectedNumberItems] = useState(1); // Number of items in the cart
+	const [selectedNumberItems, setSelectedNumberItems] = useState(1);
 	const [selectedColor, setSelectedColor] = useState(currentQuickViewProduct?.colors[0].name);
 	const [selectedSize, setSelectedSize] = useState(currentQuickViewProduct?.sizes[0]);
 
-	// Move to the next product
 	const handleMoveRight = () => {
 		const newIndex = (currentIndex + 1) % filteredData.length;
 		setCurrentIndex(newIndex);
 		setCurrentQuickViewProduct(filteredData[newIndex]);
 	};
 
-	const previousDataExists = currentIndex > 0; // Check if there's a previous product
-	const nextDataExists = currentIndex < filteredData.length - 1; // Check if there's a next product
+	const previousDataExists = currentIndex > 0;
+	const nextDataExists = currentIndex < filteredData.length - 1;
 
 	const scrollableDivRef = useRef(null);
 
@@ -76,7 +80,7 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 		allTransitionElementsRef.current.forEach((el, index) => {
 			if (el) {
 				el.style.transition = "0s ease";
-				el.style.transitionDelay = `0s`; // Increment delay
+				el.style.transitionDelay = `0s`;
 				el.style.opacity = 0;
 				el.style.transform = "translateY(20px)";
 				el.style.transform = "scale(1)";
@@ -87,7 +91,7 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 			allTransitionElementsRef.current.forEach((el, index) => {
 				if (el) {
 					el.style.transition = "0.5s ease";
-					el.style.transitionDelay = `${index * 0.05}s`; // Increment delay
+					el.style.transitionDelay = `${index * 0.05}s`;
 					el.style.opacity = 1;
 					el.style.transform = "translateY(0)";
 					el.style.transform = "scale(1)";
@@ -122,7 +126,7 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 		allTransitionElementsRef.current.forEach((el, index) => {
 			if (el) {
 				el.style.transition = "0.5s ease";
-				el.style.transitionDelay = `${index * 0.05}s`; // Increment delay
+				el.style.transitionDelay = `${index * 0.05}s`;
 				el.style.opacity = 1;
 				el.style.transform = "translateY(0)";
 				el.style.transform = "scale(1)";
@@ -388,7 +392,11 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 																variant={"outline"}
 																className="select-none"
 																onClick={() => {
-																	removeFromCart(currentQuickViewProduct.id, setCartItems);
+																	if (user) {
+																		removeFromCart(currentQuickViewProduct.id, setCartItems);
+																	} else {
+																		window.location.pathname = "/auth/login";
+																	}
 																}}
 															>
 																<div className="relative">
@@ -401,13 +409,17 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 																variant={"default"}
 																className="select-none"
 																onClick={() => {
-																	addToCart(
-																		currentQuickViewProduct.id,
-																		setCartItems,
-																		selectedNumberItems,
-																		selectedColor,
-																		selectedSize
-																	);
+																	if (user) {
+																		addToCart(
+																			currentQuickViewProduct.id,
+																			setCartItems,
+																			selectedNumberItems,
+																			selectedColor,
+																			selectedSize
+																		);
+																	} else {
+																		window.location.pathname = "/auth/login";
+																	}
 																}}
 															>
 																<div className="relative">
@@ -417,7 +429,7 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 															</Button>
 														)}
 														<div className="relative h-auto w-auto flex items-center gap-2">
-															<Link href="/checkout" className="relative rounded-md">
+															<Link href="/checkout/information" className="relative rounded-md">
 																<Button variant="default" className="select-none">
 																	<div className="relative text-yellow-500">
 																		<Zap fill="currentColor" stroke="currentColor" size={20} />
@@ -430,10 +442,14 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 													<div className="relative flex mt-3">
 														<div
 															onClick={() => {
-																if (wishList.some((item) => item.product_id === currentQuickViewProduct.id)) {
-																	removeFromWishList(currentQuickViewProduct.id, setWishList);
+																if (user) {
+																	if (wishList.some((item) => item.product_id === currentQuickViewProduct.id)) {
+																		removeFromWishList(currentQuickViewProduct.id, setWishList);
+																	} else {
+																		addToWishList(currentQuickViewProduct.id, setWishList);
+																	}
 																} else {
-																	addToWishList(currentQuickViewProduct.id, setWishList);
+																	window.location.pathname = "/auth/login";
 																}
 															}}
 															className={` select-none text-gray-900 flex items-center gap-2 cursor-pointer group`}
@@ -479,4 +495,10 @@ export default function QuickViewPopUp({ filteredData, currentQuickViewProduct, 
 			</div>
 		</div>
 	);
+};
+
+export default function QuickViewPopUp({ filteredData }) {
+	const { currentQuickViewProduct } = useMainContext();
+
+	return currentQuickViewProduct ? <QuickViewPopUpUi filteredData={filteredData} /> : "";
 }

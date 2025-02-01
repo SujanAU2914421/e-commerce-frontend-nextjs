@@ -4,6 +4,7 @@ import AllReview from "@/components/ui/allReview";
 import { useUserInterractionContext } from "@/contexts/UserInterractionContext";
 import { fetchAllComments } from "@/lib/reviewHandle";
 import RatingsStar from "@/components/ui/ratingsStar";
+import tinycolor from "tinycolor2";
 
 export default function AccordionContentDesign({ currentColor, setCurrentColor, currentItemData }) {
 	const { comments, setComments } = useUserInterractionContext();
@@ -14,17 +15,25 @@ export default function AccordionContentDesign({ currentColor, setCurrentColor, 
 		}
 	}, [currentItemData, setComments]);
 
+	function decodeHtmlEntities(text) {
+		const textArea = document.createElement("textarea");
+		textArea.innerHTML = text;
+		return textArea.value;
+	}
+	const getContrastBackground = (color) => {
+		const tc = tinycolor(color);
+		return tc.isLight() ? tc.darken(20).toString() : tc.lighten(40).toString();
+	};
+
 	return (
 		<Accordion type="single" collapsible>
 			<AccordionItem value="discription">
 				<AccordionTrigger className="relative font-extrabold text-gray-800">Detailed Discription</AccordionTrigger>
 				<AccordionContent className="relative text-gray-700 text-[1rem]">
-					Crafted from a soft and breathable cotton-blend fabric, this hoodie keeps you feeling comfortable and cool no
-					matter how intense your workout gets. The flames surrounding Goku symbolize the raw energy that fuels every
-					gym session, reminding you that like Goku, you’re always evolving and growing stronger. 🔥💪 With an
-					adjustable hood, front pocket, and a bold design, this hoodie brings anime energy and gym vibes into one
-					stylish, functional piece. Whether you’re training hard, chilling with friends, or showing off your strength,
-					this hoodie will empower you to take on anything.
+					<div
+						className="relative"
+						dangerouslySetInnerHTML={{ __html: decodeHtmlEntities(currentItemData.detailed_description) }}
+					></div>
 				</AccordionContent>
 			</AccordionItem>
 			<AccordionItem value="information">
@@ -60,7 +69,14 @@ export default function AccordionContentDesign({ currentColor, setCurrentColor, 
 							<div className="relative text-gray-700 flex max-w-[calc(100%-6rem)] flex-wrap gap-2">
 								{currentItemData.colors?.map((color, index) => {
 									return (
-										<div key={index} style={{ color: color.name }}>
+										<div
+											key={index}
+											style={{
+												backgroundColor: color.name,
+												color: getContrastBackground(color.name),
+											}}
+											className="relative py-1 px-3 rounded-md text-sm font-bold border"
+										>
 											{color.name}
 										</div>
 									);
